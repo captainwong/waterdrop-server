@@ -20,4 +20,14 @@ export class UserResolver {
   async findOne(@Args('id') id: number): Promise<UserTypeDto> {
     return await this.userService.findOne(id);
   }
+
+  @Mutation(() => Boolean, { description: 'Update user by id' })
+  async updateUser(@Args('id') id: number, @Args('params') params: UserInputDto): Promise<Boolean> {
+    return await this.userService.update(id, params) ? true : false;
+  }
+
+  @Mutation(() => Boolean, { description: 'Delete user by id' })
+  async deleteUser(@Args('id') id: number): Promise<Boolean> {
+    return await this.userService.remove(id) ? true : false;
+  }
 }
