@@ -1,20 +1,26 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { OssModule } from './modules/oss/oss.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.MYSQL_HOST || 'localhost',
-      port: parseInt(process.env.MYSQL_PORT, 10) || 3306,
-      username: 'jack',
-      password: 'r7zuMTLmRJzKOrkb',
-      database: 'dropwater',
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT, 10) || 3306,
+      username: process.env.DB_USERNAME || 'root',
+      password: process.env.DB_PASSWORD || 'root',
+      database: process.env.DB_DATABASE || 'test',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       logging: true,
       synchronize: true,
@@ -22,10 +28,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: './src/schema.gql',
       playground: true,
     }),
     UserModule,
+    OssModule,
   ],
   controllers: [AppController],
   providers: [AppService],

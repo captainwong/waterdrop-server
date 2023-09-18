@@ -1,0 +1,76 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserTypeDto {
+  """用户id"""
+  id: Float!
+
+  """姓名"""
+  name: String!
+
+  """描述"""
+  desc: String!
+
+  """手机号码"""
+  tel: String!
+
+  """密码"""
+  password: String!
+
+  """账户信息"""
+  account: String!
+}
+
+type OssType {
+  """过期时间"""
+  expire: String!
+
+  """策略"""
+  policy: String!
+
+  """签名"""
+  signature: String!
+
+  """key"""
+  accessId: String!
+
+  """host"""
+  host: String!
+}
+
+type Query {
+  """Find user by id"""
+  findOne(id: Float!): UserTypeDto!
+
+  """oss info"""
+  getOSSInfo: OssType!
+}
+
+type Mutation {
+  """Create user"""
+  createUser(params: UserInputDto!): Boolean!
+
+  """Update user by id"""
+  updateUser(id: Float!, params: UserInputDto!): Boolean!
+
+  """Delete user by id"""
+  deleteUser(id: Float!): Boolean!
+}
+
+input UserInputDto {
+  """姓名"""
+  name: String!
+
+  """描述"""
+  desc: String!
+
+  """手机号码"""
+  tel: String!
+
+  """密码"""
+  password: String!
+
+  """账户信息"""
+  account: String!
+}

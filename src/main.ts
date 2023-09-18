@@ -12,7 +12,7 @@ async function bootstrap() {
   //     enableImplicitConversion: true, // convert incoming data to the DTO type even if it is not the same type
   //   },
   // }));
-  
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

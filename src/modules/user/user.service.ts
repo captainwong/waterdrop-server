@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll(query: PaginateQuery): Promise<Paginated<User>> {
     //return await this.userRepository.find();
@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async create(user: any): Promise<User> {
-    try{
+    try {
       return await this.userRepository.save(user);
     } catch (e) {
       console.log(e);
