@@ -21,12 +21,25 @@ export class UserResolver {
     return await this.userService.findOne(id);
   }
 
+  @Query(() => UserTypeDto, { description: 'Find user by tel' })
+  async findOneByTel(@Args('tel') tel: string): Promise<UserTypeDto> {
+    return await this.userService.findOneByTel(tel);
+  }
+
   @Mutation(() => Boolean, { description: 'Update user by id' })
   async updateUser(
     @Args('id') id: number,
     @Args('params') params: UserInputDto,
   ): Promise<boolean> {
     return (await this.userService.update(id, params)) ? true : false;
+  }
+
+  @Mutation(() => Boolean, { description: 'Update user sms code by id' })
+  async updateUserSmsCode(
+    @Args('id') id: number,
+    @Args('code') code: string,
+  ): Promise<boolean> {
+    return (await this.userService.updateSmsCode(id, code)) ? true : false;
   }
 
   @Mutation(() => Boolean, { description: 'Delete user by id' })

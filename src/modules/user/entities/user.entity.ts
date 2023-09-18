@@ -1,6 +1,5 @@
-import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { IsNotEmpty } from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -27,6 +26,18 @@ export class User {
     nullable: true,
   })
   tel: string;
+
+  @Column({
+    comment: '短信验证码',
+    nullable: true,
+  })
+  smsCode: string;
+
+  @Column({
+    comment: '短信验证码创建时间',
+    nullable: true,
+  })
+  smsCodeCreatedAt: Date;
 
   @Column({
     comment: '密码',

@@ -43,6 +43,9 @@ type Query {
   """Find user by id"""
   findOne(id: Float!): UserTypeDto!
 
+  """Find user by tel"""
+  findOneByTel(tel: String!): UserTypeDto!
+
   """oss info"""
   getOSSInfo: OssType!
 }
@@ -54,8 +57,17 @@ type Mutation {
   """Update user by id"""
   updateUser(id: Float!, params: UserInputDto!): Boolean!
 
+  """Update user sms code by id"""
+  updateUserSmsCode(id: Float!, code: String!): Boolean!
+
   """Delete user by id"""
   deleteUser(id: Float!): Boolean!
+
+  """Send verification code"""
+  sendVerificationCode(tel: String!): Boolean!
+
+  """Login"""
+  login(tel: String!, smsCode: String!): Boolean!
 }
 
 input UserInputDto {
