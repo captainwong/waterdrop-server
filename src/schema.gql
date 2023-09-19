@@ -79,6 +79,12 @@ type Mutation {
 
   """Login"""
   login(tel: String!, smsCode: String!): Result!
+
+  """Student Register"""
+  studentRegister(account: String!, password: String!): Result!
+
+  """Student Login"""
+  studentLogin(account: String!, password: String!): Result!
 }
 
 input UserInputDto {

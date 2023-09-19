@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as Dysmsapi from '@alicloud/dysmsapi20170525';
 import * as Utils from '@alicloud/tea-util';
-import { getRandomVerificationCode4 } from 'src/utils';
+import { getRandomVerificationCode4 } from '@/utils';
 import { UserService } from '../user/user.service';
-import smsClient from 'src/utils/sms';
+import smsClient from '@/utils/sms';
 import * as dayjs from 'dayjs';
-import { Result } from 'src/common/dto/result.dto';
+import { Result } from '@/common/dto/result.dto';
 import {
   CREATE_USER_FAILED,
   SEND_SMS_FAILED,
@@ -16,7 +16,7 @@ import {
   USER_SMS_CODE_EXPIRED,
   USER_SMS_CODE_NOT_EXISTS,
   USER_SMS_CODE_NOT_MATCH,
-} from 'src/common/const/code';
+} from '@/common/const/code';
 
 @Injectable()
 export class AuthService {
