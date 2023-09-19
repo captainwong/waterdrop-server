@@ -17,10 +17,14 @@ import {
   USER_SMS_CODE_NOT_EXISTS,
   USER_SMS_CODE_NOT_MATCH,
 } from '@/common/const/code';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   // send verification code
   async sendVerificationCode(tel: string): Promise<Result> {
@@ -120,8 +124,13 @@ export class AuthService {
       };
     }
 
+    const token = this.jwtService.sign({
+      id: user.id,
+    });
+
     return {
       code: SUCCESS,
+      data: token,
     };
   }
 }
