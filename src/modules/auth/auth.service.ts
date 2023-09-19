@@ -5,20 +5,35 @@ import { getRandomVerificationCode4 } from 'src/utils';
 import { UserService } from '../user/user.service';
 import smsClient from 'src/utils/sms';
 import * as dayjs from 'dayjs';
+import { Result } from 'src/common/dto/result.dto';
+import {
+  CREATE_USER_FAILED,
+  SEND_SMS_FAILED,
+  SMS_CODE_STILL_VALID,
+  SUCCESS,
+  UPDATE_USER_SMS_CODE_FAILED,
+  USER_NOT_EXISTS,
+  USER_SMS_CODE_EXPIRED,
+  USER_SMS_CODE_NOT_EXISTS,
+  USER_SMS_CODE_NOT_MATCH,
+} from 'src/common/const/code';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
 
   // send verification code
-  async sendVerificationCode(tel: string): Promise<boolean> {
+  async sendVerificationCode(tel: string): Promise<Result> {
     const user = await this.userService.findOneByTel(tel);
     if (user && user.smsCodeCreatedAt) {
       const diff = dayjs().diff(dayjs(user.smsCodeCreatedAt), 'second');
       console.log('diff', diff);
       if (diff < 60) {
         console.log('diff < 60');
-        return false;
+        return {
+          code: SMS_CODE_STILL_VALID,
+          message: '验证码还在有效期内，不要重复发送',
+        };
       }
     }
     const code = getRandomVerificationCode4();
@@ -36,7 +51,16 @@ export class AuthService {
         console.log('update user');
         const result = await this.userService.updateSmsCode(user.id, code);
         console.log('update user result', result);
-        return result ? true : false;
+        if (result) {
+          return {
+            code: SUCCESS,
+          };
+        } else {
+          return {
+            code: UPDATE_USER_SMS_CODE_FAILED,
+            message: '更新用户验证码失败',
+          };
+        }
       } else {
         console.log('create user');
         const result = await this.userService.create({
@@ -45,23 +69,59 @@ export class AuthService {
           smsCodeCreatedAt: new Date(),
         });
         console.log('create user result', result);
-        return result ? true : false;
+        if (result) {
+          return {
+            code: SUCCESS,
+          };
+        } else {
+          return {
+            code: CREATE_USER_FAILED,
+            message: '创建用户失败',
+          };
+        }
       }
     } catch (error) {
       // 如有需要，请打印 error
       console.error(error);
-      return false;
+      return {
+        code: SEND_SMS_FAILED,
+        message: '发送短信失败',
+      };
     }
   }
 
-  async login(tel: string, code: string): Promise<boolean> {
+  async login(tel: string, code: string): Promise<Result> {
     const user = await this.userService.findOneByTel(tel);
-    if (!user || !user.smsCode || !user.smsCodeCreatedAt) {
-      return false;
+    if (!user) {
+      return {
+        code: USER_NOT_EXISTS,
+        message: '用户不存在',
+      };
     }
+
+    if (!user.smsCode || !user.smsCodeCreatedAt) {
+      return {
+        code: USER_SMS_CODE_NOT_EXISTS,
+        message: '用户验证码不存在',
+      };
+    }
+
     if (dayjs().diff(dayjs(user.smsCodeCreatedAt), 'minute') >= 60) {
-      return false;
+      return {
+        code: USER_SMS_CODE_EXPIRED,
+        message: '用户验证码已过期，请重新发送',
+      };
     }
-    return user.smsCode === code;
+
+    if (user.smsCode !== code) {
+      return {
+        code: USER_SMS_CODE_NOT_MATCH,
+        message: '用户验证码不匹配',
+      };
+    }
+
+    return {
+      code: SUCCESS,
+    };
   }
 }

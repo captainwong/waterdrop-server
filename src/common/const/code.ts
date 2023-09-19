@@ -1,0 +1,9 @@
+export const SUCCESS = 200;
+export const SMS_CODE_STILL_VALID = 10001;
+export const UPDATE_USER_SMS_CODE_FAILED = 10002;
+export const CREATE_USER_FAILED = 10003;
+export const SEND_SMS_FAILED = 10004;
+export const USER_NOT_EXISTS = 10005;
+export const USER_SMS_CODE_NOT_EXISTS = 10006;
+export const USER_SMS_CODE_EXPIRED = 10007;
+export const USER_SMS_CODE_NOT_MATCH = 10008;

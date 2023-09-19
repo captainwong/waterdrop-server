@@ -39,6 +39,17 @@ type OssType {
   host: String!
 }
 
+type Result {
+  """状态码"""
+  code: Int!
+
+  """提示信息"""
+  message: String
+
+  """数据"""
+  data: String
+}
+
 type Query {
   """Find user by id"""
   findOne(id: Float!): UserTypeDto!
@@ -64,10 +75,10 @@ type Mutation {
   deleteUser(id: Float!): Boolean!
 
   """Send verification code"""
-  sendVerificationCode(tel: String!): Boolean!
+  sendVerificationCode(tel: String!): Result!
 
   """Login"""
-  login(tel: String!, smsCode: String!): Boolean!
+  login(tel: String!, smsCode: String!): Result!
 }
 
 input UserInputDto {
