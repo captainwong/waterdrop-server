@@ -15,7 +15,7 @@ import { JwtStrategy } from './jwt.strategy';
     ConfigModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '7d' },
     }),
     TypeOrmModule.forFeature([User, Student]),
   ],

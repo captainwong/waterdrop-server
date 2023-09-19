@@ -1,9 +1,11 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserInputDto } from './dto/user-input.dto';
 import { UserTypeDto } from './dto/user-type.dto';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '@/common/guards/auth.guard';
 
 @Resolver()
 export class UserResolver {
@@ -18,6 +20,14 @@ export class UserResolver {
 
   @Query(() => UserTypeDto, { description: 'Find user by id' })
   async findOne(@Args('id') id: number): Promise<UserTypeDto> {
+    return await this.userService.findOne(id);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => UserTypeDto, { description: 'Find user by id' })
+  async getUserInfo(@Context() ctx: any): Promise<UserTypeDto> {
+    console.log('getUserInfo', ctx);
+    const id = ctx.req.user.id;
     return await this.userService.findOne(id);
   }
 

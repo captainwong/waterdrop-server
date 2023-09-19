@@ -16,10 +16,10 @@ type UserTypeDto {
   tel: String!
 
   """密码"""
-  password: String!
+  password: String
 
   """账户信息"""
-  account: String!
+  account: String
 }
 
 type OssType {
@@ -53,6 +53,9 @@ type Result {
 type Query {
   """Find user by id"""
   findOne(id: Float!): UserTypeDto!
+
+  """Find user by id"""
+  getUserInfo: UserTypeDto!
 
   """Find user by tel"""
   findOneByTel(tel: String!): UserTypeDto!
