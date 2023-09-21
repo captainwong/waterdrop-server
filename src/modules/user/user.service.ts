@@ -2,8 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
+import { Result } from '@/common/dto/result.dto';
+import { SUCCESS } from '@/common/const/code';
 
 @Injectable()
 export class UserService {
@@ -35,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  async create(user: any): Promise<User> {
+  async create(user: CreateUserDto): Promise<User> {
     try {
       return await this.userRepository.save(user);
     } catch (e) {
@@ -43,9 +46,11 @@ export class UserService {
     }
   }
 
-  async update(id: number, user: UpdateUserDto): Promise<User> {
+  async update(id: number, user: UpdateUserDto): Promise<Result> {
     await this.userRepository.update(id, user);
-    return this.userRepository.findOne({ where: { id } });
+    return {
+      code: SUCCESS,
+    };
   }
 
   async updateSmsCode(id: number, code: string): Promise<User> {

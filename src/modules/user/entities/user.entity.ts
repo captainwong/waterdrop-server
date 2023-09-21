@@ -40,14 +40,20 @@ export class User {
   smsCodeCreatedAt: Date;
 
   @Column({
+    comment: '账户信息',
+    nullable: true,
+  })
+  account: string;
+
+  @Column({
     comment: '密码',
     nullable: true,
   })
   password: string;
 
   @Column({
-    comment: '账户信息',
+    comment: '用户头像',
     nullable: true,
   })
-  account: string;
+  avatar: string;
 }

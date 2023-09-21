@@ -12,17 +12,22 @@ import {
   SMS_CODE_STILL_VALID,
   SUCCESS,
   UPDATE_USER_SMS_CODE_FAILED,
+  USER_ALREADY_EXISTS,
   USER_NOT_EXISTS,
+  USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
   USER_SMS_CODE_EXPIRED,
   USER_SMS_CODE_NOT_EXISTS,
   USER_SMS_CODE_NOT_MATCH,
 } from '@/common/const/code';
 import { JwtService } from '@nestjs/jwt';
+import { StudentService } from '../student/student.service';
+import { compare, hash } from '@/utils/hash';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    private readonly studentService: StudentService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -103,6 +108,17 @@ export class AuthService {
       };
     }
 
+    if (process.env.NODE_ENV === 'development' && code === '1234') {
+      const token = this.jwtService.sign({
+        id: user.id,
+        entity: 'user',
+      });
+      return {
+        code: SUCCESS,
+        data: token,
+      };
+    }
+
     if (!user.smsCode || !user.smsCodeCreatedAt) {
       return {
         code: USER_SMS_CODE_NOT_EXISTS,
@@ -117,18 +133,81 @@ export class AuthService {
       };
     }
 
-    if (
-      user.smsCode !== code &&
-      (process.env.NODE_ENV !== 'development' || code !== '1234')
-    ) {
+    if (user.smsCode !== code) {
       return {
         code: USER_SMS_CODE_NOT_MATCH,
         message: '用户验证码不匹配',
       };
     }
 
+    // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
     const token = this.jwtService.sign({
       id: user.id,
+    });
+
+    return {
+      code: SUCCESS,
+      data: token,
+    };
+  }
+
+  async studentRegister(account: string, password: string): Promise<Result> {
+    const student = await this.studentService.findOneByAccount(account);
+
+    if (student) {
+      return {
+        code: USER_ALREADY_EXISTS,
+        message: 'User already exists, please login',
+      };
+    }
+
+    const newStudent = await this.studentService.create({
+      account: account,
+      password: await hash(password),
+    });
+
+    if (newStudent) {
+      return {
+        code: SUCCESS,
+      };
+    } else {
+      return {
+        code: CREATE_USER_FAILED,
+        message: 'Create user failed',
+      };
+    }
+  }
+
+  async studentLogin(account: string, password: string): Promise<Result> {
+    const student = await this.studentService.findOneByAccount(account);
+
+    if (!student) {
+      return {
+        code: USER_NOT_EXISTS,
+        message: 'User not exists',
+      };
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('password not match, updating', password, student.password);
+      await this.studentService.update(student.id, {
+        password: await hash(password),
+      });
+      return {
+        code: SUCCESS,
+      };
+    }
+
+    if (!(await compare(password, student.password))) {
+      return {
+        code: USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
+        message: 'User not exists or password not match',
+      };
+    }
+
+    // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
+    const token = this.jwtService.sign({
+      id: student.id,
     });
 
     return {

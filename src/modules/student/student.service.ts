@@ -1,16 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Student } from './entities/student.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Result } from '@/common/dto/result.dto';
-import {
-  CREATE_USER_FAILED,
-  SUCCESS,
-  USER_ALREADY_EXISTS,
-  USER_NOT_EXISTS,
-  USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
-} from '@/common/const/code';
-import { compare, hash } from '@/utils/hash';
+import { SUCCESS } from '@/common/const/code';
+import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Injectable()
 export class StudentService {
@@ -19,54 +14,28 @@ export class StudentService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
-  async register(account: string, password: string): Promise<Result> {
-    const user = await this.studentRepository.findOne({
-      where: { account: account },
-    });
-
-    if (user) {
-      return {
-        code: USER_ALREADY_EXISTS,
-        message: 'User already exists',
-      };
+  async findOne(id: number): Promise<Student> {
+    const student = await this.studentRepository.findOne({ where: { id } });
+    if (!student) {
+      throw new NotFoundException(`Student #${id} not found`);
     }
-
-    const newUser = await this.studentRepository.save({
-      account: account,
-      password: await hash(password),
-    });
-
-    if (newUser) {
-      return {
-        code: SUCCESS,
-      };
-    } else {
-      return {
-        code: CREATE_USER_FAILED,
-        message: 'Create user failed',
-      };
-    }
+    return student;
   }
 
-  async login(account: string, password: string): Promise<Result> {
-    const user = await this.studentRepository.findOne({
+  async findOneByAccount(account: string): Promise<Student> {
+    const student = await this.studentRepository.findOne({
       where: { account: account },
     });
+    return student;
+  }
 
-    if (!user) {
-      return {
-        code: USER_NOT_EXISTS,
-        message: 'User not exists',
-      };
-    }
+  async create(dto: CreateStudentDto): Promise<Student> {
+    const student = await this.studentRepository.save(dto);
+    return student;
+  }
 
-    if (!(await compare(password, user.password))) {
-      return {
-        code: USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
-        message: 'User not exists or password not match',
-      };
-    }
-
+  async update(id: number, dto: UpdateStudentDto): Promise<Result> {
+    await this.studentRepository.update(id, dto);
     return {
       code: SUCCESS,
     };

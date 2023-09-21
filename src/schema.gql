@@ -15,11 +15,19 @@ type UserTypeDto {
   """手机号码"""
   tel: String!
 
-  """密码"""
-  password: String
+  """头像"""
+  avatar: String
+}
 
-  """账户信息"""
-  account: String
+type Result {
+  """状态码"""
+  code: Int!
+
+  """提示信息"""
+  message: String
+
+  """数据"""
+  data: String
 }
 
 type OssType {
@@ -37,17 +45,23 @@ type OssType {
 
   """host"""
   host: String!
+
+  """dir"""
+  dir: String!
 }
 
-type Result {
-  """状态码"""
-  code: Int!
+type StudentTypeDto {
+  """用户id"""
+  id: Float
 
-  """提示信息"""
-  message: String
+  """姓名"""
+  name: String
 
-  """数据"""
-  data: String
+  """手机号码"""
+  tel: String
+
+  """头像"""
+  avatar: String
 }
 
 type Query {
@@ -62,14 +76,20 @@ type Query {
 
   """oss info"""
   getOSSInfo: OssType!
+
+  """Find student by id"""
+  findStudent(id: Float!): StudentTypeDto!
+
+  """Find student by id"""
+  getStudentInfo: StudentTypeDto!
 }
 
 type Mutation {
   """Create user"""
-  createUser(params: UserInputDto!): Boolean!
+  createUser(params: CreateUserDto!): Boolean!
 
   """Update user by id"""
-  updateUser(id: Float!, params: UserInputDto!): Boolean!
+  updateUserInfo(id: Float!, params: UpdateUserDto!): Result!
 
   """Update user sms code by id"""
   updateUserSmsCode(id: Float!, code: String!): Boolean!
@@ -90,19 +110,28 @@ type Mutation {
   studentLogin(account: String!, password: String!): Result!
 }
 
-input UserInputDto {
+input CreateUserDto {
+  tel: String!
+  smsCode: String!
+  smsCodeCreatedAt: DateTime!
+  name: String
+  desc: String
+  password: String
+  account: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input UpdateUserDto {
   """姓名"""
-  name: String!
+  name: String
 
   """描述"""
-  desc: String!
+  desc: String
 
-  """手机号码"""
-  tel: String!
-
-  """密码"""
-  password: String!
-
-  """账户信息"""
-  account: String!
+  """头像"""
+  avatar: String
 }

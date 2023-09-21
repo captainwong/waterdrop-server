@@ -16,4 +16,7 @@ export class OssType {
 
   @Field({ description: 'host' })
   host: string;
+
+  @Field({ description: 'dir' })
+  dir: string;
 }

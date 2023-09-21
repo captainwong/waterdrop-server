@@ -1,19 +1,25 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
 
+@InputType()
 export class CreateUserDto {
-  @IsString()  
-  @IsNotEmpty()
-  readonly name: string;
+  @Field()
+  tel: string;
 
-  @IsString()
-  readonly desc: string;
+  @Field()
+  smsCode: string;
 
-  @IsString()
-  readonly tel: string;
+  @Field()
+  smsCodeCreatedAt: Date;
 
-  @IsString()
-  readonly password: string;
+  @Field({ nullable: true })
+  name?: string;
 
-  @IsString()
-  readonly account: string;
+  @Field({ nullable: true })
+  desc?: string;
+
+  @Field({ nullable: true })
+  password?: string;
+
+  @Field({ nullable: true })
+  account?: string;
 }

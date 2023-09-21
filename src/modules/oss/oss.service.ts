@@ -48,7 +48,7 @@ export class OssService {
       accessId: formData.OSSAccessKeyId,
       host,
       // callback: Buffer.from(JSON.stringify(callback)).toString('base64'),
-      // dir: config.dir,
+      dir: config.dir,
     };
 
     return params;

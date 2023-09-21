@@ -1,4 +1,13 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CreateUserDto } from "./create-user.dto";
+import { Field, InputType } from '@nestjs/graphql';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) { }
+@InputType()
+export class UpdateUserDto {
+  @Field({ nullable: true, description: '姓名' })
+  name?: string;
+
+  @Field({ nullable: true, description: '描述' })
+  desc?: string;
+
+  @Field({ nullable: true, description: '头像' })
+  avatar?: string;
+}

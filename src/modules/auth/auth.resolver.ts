@@ -1,14 +1,10 @@
 import { Args, Resolver, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Result } from '@/common/dto/result.dto';
-import { StudentService } from '../student/student.service';
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly studentService: StudentService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => Result, { description: 'Send verification code' })
   async sendVerificationCode(@Args('tel') tel: string): Promise<Result> {
@@ -28,7 +24,7 @@ export class AuthResolver {
     @Args('account') account: string,
     @Args('password') password: string,
   ): Promise<Result> {
-    return this.studentService.register(account, password);
+    return this.authService.studentRegister(account, password);
   }
 
   @Mutation(() => Result, { description: 'Student Login' })
@@ -36,6 +32,6 @@ export class AuthResolver {
     @Args('account') account: string,
     @Args('password') password: string,
   ): Promise<Result> {
-    return this.studentService.login(account, password);
+    return this.authService.studentLogin(account, password);
   }
 }
