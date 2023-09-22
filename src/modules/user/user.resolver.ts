@@ -19,7 +19,7 @@ export class UserResolver {
   }
 
   @Query(() => UserTypeDto, { description: 'Find user by id' })
-  async findOne(@Args('id') id: number): Promise<UserTypeDto> {
+  async findOne(@Args('id') id: string): Promise<UserTypeDto> {
     return await this.userService.findOne(id);
   }
 
@@ -38,7 +38,7 @@ export class UserResolver {
 
   @Mutation(() => Result, { description: 'Update user by id' })
   async updateUserInfo(
-    @Args('id') id: number,
+    @Args('id') id: string,
     @Args('params') params: UpdateUserDto,
   ): Promise<Result> {
     return await this.userService.update(id, params);
@@ -46,14 +46,14 @@ export class UserResolver {
 
   @Mutation(() => Boolean, { description: 'Update user sms code by id' })
   async updateUserSmsCode(
-    @Args('id') id: number,
+    @Args('id') id: string,
     @Args('code') code: string,
   ): Promise<boolean> {
     return (await this.userService.updateSmsCode(id, code)) ? true : false;
   }
 
   @Mutation(() => Boolean, { description: 'Delete user by id' })
-  async deleteUser(@Args('id') id: number): Promise<boolean> {
+  async deleteUser(@Args('id') id: string): Promise<boolean> {
     return (await this.userService.remove(id)) ? true : false;
   }
 }

@@ -4,7 +4,7 @@
 
 type UserTypeDto {
   """用户id"""
-  id: Float!
+  id: String!
 
   """姓名"""
   name: String!
@@ -66,7 +66,7 @@ type StudentTypeDto {
 
 type Query {
   """Find user by id"""
-  findOne(id: Float!): UserTypeDto!
+  findOne(id: String!): UserTypeDto!
 
   """Find user by id"""
   getUserInfo: UserTypeDto!
@@ -89,13 +89,13 @@ type Mutation {
   createUser(params: CreateUserDto!): Boolean!
 
   """Update user by id"""
-  updateUserInfo(id: Float!, params: UpdateUserDto!): Result!
+  updateUserInfo(id: String!, params: UpdateUserDto!): Result!
 
   """Update user sms code by id"""
-  updateUserSmsCode(id: Float!, code: String!): Boolean!
+  updateUserSmsCode(id: String!, code: String!): Boolean!
 
   """Delete user by id"""
-  deleteUser(id: Float!): Boolean!
+  deleteUser(id: String!): Boolean!
 
   """Send verification code"""
   sendVerificationCode(tel: String!): Result!

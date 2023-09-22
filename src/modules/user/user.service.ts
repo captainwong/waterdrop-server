@@ -25,7 +25,7 @@ export class UserService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
@@ -46,14 +46,14 @@ export class UserService {
     }
   }
 
-  async update(id: number, user: UpdateUserDto): Promise<Result> {
+  async update(id: string, user: UpdateUserDto): Promise<Result> {
     await this.userRepository.update(id, user);
     return {
       code: SUCCESS,
     };
   }
 
-  async updateSmsCode(id: number, code: string): Promise<User> {
+  async updateSmsCode(id: string, code: string): Promise<User> {
     await this.userRepository.update(id, {
       smsCode: code,
       smsCodeCreatedAt: new Date(),
@@ -61,7 +61,7 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async remove(id: number): Promise<User> {
+  async remove(id: string): Promise<User> {
     const user = await this.findOne(id);
     return this.userRepository.remove(user);
   }
