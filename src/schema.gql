@@ -89,7 +89,7 @@ type Mutation {
   createUser(params: CreateUserDto!): Boolean!
 
   """Update user by id"""
-  updateUserInfo(id: String!, params: UpdateUserDto!): Result!
+  updateUserInfo(params: UpdateUserDto!): Result!
 
   """Update user sms code by id"""
   updateUserSmsCode(id: String!, code: String!): Boolean!

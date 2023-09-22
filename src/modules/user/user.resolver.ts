@@ -36,11 +36,13 @@ export class UserResolver {
     return await this.userService.findOneByTel(tel);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Result, { description: 'Update user by id' })
   async updateUserInfo(
-    @Args('id') id: string,
+    @Context() ctx: any,
     @Args('params') params: UpdateUserDto,
   ): Promise<Result> {
+    const id = ctx.req.user.id;
     return await this.userService.update(id, params);
   }
 
