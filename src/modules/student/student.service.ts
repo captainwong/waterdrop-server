@@ -14,7 +14,7 @@ export class StudentService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
-  async findOne(id: number): Promise<Student> {
+  async findOne(id: string): Promise<Student> {
     const student = await this.studentRepository.findOne({ where: { id } });
     if (!student) {
       throw new NotFoundException(`Student #${id} not found`);
@@ -34,7 +34,7 @@ export class StudentService {
     return student;
   }
 
-  async update(id: number, dto: UpdateStudentDto): Promise<Result> {
+  async update(id: string, dto: UpdateStudentDto): Promise<Result> {
     await this.studentRepository.update(id, dto);
     return {
       code: SUCCESS,

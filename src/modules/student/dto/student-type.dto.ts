@@ -2,8 +2,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class StudentTypeDto {
-  @Field({ nullable: true, description: '用户id' })
-  id?: number;
+  @Field({ description: '用户id' })
+  id: string;
 
   @Field({ nullable: true, description: '姓名' })
   name?: string;

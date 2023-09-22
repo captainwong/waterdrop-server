@@ -11,7 +11,7 @@ export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
 
   @Query(() => StudentTypeDto, { description: 'Find student by id' })
-  async findStudent(@Args('id') id: number): Promise<StudentTypeDto> {
+  async findStudent(@Args('id') id: string): Promise<StudentTypeDto> {
     return await this.studentService.findOne(id);
   }
 

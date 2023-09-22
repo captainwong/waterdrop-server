@@ -52,7 +52,7 @@ type OssType {
 
 type StudentTypeDto {
   """用户id"""
-  id: Float
+  id: String!
 
   """姓名"""
   name: String
@@ -78,7 +78,7 @@ type Query {
   getOSSInfo: OssType!
 
   """Find student by id"""
-  findStudent(id: Float!): StudentTypeDto!
+  findStudent(id: String!): StudentTypeDto!
 
   """Find student by id"""
   getStudentInfo: StudentTypeDto!

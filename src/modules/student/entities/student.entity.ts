@@ -3,10 +3,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('students')
 export class Student {
-  @PrimaryGeneratedColumn({
+  @PrimaryGeneratedColumn('uuid', {
     comment: '学生ID',
   })
-  id: number;
+  id: string;
 
   @Column({
     comment: '学生姓名',
