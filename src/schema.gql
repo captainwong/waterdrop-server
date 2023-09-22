@@ -19,11 +19,22 @@ type UserTypeDto {
   avatar: String
 }
 
+type PageTypeDto {
+  """总数"""
+  total: Int!
+
+  """页码"""
+  page: Int!
+
+  """每页数量"""
+  pageSize: Int!
+}
+
 type Result {
   """状态码"""
   code: Int!
 
-  """提示信息"""
+  """信息"""
   message: String
 
   """数据"""
@@ -51,8 +62,13 @@ type OssType {
 }
 
 type StudentTypeDto {
-  """用户id"""
   id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
 
   """姓名"""
   name: String
@@ -62,6 +78,36 @@ type StudentTypeDto {
 
   """头像"""
   avatar: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type StudentResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: StudentTypeDto
+}
+
+type StudentResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [StudentTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
 }
 
 type Query {
@@ -78,10 +124,18 @@ type Query {
   getOSSInfo: OssType!
 
   """Find student by id"""
-  findStudent(id: String!): StudentTypeDto!
+  getStudentInfo: StudentResult!
 
-  """Find student by id"""
-  getStudentInfo: StudentTypeDto!
+  """Find students"""
+  getStudents(page: PageInput!): StudentResults!
+}
+
+input PageInput {
+  """页码"""
+  page: Float!
+
+  """每页数量"""
+  pageSize: Float!
 }
 
 type Mutation {
@@ -109,8 +163,11 @@ type Mutation {
   """Student Login"""
   studentLogin(account: String!, password: String!): Result!
 
+  """Create student"""
+  createStudent(account: String!, password: String!): Result!
+
   """Update student by id"""
-  updateStudentInfo(params: UpdateStudentDto!): Result!
+  updateStudentInfo(params: UpdateStudentDto!): StudentResult!
 }
 
 input CreateUserDto {
@@ -122,11 +179,6 @@ input CreateUserDto {
   password: String
   account: String
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 input UpdateUserDto {
   """姓名"""

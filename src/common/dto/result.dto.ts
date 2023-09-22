@@ -1,18 +1,18 @@
 import { ClassType } from 'type-graphql';
-import Pagination from './page.dto';
+import PageTypeDto from './page-type.dto';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-interface IResult<T> {
+export interface IResult<T> {
   code: number;
-  message: string;
+  message?: string;
   data?: T;
 }
 
-interface IResults<T> {
+export interface IResults<T> {
   code: number;
-  message: string;
+  message?: string;
   data?: T[];
-  page?: Pagination;
+  page?: PageTypeDto;
 }
 
 export function createResult<T>(ItemType: ClassType<T>): ClassType<IResult<T>> {
@@ -21,8 +21,8 @@ export function createResult<T>(ItemType: ClassType<T>): ClassType<IResult<T>> {
     @Field(() => Int, { description: '状态码' })
     code: number;
 
-    @Field(() => String, { description: '提示信息' })
-    message: string;
+    @Field(() => String, { nullable: true, description: '信息' })
+    message?: string;
 
     @Field(() => ItemType, { nullable: true, description: '数据' })
     data?: T;
@@ -39,14 +39,14 @@ export function createResults<T>(
     @Field(() => Int, { description: '状态码' })
     code: number;
 
-    @Field(() => String, { description: '提示信息' })
-    message: string;
+    @Field(() => String, { nullable: true, description: '信息' })
+    message?: string;
 
     @Field(() => [ItemType], { nullable: true, description: '数据' })
     data?: T[];
 
-    @Field(() => Pagination, { nullable: true, description: '分页信息' })
-    page?: Pagination;
+    @Field(() => PageTypeDto, { nullable: true, description: '分页信息' })
+    page?: PageTypeDto;
   }
 
   return Results;
@@ -57,7 +57,7 @@ export class Result {
   @Field(() => Int, { description: '状态码' })
   code: number;
 
-  @Field(() => String, { nullable: true, description: '提示信息' })
+  @Field(() => String, { nullable: true, description: '信息' })
   message?: string;
 
   @Field(() => String, { nullable: true, description: '数据' })

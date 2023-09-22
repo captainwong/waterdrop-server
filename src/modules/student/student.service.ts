@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Student } from './entities/student.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Result } from '@/common/dto/result.dto';
-import { SUCCESS } from '@/common/const/code';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
@@ -14,30 +12,38 @@ export class StudentService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
+  async findAll({
+    page,
+    pageSize,
+  }: {
+    page: number;
+    pageSize: number;
+  }): Promise<[Student[], number]> {
+    return this.studentRepository.findAndCount({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async findOne(id: string): Promise<Student> {
-    const student = await this.studentRepository.findOne({ where: { id } });
-    if (!student) {
-      throw new NotFoundException(`Student #${id} not found`);
-    }
-    return student;
+    return this.studentRepository.findOne({ where: { id } });
   }
 
   async findOneByAccount(account: string): Promise<Student> {
-    const student = await this.studentRepository.findOne({
+    return this.studentRepository.findOne({
       where: { account: account },
     });
-    return student;
   }
 
   async create(dto: CreateStudentDto): Promise<Student> {
-    const student = await this.studentRepository.save(dto);
-    return student;
+    return this.studentRepository.save(this.studentRepository.create(dto));
   }
 
-  async update(id: string, dto: UpdateStudentDto): Promise<Result> {
-    await this.studentRepository.update(id, dto);
-    return {
-      code: SUCCESS,
-    };
+  async update(id: string, dto: UpdateStudentDto): Promise<boolean> {
+    const res = await this.studentRepository.update(id, dto);
+    return res.affected > 0;
   }
 }
