@@ -108,6 +108,9 @@ type Mutation {
 
   """Student Login"""
   studentLogin(account: String!, password: String!): Result!
+
+  """Update student by id"""
+  updateStudentInfo(params: UpdateStudentDto!): Result!
 }
 
 input CreateUserDto {
@@ -134,4 +137,18 @@ input UpdateUserDto {
 
   """头像"""
   avatar: String
+}
+
+input UpdateStudentDto {
+  """姓名"""
+  name: String
+
+  """手机号码"""
+  tel: String
+
+  """头像"""
+  avatar: String
+
+  """密码"""
+  password: String
 }

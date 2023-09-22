@@ -188,17 +188,21 @@ export class AuthService {
       };
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('password not match, updating', password, student.password);
-      await this.studentService.update(student.id, {
-        password: await hash(password),
-      });
-      return {
-        code: SUCCESS,
-      };
-    }
-
     if (!(await compare(password, student.password))) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('password not match, updating', password, student.password);
+        await this.studentService.update(student.id, {
+          password: await hash(password),
+        });
+        const token = this.jwtService.sign({
+          id: student.id,
+        });
+        return {
+          code: SUCCESS,
+          data: token,
+        };
+      }
+
       return {
         code: USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
         message: 'User not exists or password not match',
