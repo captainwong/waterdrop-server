@@ -1,13 +1,9 @@
+import { CommonEntity } from '@/common/entities/common.entity';
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity('students')
-export class Student {
-  @PrimaryGeneratedColumn('uuid', {
-    comment: '学生ID',
-  })
-  id: string;
-
+export class Student extends CommonEntity {
   @Column({
     comment: '学生姓名',
     nullable: true,
