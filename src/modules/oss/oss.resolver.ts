@@ -1,6 +1,5 @@
 import { Resolver } from '@nestjs/graphql';
 import { Query } from '@nestjs/graphql';
-import { OssType } from './dto/oss.type';
 import { OssService } from './oss.service';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';

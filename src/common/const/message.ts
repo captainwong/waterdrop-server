@@ -17,12 +17,12 @@ export const Message = {
   [Code.STUDENT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '学生不存在或密码不匹配',
   [Code.STUDENT_PASSWORD_NOT_MATCH]: '学生密码不匹配',
   [Code.CREATE_STUDENT_FAILED]: '创建学生失败',
-  [Code.ORGANIZATION_NOT_EXISTS]: '机构不存在',
-  [Code.ORGANIZATION_ALREADY_EXISTS]: '机构已存在',
+  [Code.ORGANIZATION_NOT_EXISTS]: '门店不存在',
+  [Code.ORGANIZATION_ALREADY_EXISTS]: '门店已存在',
   [Code.ORGANIZATION_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]:
-    '机构不存在或密码不匹配',
-  [Code.ORGANIZATION_PASSWORD_NOT_MATCH]: '机构密码不匹配',
-  [Code.CREATE_ORGANIZATION_FAILED]: '创建机构失败',
+    '门店不存在或密码不匹配',
+  [Code.ORGANIZATION_PASSWORD_NOT_MATCH]: '门店密码不匹配',
+  [Code.CREATE_ORGANIZATION_FAILED]: '创建门店失败',
   [Code.OSS_GET_SIGNATURE_ERROR]: '获取OSS签名失败',
 };
 

@@ -22,7 +22,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { StudentService } from '../student/student.service';
 import { compare, hash } from '@/utils/hash';
-import { CodeMsg } from '@/common/const/message';
 
 @Injectable()
 export class AuthService {
@@ -40,10 +39,7 @@ export class AuthService {
       console.log('diff', diff);
       if (diff < 60) {
         console.log('diff < 60');
-        return {
-          code: SMS_CODE_STILL_VALID,
-          message: '验证码还在有效期内，不要重复发送',
-        };
+        return createCodeMsgResult(SMS_CODE_STILL_VALID);
       }
     }
     const code = getRandomVerificationCode4();
