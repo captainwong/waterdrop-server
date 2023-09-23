@@ -23,6 +23,7 @@ export const Message = {
     '机构不存在或密码不匹配',
   [Code.ORGANIZATION_PASSWORD_NOT_MATCH]: '机构密码不匹配',
   [Code.CREATE_ORGANIZATION_FAILED]: '创建机构失败',
+  [Code.OSS_GET_SIGNATURE_ERROR]: '获取OSS签名失败',
 };
 
 export const CodeMsg = (code: number): string => {

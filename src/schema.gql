@@ -154,6 +154,17 @@ type OssType {
   dir: String!
 }
 
+type OssResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: OssType
+}
+
 type StudentTypeDto {
   id: String!
   createdAt: DateTime!
@@ -209,7 +220,7 @@ type Query {
   findOneByTel(tel: String!): UserTypeDto!
 
   """oss info"""
-  getOSSInfo: OssType!
+  getOSSInfo: OssResult!
 
   """Find student by id"""
   getStudentInfo: StudentResult!
