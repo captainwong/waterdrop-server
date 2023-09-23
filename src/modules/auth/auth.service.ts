@@ -5,7 +5,7 @@ import { getRandomVerificationCode4 } from '@/utils';
 import { UserService } from '../user/user.service';
 import smsClient from '@/utils/sms';
 import * as dayjs from 'dayjs';
-import { Result } from '@/common/dto/result.dto';
+import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
 import {
   CREATE_USER_FAILED,
   SEND_SMS_FAILED,
@@ -22,6 +22,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { StudentService } from '../student/student.service';
 import { compare, hash } from '@/utils/hash';
+import { CodeMsg } from '@/common/const/message';
 
 @Injectable()
 export class AuthService {
@@ -61,14 +62,9 @@ export class AuthService {
         const result = await this.userService.updateSmsCode(user.id, code);
         console.log('update user result', result);
         if (result) {
-          return {
-            code: SUCCESS,
-          };
+          return createCodeMsgResult(SUCCESS);
         } else {
-          return {
-            code: UPDATE_USER_SMS_CODE_FAILED,
-            message: '更新用户验证码失败',
-          };
+          return createCodeMsgResult(UPDATE_USER_SMS_CODE_FAILED);
         }
       } else {
         console.log('create user');
@@ -79,65 +75,43 @@ export class AuthService {
         });
         console.log('create user result', result);
         if (result) {
-          return {
-            code: SUCCESS,
-          };
+          return createCodeMsgResult(SUCCESS);
         } else {
-          return {
-            code: CREATE_USER_FAILED,
-            message: '创建用户失败',
-          };
+          return createCodeMsgResult(CREATE_USER_FAILED);
         }
       }
     } catch (error) {
       // 如有需要，请打印 error
       console.error(error);
-      return {
-        code: SEND_SMS_FAILED,
-        message: '发送短信失败',
-      };
+      return createCodeMsgResult(SEND_SMS_FAILED);
     }
   }
 
   async login(tel: string, code: string): Promise<Result> {
     const user = await this.userService.findOneByTel(tel);
     if (!user) {
-      return {
-        code: USER_NOT_EXISTS,
-        message: '用户不存在',
-      };
+      return createCodeMsgResult(USER_NOT_EXISTS);
     }
 
     if (process.env.NODE_ENV === 'development' && code === '1234') {
+      // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
       const token = this.jwtService.sign({
         id: user.id,
         entity: 'user',
       });
-      return {
-        code: SUCCESS,
-        data: token,
-      };
+      return createCodeMsgResult(SUCCESS, token);
     }
 
     if (!user.smsCode || !user.smsCodeCreatedAt) {
-      return {
-        code: USER_SMS_CODE_NOT_EXISTS,
-        message: '用户验证码不存在',
-      };
+      return createCodeMsgResult(USER_SMS_CODE_NOT_EXISTS);
     }
 
     if (dayjs().diff(dayjs(user.smsCodeCreatedAt), 'minute') >= 60) {
-      return {
-        code: USER_SMS_CODE_EXPIRED,
-        message: '用户验证码已过期，请重新发送',
-      };
+      return createCodeMsgResult(USER_SMS_CODE_EXPIRED);
     }
 
     if (user.smsCode !== code) {
-      return {
-        code: USER_SMS_CODE_NOT_MATCH,
-        message: '用户验证码不匹配',
-      };
+      return createCodeMsgResult(USER_SMS_CODE_NOT_MATCH);
     }
 
     // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
@@ -145,20 +119,14 @@ export class AuthService {
       id: user.id,
     });
 
-    return {
-      code: SUCCESS,
-      data: token,
-    };
+    return createCodeMsgResult(SUCCESS, token);
   }
 
   async studentRegister(account: string, password: string): Promise<Result> {
     const student = await this.studentService.findOneByAccount(account);
 
     if (student) {
-      return {
-        code: USER_ALREADY_EXISTS,
-        message: 'User already exists, please login',
-      };
+      return createCodeMsgResult(USER_ALREADY_EXISTS);
     }
 
     const newStudent = await this.studentService.create({
@@ -167,14 +135,9 @@ export class AuthService {
     });
 
     if (newStudent) {
-      return {
-        code: SUCCESS,
-      };
+      return createCodeMsgResult(SUCCESS);
     } else {
-      return {
-        code: CREATE_USER_FAILED,
-        message: 'Create user failed',
-      };
+      return createCodeMsgResult(CREATE_USER_FAILED);
     }
   }
 
@@ -182,10 +145,7 @@ export class AuthService {
     const student = await this.studentService.findOneByAccount(account);
 
     if (!student) {
-      return {
-        code: USER_NOT_EXISTS,
-        message: 'User not exists',
-      };
+      return createCodeMsgResult(USER_NOT_EXISTS);
     }
 
     if (!(await compare(password, student.password))) {
@@ -197,16 +157,10 @@ export class AuthService {
         const token = this.jwtService.sign({
           id: student.id,
         });
-        return {
-          code: SUCCESS,
-          data: token,
-        };
+        return createCodeMsgResult(SUCCESS, token);
       }
 
-      return {
-        code: USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH,
-        message: 'User not exists or password not match',
-      };
+      return createCodeMsgResult(USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH);
     }
 
     // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
@@ -214,9 +168,6 @@ export class AuthService {
       id: student.id,
     });
 
-    return {
-      code: SUCCESS,
-      data: token,
-    };
+    return createCodeMsgResult(SUCCESS, token);
   }
 }

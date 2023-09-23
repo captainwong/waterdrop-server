@@ -1,6 +1,7 @@
 import { ClassType } from 'type-graphql';
 import PageTypeDto from './page-type.dto';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { CodeMsg } from '../const/message';
 
 export interface IResult<T> {
   code: number;
@@ -62,4 +63,12 @@ export class Result {
 
   @Field(() => String, { nullable: true, description: '数据' })
   data?: string;
+}
+
+export function createCodeMsgResult(code: number, data?: string) {
+  const result = new Result();
+  result.code = code;
+  result.message = CodeMsg(code);
+  result.data = data;
+  return result;
 }

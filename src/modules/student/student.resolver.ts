@@ -12,7 +12,8 @@ import {
   SUCCESS,
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
-import { Result } from '@/common/dto/result.dto';
+import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
+import { CodeMsg } from '@/common/const/message';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -26,13 +27,10 @@ export class StudentResolver {
   ): Promise<Result> {
     const student = await this.studentService.findOneByAccount(account);
     if (student) {
-      return {
-        code: STUDENT_ALREADY_EXISTS,
-        message: 'Student already exists',
-      };
+      return createCodeMsgResult(STUDENT_ALREADY_EXISTS);
     }
     const res = await this.studentService.create({ account, password });
-    return res ? { code: SUCCESS } : { code: CREATE_STUDENT_FAILED };
+    return createCodeMsgResult(res ? SUCCESS : CREATE_STUDENT_FAILED);
   }
 
   @Query(() => StudentResult, { description: 'Find student by id' })
@@ -41,8 +39,8 @@ export class StudentResolver {
   ): Promise<StudentResult> {
     const student = await this.studentService.findOne(id);
     return student
-      ? { code: SUCCESS, data: student }
-      : { code: STUDENT_NOT_EXISTS, message: 'Student not exists' };
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: student }
+      : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
   @Mutation(() => StudentResult, { description: 'Update student by id' })
@@ -52,8 +50,8 @@ export class StudentResolver {
   ): Promise<StudentResult> {
     const res = await this.studentService.update(id, params);
     return res
-      ? { code: SUCCESS }
-      : { code: STUDENT_NOT_EXISTS, message: 'Student not exists' };
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
+      : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
   @Query(() => StudentResults, { description: 'Find students' })
@@ -67,6 +65,7 @@ export class StudentResolver {
     });
     return {
       code: SUCCESS,
+      message: CodeMsg(SUCCESS),
       data: students,
       page: {
         page,

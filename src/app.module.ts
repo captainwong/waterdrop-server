@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { OrganizationModule } from './modules/organization/organization.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -37,6 +38,7 @@ import { StudentModule } from './modules/student/student.module';
     OssModule,
     AuthModule,
     StudentModule,
+    OrganizationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

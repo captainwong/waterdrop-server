@@ -5509,13 +5509,6 @@ neo-async@^2.6.2:
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-nestjs-paginate@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.npmmirror.com/nestjs-paginate/-/nestjs-paginate-8.3.0.tgz#089a4177db9044d8526527ed8754b0bce2578dad"
-  integrity sha512-ZZLzPhsngxeNUUY9AdnLFlnpDhD2paitaTFuvYIVMNURhcRG/XfgEIU4sfxXKzJWVU95zQEyMmcuTacYCybScw==
-  dependencies:
-    lodash "^4.17.21"
-
 no-case@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmmirror.com/no-case/-/no-case-3.0.4.tgz#d361fd5c9800f558551a8369fc0dcd4662b6124d"
