@@ -82,6 +82,7 @@ export class OrganizationResolver {
     });
     return {
       code: SUCCESS,
+      message: CodeMsg(SUCCESS),
       data: organizations,
       page: {
         page,
