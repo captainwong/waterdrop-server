@@ -1,0 +1,9 @@
+import { createResult, createResults } from '@/common/dto/result.dto';
+import { ObjectType } from '@nestjs/graphql';
+import { {{pascalCase name}}TypeDto } from './{{kebabCase name}}-type.dto';
+
+@ObjectType()
+export class {{pascalCase name}}Result extends createResult({{pascalCase name}}TypeDto) {}
+
+@ObjectType()
+export class {{pascalCase name}}Results extends createResults({{pascalCase name}}TypeDto) {}

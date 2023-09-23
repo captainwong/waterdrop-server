@@ -1,0 +1,36 @@
+import { CommonEntity } from '@/common/entities/common.entity';
+import { IsNotEmpty } from 'class-validator';
+import { Column, Entity } from 'typeorm';
+
+@Entity('{{kebabCase name}}s')
+export class {{pascalCase name}} extends CommonEntity {
+  @Column({
+    comment: '姓名',
+    nullable: true,
+  })
+  name: string;
+
+  @Column({
+    comment: '电话',
+    nullable: true,
+  })
+  tel: string;
+
+  @Column({
+    comment: '头像',
+    nullable: true,
+  })
+  avatar: string;
+
+  @IsNotEmpty()
+  @Column({
+    comment: '账号',
+  })
+  account: string;
+
+  @IsNotEmpty()
+  @Column({
+    comment: '密码',
+  })
+  password: string;
+}

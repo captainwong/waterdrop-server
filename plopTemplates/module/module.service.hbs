@@ -1,0 +1,49 @@
+import { Injectable } from '@nestjs/common';
+import { {{pascalCase name}} } from './entities/{{kebabCase name}}.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Create{{pascalCase name}}Dto } from './dto/create-{{kebabCase name}}.dto';
+import { Update{{pascalCase name}}Dto } from './dto/update-{{kebabCase name}}.dto';
+
+@Injectable()
+export class {{pascalCase name}}Service {
+  constructor(
+    @InjectRepository({{pascalCase name}})
+    private readonly {{kebabCase name}}Repository: Repository<{{pascalCase name}}>,
+  ) {}
+
+  async findAll({
+    page,
+    pageSize,
+  }: {
+    page: number;
+    pageSize: number;
+  }): Promise<[{{pascalCase name}}[], number]> {
+    return this.{{kebabCase name}}Repository.findAndCount({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  async findOne(id: string): Promise<{{pascalCase name}}> {
+    return this.{{kebabCase name}}Repository.findOne({ where: { id } });
+  }
+
+  async findOneByAccount(account: string): Promise<{{pascalCase name}}> {
+    return this.{{kebabCase name}}Repository.findOne({
+      where: { account: account },
+    });
+  }
+
+  async create(dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
+    return this.{{kebabCase name}}Repository.save(this.{{kebabCase name}}Repository.create(dto));
+  }
+
+  async update(id: string, dto: Update{{pascalCase name}}Dto): Promise<boolean> {
+    const res = await this.{{kebabCase name}}Repository.update(id, dto);
+    return res.affected > 0;
+  }
+}

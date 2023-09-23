@@ -1,0 +1,12 @@
+import { Module } from '@nestjs/common';
+import { {{pascalCase name}}Resolver } from './{{kebabCase name}}.resolver';
+import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { {{pascalCase name}} } from './entities/{{kebabCase name}}.entity';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [ConfigModule, TypeOrmModule.forFeature([{{pascalCase name}}])],
+  providers: [{{pascalCase name}}Resolver, {{pascalCase name}}Service],
+})
+export class {{pascalCase name}}Module {}
