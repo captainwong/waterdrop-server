@@ -1,0 +1,524 @@
+{
+	"info": {
+		"_postman_id": "f343feea-c04c-4a80-8045-369e3e798356",
+		"name": "water-drop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2120834"
+	},
+	"item": [
+		{
+			"name": "sms",
+			"item": [
+				{
+					"name": "sendSMS",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation sendVerificationCode($tel: String!){\r\n  sendVerificationCode(tel: $tel){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
+								"variables": "{\r\n  \"tel\":\"13385401630\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "rest",
+					"item": [
+						{
+							"name": "findAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{host}}:{{port}}/users",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findOne",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{host}}:{{port}}/users/1",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"jack\",\r\n    \"desc\": \"king of the world\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/users",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{host}}:{{port}}/users/3",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"jackysdfg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/users/1",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation login($tel: String!, $smsCode: String!){\r\n  login(tel: $tel, smsCode: $smsCode){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
+								"variables": "{\r\n  \"tel\":\"13385401630\",\r\n  \"smsCode\":\"1234\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "oss",
+			"item": [
+				{
+					"name": "getOSSInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getOSSInfo {\r\n  getOSSInfo{\r\n    expire\r\n    policy\r\n    signature\r\n    accessId\r\n    host\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "org",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrganization($dto: CreateOrganizationDto!){\r\n  createOrganization(dto: $dto){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\": {\r\n    \"businessLicense\":\"asdfasdf;alkj;lkasjdf\",\r\n    \"identityCardBackImg\":\"赛发塞缝sdf\",\r\n    \"identityCardFrontImg\":\"asdf\",\r\n    \"tags\":\"a,b,c\",\r\n    \"desc\":\"安东风\",\r\n    \"name\":\"一号店\",\r\n    \"tel\":\"233\",\r\n    \"address\": \"asdfdflkj\",\r\n    \"longitude\": \"23434\",\r\n    \"latitude\": \"3434\",\r\n    \"logo\": \"23432dlkjflskdjf\",\r\n    \"frontImgs\": [\r\n      {\r\n        \"url\":\"11111\",\r\n        \"remark\": \"11111\"\r\n      },\r\n      {\r\n        \"url\": \"22222\",\r\n        \"remark\": \"22222\"\r\n      }\r\n    ]\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateOrganizationInfo($id: String!, $dto: UpdateOrganizationDto!){\r\n  updateOrganizationInfo(id:$id, dto: $dto){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"22399e06-4032-462d-99af-34e180009107\",\r\n  \"dto\": {\r\n    \"businessLicense\":\"asdfasdf;alkj;lkasjdf\",\r\n    \"identityCardBackImg\":\"赛发塞缝sdf\",\r\n    \"identityCardFrontImg\":\"asdf\",\r\n    \"tags\":\"a,b,c\",\r\n    \"desc\":\"安东风\",\r\n    \"name\":\"一号店\",\r\n    \"tel\":\"233\",\r\n    \"address\": \"asdfdflkj\",\r\n    \"longitude\": \"23434\",\r\n    \"latitude\": \"3434\",\r\n    \"logo\": \"23432dlkjflskdjf\",\r\n    \"frontImgs\": [\r\n      {\r\n        \"url\":\"11111\",\r\n        \"remark\": \"11111\"\r\n      },\r\n      {\r\n        \"url\": \"22222\",\r\n        \"remark\": \"22222\"\r\n      }\r\n    ]\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "# Write your query or mutation here\r\nmutation deleteOrganization($id: String!){\r\n  deleteOrganization(id: $id){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"09265524-a666-4f7a-a288-0409f7a4eedd\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "student",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation studentRegister($account: String!, $password: String!){\r\n  studentRegister(account: $account, password: $password){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"account\":\"abcdefg\",\r\n  \"password\": \"234234234asdf\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation studentLogin($account: String!, $password: String!){\r\n  studentLogin(account: $account, password: $password){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
+								"variables": "{\r\n  \"account\":\"abcdefg\",\r\n  \"password\": \"234234234asdf\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getStudentInfo{\r\n  getStudentInfo{\r\n      code\r\n      message\r\n      data{\r\n        id\r\n        name\r\n        tel\r\n        avatar\r\n      }\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateStudentInfo($params: UpdateStudentDto!){\r\n  updateStudentInfo(params: $params){\r\n      code\r\n      message\r\n      data{\r\n        id\r\n        name\r\n        tel\r\n        avatar\r\n      }\r\n  }\r\n  \r\n}",
+								"variables": "{\r\n    \"params\":{\r\n        \"name\":\"啊赛发塞缝\",\r\n        \"tel\":\"234234\",\r\n        \"avatar\": \"dfasdfasdf\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getStudents",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "# Write your query or mutation here\r\nquery getStudents($page: PageInput!){\r\n  getStudents(page: $page){\r\n    code\r\n    data{\r\n      id\r\n      name\r\n      tel\r\n      avatar\r\n      createdAt\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":5\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/graphql",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

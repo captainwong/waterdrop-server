@@ -49,14 +49,6 @@ export class UserResolver {
     return await this.userService.update(id, params);
   }
 
-  @Mutation(() => Boolean, { description: 'Update user sms code by id' })
-  async updateUserSmsCode(
-    @Args('id') id: string,
-    @Args('code') code: string,
-  ): Promise<boolean> {
-    return (await this.userService.updateSmsCode(id, code)) ? true : false;
-  }
-
   @Mutation(() => Boolean, { description: 'Delete user by id' })
   async deleteUser(@Args('id') id: string): Promise<boolean> {
     return (await this.userService.remove(id)) ? true : false;

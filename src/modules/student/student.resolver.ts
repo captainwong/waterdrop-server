@@ -57,6 +57,7 @@ export class StudentResolver {
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
+  // FIXME: 不应该用 student 的 token 来获取所有的 student
   @Query(() => StudentResults, { description: 'Find students' })
   async getStudents(
     @Args('page') pageInput: PageInput,
