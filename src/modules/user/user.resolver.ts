@@ -6,7 +6,10 @@ import { UserTypeDto } from './dto/user-type.dto';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { Result } from '@/common/dto/result.dto';
+import { Entity } from '@/common/decorators/entity.decorator';
+import { EntityGuard } from '@/common/guards/entity.guard';
 
+@Entity('user')
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
@@ -23,7 +26,7 @@ export class UserResolver {
     return await this.userService.findOne(id);
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, EntityGuard)
   @Query(() => UserTypeDto, { description: 'Find user by id' })
   async getUserInfo(@Context() ctx: any): Promise<UserTypeDto> {
     // console.log('getUserInfo', ctx);

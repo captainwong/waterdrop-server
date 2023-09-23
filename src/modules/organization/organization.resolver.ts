@@ -17,8 +17,11 @@ import { PageInput } from '@/common/dto/page-input.dto';
 import { CreateOrganizationDto } from './dto/organization/create-organization.dto';
 import { CodeMsg } from '@/common/const/message';
 import { Result } from '@/common/dto/result.dto';
+import { Entity } from '@/common/decorators/entity.decorator';
+import { EntityGuard } from '@/common/guards/entity.guard';
 
-@UseGuards(GqlAuthGuard)
+@Entity('user')
+@UseGuards(GqlAuthGuard, EntityGuard)
 @Resolver()
 export class OrganizationResolver {
   constructor(private readonly organizationService: OrganizationService) {}

@@ -14,8 +14,11 @@ import {
 import { PageInput } from '@/common/dto/page-input.dto';
 import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
+import { Entity } from '@/common/decorators/entity.decorator';
+import { EntityGuard } from '@/common/guards/entity.guard';
 
-@UseGuards(GqlAuthGuard)
+@Entity('student')
+@UseGuards(GqlAuthGuard, EntityGuard)
 @Resolver()
 export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}

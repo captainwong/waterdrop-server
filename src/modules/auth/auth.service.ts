@@ -117,6 +117,7 @@ export class AuthService {
     // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
     const token = this.jwtService.sign({
       id: user.id,
+      entity: 'user',
     });
 
     return createCodeMsgResult(SUCCESS, token);
@@ -156,6 +157,7 @@ export class AuthService {
         });
         const token = this.jwtService.sign({
           id: student.id,
+          entity: 'student',
         });
         return createCodeMsgResult(SUCCESS, token);
       }
@@ -166,6 +168,7 @@ export class AuthService {
     // FIXME: 签发 token 时，需要加上用户类型，以便区分是 user 还是 student 还是其他
     const token = this.jwtService.sign({
       id: student.id,
+      entity: 'student',
     });
 
     return createCodeMsgResult(SUCCESS, token);
