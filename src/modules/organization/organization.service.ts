@@ -56,6 +56,18 @@ export class OrganizationService {
     return this.organizationRepository.save(organization);
   }
 
+  async remove(id: string, userId: string): Promise<boolean> {
+    console.log('remove', id, userId);
+    const res = await this.organizationRepository.update(id, {
+      deletedBy: userId,
+    });
+    if (res.affected > 0) {
+      const res2 = await this.organizationRepository.softDelete(id);
+      return res2.affected > 0;
+    }
+    return false;
+  }
+
   // always return true
   async deleteImgsByOrgId(orgId: string): Promise<boolean> {
     const imgs = await this.imgRepository

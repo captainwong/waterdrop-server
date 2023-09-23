@@ -16,6 +16,7 @@ import {
 import { PageInput } from '@/common/dto/page-input.dto';
 import { CreateOrganizationDto } from './dto/organization/create-organization.dto';
 import { CodeMsg } from '@/common/const/message';
+import { Result } from '@/common/dto/result.dto';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -24,9 +25,10 @@ export class OrganizationResolver {
 
   @Mutation(() => OrganizationResult, { description: 'Create organization' })
   async createOrganization(
-    @CurrentUserId() userId: string,
+    @CurrentUserId('userId') userId: string,
     @Args('dto') dto: CreateOrganizationDto,
   ): Promise<OrganizationResult> {
+    console.log('createOrganization', userId);
     const organization = await this.organizationService.create({
       ...dto,
       createdBy: userId,
@@ -55,7 +57,7 @@ export class OrganizationResolver {
     description: 'Update organization by id',
   })
   async updateOrganizationInfo(
-    @CurrentUserId() userId: string,
+    @CurrentUserId('userId') userId: string,
     @Args('id') id: string,
     @Args('dto') dto: UpdateOrganizationDto,
   ): Promise<OrganizationResult> {
@@ -90,5 +92,20 @@ export class OrganizationResolver {
         total,
       },
     };
+  }
+
+  @Mutation(() => Result, { description: 'Delete organization by id' })
+  async deleteOrganization(
+    @CurrentUserId('userId') userId: string,
+    @Args('id') id: string,
+  ): Promise<Result> {
+    console.log('deleteOrganization', id, userId);
+    const res = await this.organizationService.remove(id, userId);
+    return res
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
+      : {
+          code: ORGANIZATION_NOT_EXISTS,
+          message: CodeMsg(ORGANIZATION_NOT_EXISTS),
+        };
   }
 }

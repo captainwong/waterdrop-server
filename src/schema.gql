@@ -268,6 +268,9 @@ type Mutation {
 
   """Update organization by id"""
   updateOrganizationInfo(id: String!, dto: UpdateOrganizationDto!): OrganizationResult!
+
+  """Delete organization by id"""
+  deleteOrganization(id: String!): Result!
 }
 
 input CreateUserDto {
