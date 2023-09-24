@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Organization } from './entities/organization.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { CreateOrganizationDto } from './dto/organization/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/organization/update-organization.dto';
 import { OrganizationImage } from './entities/organization-image.entiry';
@@ -28,14 +28,20 @@ export class OrganizationService {
     });
   }
 
-  async findAll({
-    page,
-    pageSize,
-  }: {
-    page: number;
-    pageSize: number;
-  }): Promise<[Organization[], number]> {
+  async findAll(
+    page: number,
+    pageSize: number,
+    createdBy: string,
+    name?: string,
+  ): Promise<[Organization[], number]> {
+    const where: FindOptionsWhere<Organization> = {
+      createdBy: createdBy,
+    };
+    if (name) {
+      where.name = Like(`%${name}%`);
+    }
     return this.organizationRepository.findAndCount({
+      where,
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {

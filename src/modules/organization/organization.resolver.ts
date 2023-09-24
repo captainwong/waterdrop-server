@@ -78,13 +78,17 @@ export class OrganizationResolver {
 
   @Query(() => OrganizationResults, { description: 'Find organizations' })
   async getOrganizations(
+    @CurrentUserId('userId') userId: string,
     @Args('page') pageInput: PageInput,
+    @Args('name', { nullable: true }) name?: string,
   ): Promise<OrganizationResults> {
     const { page, pageSize } = pageInput;
-    const [organizations, total] = await this.organizationService.findAll({
+    const [organizations, total] = await this.organizationService.findAll(
       page,
       pageSize,
-    });
+      userId,
+      name,
+    );
     return {
       code: SUCCESS,
       message: CodeMsg(SUCCESS),

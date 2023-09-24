@@ -11,14 +11,16 @@ export class EntityGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    // works for graphql resolvers
-    const entity = this.reflector.get<string>(ENTITY_KEY, context.getClass());
-    // for controllers, use this
-    // const entity = this.reflector.get<string>(ENTITY_KEY, context.getHandler());
     // see https://github.com/nestjs/nest/issues/2027#issuecomment-527863600
+    // works for graphql resolvers
+    let entity = this.reflector.get<string>(ENTITY_KEY, context.getClass());
+    // for controllers, use this
+    if (!entity) {
+      entity = this.reflector.get<string>(ENTITY_KEY, context.getHandler());
+    }
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req.user;
-    // console.log('EntityGuard', entity, user);
+    console.log('EntityGuard', entity, user);
     return user && user.entity === entity;
   }
 }

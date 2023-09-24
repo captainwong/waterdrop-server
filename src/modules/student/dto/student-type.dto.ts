@@ -11,4 +11,7 @@ export class StudentTypeDto extends CommonTypeDto {
 
   @Field({ nullable: true, description: '头像' })
   avatar?: string;
+
+  @Field({ nullable: true, description: '学生账号' })
+  account?: string;
 }

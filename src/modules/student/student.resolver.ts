@@ -17,12 +17,12 @@ import { CodeMsg } from '@/common/const/message';
 import { Entity } from '@/common/decorators/entity.decorator';
 import { EntityGuard } from '@/common/guards/entity.guard';
 
-@Entity('student')
 @UseGuards(GqlAuthGuard, EntityGuard)
 @Resolver()
 export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
 
+  @Entity('student')
   @Mutation(() => Result, { description: 'Create student' })
   async createStudent(
     @Args('account') account: string,
@@ -36,6 +36,7 @@ export class StudentResolver {
     return createCodeMsgResult(res ? SUCCESS : CREATE_STUDENT_FAILED);
   }
 
+  @Entity('student')
   @Query(() => StudentResult, { description: 'Find student by id' })
   async getStudentInfo(
     @CurrentUserId('id') id: string,
@@ -46,6 +47,7 @@ export class StudentResolver {
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
+  @Entity('student')
   @Mutation(() => StudentResult, { description: 'Update student by id' })
   async updateStudentInfo(
     @CurrentUserId('id') id: string,
@@ -57,7 +59,7 @@ export class StudentResolver {
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
-  // FIXME: 不应该用 student 的 token 来获取所有的 student
+  @Entity('user')
   @Query(() => StudentResults, { description: 'Find students' })
   async getStudents(
     @Args('page') pageInput: PageInput,
