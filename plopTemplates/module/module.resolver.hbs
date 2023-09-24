@@ -13,60 +13,80 @@ import {
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
 import { Result } from '@/common/dto/result.dto';
+import { CodeMsg } from '@/common/const/message';
+import { Entity } from '@/common/decorators/entity.decorator';
+import { EntityGuard } from '@/common/guards/entity.guard';
 
-@UseGuards(GqlAuthGuard)
+@Entity('user')
+@UseGuards(GqlAuthGuard, EntityGuard)
 @Resolver()
 export class {{pascalCase name}}Resolver {
   constructor(private readonly {{kebabCase name}}Service: {{pascalCase name}}Service) {}
 
-  @Mutation(() => Result, { description: 'Create {{kebabCase name}}' })
+  @Mutation(() => {{pascalCase name}}Result, { description: 'Create {{kebabCase name}}' })
   async create{{pascalCase name}}(
-    @Args('account') account: string,
-    @Args('password') password: string,
-  ): Promise<Result> {
-    const {{kebabCase name}} = await this.{{kebabCase name}}Service.findOneByAccount(account);
+    @CurrentUserId('userId') userId: string,
+    @Args('dto') dto: Create{{pascalCase name}}Dto,
+  ): Promise<{{pascalCase name}}Result> {
+    console.log('create{{pascalCase name}}', userId);
+    const {{kebabCase name}} = await this.{{kebabCase name}}Service.create({
+      ...dto,
+      createdBy: userId,
+    });
     if ({{kebabCase name}}) {
+      return { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} };
+    } else {
       return {
-        code: {{constantCase name}}_ALREADY_EXISTS,
-        message: '{{pascalCase name}} already exists',
+        code: CREATE_{{constantCase name}}_FAILED,
+        message: CodeMsg(CREATE_{{constantCase name}}_FAILED),
       };
     }
-    const res = await this.{{kebabCase name}}Service.create({ account, password });
-    return res ? { code: SUCCESS } : { code: CREATE_{{constantCase name}}_FAILED };
   }
 
   @Query(() => {{pascalCase name}}Result, { description: 'Find {{kebabCase name}} by id' })
-  async get{{pascalCase name}}Info(
-    @CurrentUserId('id') id: string,
-  ): Promise<{{pascalCase name}}Result> {
+  async get{{pascalCase name}}Info(@Args('id') id: string): Promise<{{pascalCase name}}Result> {
     const {{kebabCase name}} = await this.{{kebabCase name}}Service.findOne(id);
     return {{kebabCase name}}
-      ? { code: SUCCESS, data: {{kebabCase name}} }
-      : { code: {{constantCase name}}_NOT_EXISTS, message: '{{pascalCase name}} not exists' };
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
+      : { code: {{constantCase name}}_NOT_EXISTS, message: CodeMsg({{constantCase name}}_NOT_EXISTS) };
   }
 
-  @Mutation(() => {{pascalCase name}}Result, { description: 'Update {{kebabCase name}} by id' })
+  @Mutation(() => {{pascalCase name}}Result, {
+    description: 'Update {{kebabCase name}} by id',
+  })
   async update{{pascalCase name}}Info(
-    @CurrentUserId('id') id: string,
-    @Args('params') params: Update{{pascalCase name}}Dto,
+    @CurrentUserId('userId') userId: string,
+    @Args('id') id: string,
+    @Args('dto') dto: Update{{pascalCase name}}Dto,
   ): Promise<{{pascalCase name}}Result> {
-    const res = await this.{{kebabCase name}}Service.update(id, params);
-    return res
-      ? { code: SUCCESS }
-      : { code: {{constantCase name}}_NOT_EXISTS, message: '{{pascalCase name}} not exists' };
+    const {{kebabCase name}} = await this.{{kebabCase name}}Service.update(id, {
+      ...dto,
+      updatedBy: userId,
+    });
+    return {{kebabCase name}}
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
+      : {
+          code: {{constantCase name}}_NOT_EXISTS,
+          message: CodeMsg({{constantCase name}}_NOT_EXISTS),
+        };
   }
 
   @Query(() => {{pascalCase name}}Results, { description: 'Find {{kebabCase name}}s' })
   async get{{pascalCase name}}s(
+    @CurrentUserId('userId') userId: string,
     @Args('page') pageInput: PageInput,
+    @Args('name', { nullable: true }) name?: string,
   ): Promise<{{pascalCase name}}Results> {
     const { page, pageSize } = pageInput;
-    const [{{kebabCase name}}s, total] = await this.{{kebabCase name}}Service.findAll({
+    const [{{kebabCase name}}s, total] = await this.{{kebabCase name}}Service.findAll(
       page,
       pageSize,
-    });
+      userId,
+      name,
+    );
     return {
       code: SUCCESS,
+      message: CodeMsg(SUCCESS),
       data: {{kebabCase name}}s,
       page: {
         page,
@@ -74,5 +94,20 @@ export class {{pascalCase name}}Resolver {
         total,
       },
     };
+  }
+
+  @Mutation(() => Result, { description: 'Delete organization by id' })
+  async delete{{pascalCase name}}(
+    @CurrentUserId('userId') userId: string,
+    @Args('id') id: string,
+  ): Promise<Result> {
+    console.log('delete{{pascalCase name}}', id, userId);
+    const res = await this.{{kebabCase name}}Service.remove(id, userId);
+    return res
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
+      : {
+          code: {{constantCase name}}_NOT_EXISTS,
+          message: CodeMsg({{constantCase name}}_NOT_EXISTS),
+        };
   }
 }

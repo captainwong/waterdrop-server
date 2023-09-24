@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CourseModule } from './modules/course/course.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -39,6 +40,7 @@ import { StudentModule } from './modules/student/student.module';
     AuthModule,
     StudentModule,
     OrganizationModule,
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

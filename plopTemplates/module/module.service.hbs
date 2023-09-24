@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { {{pascalCase name}} } from './entities/{{kebabCase name}}.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { Create{{pascalCase name}}Dto } from './dto/create-{{kebabCase name}}.dto';
 import { Update{{pascalCase name}}Dto } from './dto/update-{{kebabCase name}}.dto';
 
@@ -12,14 +12,20 @@ export class {{pascalCase name}}Service {
     private readonly {{kebabCase name}}Repository: Repository<{{pascalCase name}}>,
   ) {}
 
-  async findAll({
-    page,
-    pageSize,
-  }: {
-    page: number;
-    pageSize: number;
-  }): Promise<[{{pascalCase name}}[], number]> {
+  async findAll(
+    page: number,
+    pageSize: number,
+    createdBy: string,
+    name?: string,
+  ): Promise<[{{pascalCase name}}[], number]> {
+    const where: FindOptionsWhere<{{pascalCase name}}> = {
+      createdBy: createdBy,
+    };
+    if (name) {
+      where.name = Like(`%${name}%`);
+    }
     return this.{{kebabCase name}}Repository.findAndCount({
+      where,
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {
@@ -32,18 +38,28 @@ export class {{pascalCase name}}Service {
     return this.{{kebabCase name}}Repository.findOne({ where: { id } });
   }
 
-  async findOneByAccount(account: string): Promise<{{pascalCase name}}> {
-    return this.{{kebabCase name}}Repository.findOne({
-      where: { account: account },
-    });
-  }
-
   async create(dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
     return this.{{kebabCase name}}Repository.save(this.{{kebabCase name}}Repository.create(dto));
   }
 
-  async update(id: string, dto: Update{{pascalCase name}}Dto): Promise<boolean> {
-    const res = await this.{{kebabCase name}}Repository.update(id, dto);
-    return res.affected > 0;
+  async update(id: string, dto: Update{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
+    const {{kebabCase name}} = await this.findOne(id);
+    if (!{{kebabCase name}}) {
+      return null;
+    }
+    Object.assign({{kebabCase name}}, dto);
+    return this.{{kebabCase name}}Repository.save({{kebabCase name}});
+  }
+
+  async remove(id: string, userId: string): Promise<boolean> {
+    console.log('remove', id, userId);
+    const res = await this.{{kebabCase name}}Repository.update(id, {
+      deletedBy: userId,
+    });
+    if (res.affected > 0) {
+      const res2 = await this.{{kebabCase name}}Repository.softDelete(id);
+      return res2.affected > 0;
+    }
+    return false;
   }
 }

@@ -24,6 +24,11 @@ export const Message = {
   [Code.ORGANIZATION_PASSWORD_NOT_MATCH]: '门店密码不匹配',
   [Code.CREATE_ORGANIZATION_FAILED]: '创建门店失败',
   [Code.OSS_GET_SIGNATURE_ERROR]: '获取OSS签名失败',
+  [Code.COURSE_NOT_EXISTS]: '课程不存在',
+  [Code.COURSE_ALREADY_EXISTS]: '课程已存在',
+  [Code.COURSE_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '课程不存在或密码不匹配',
+  [Code.COURSE_PASSWORD_NOT_MATCH]: '课程密码不匹配',
+  [Code.CREATE_COURSE_FAILED]: '创建课程失败',
 };
 
 export const CodeMsg = (code: number): string => {

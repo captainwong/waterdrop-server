@@ -24,6 +24,76 @@ type Result {
   data: String
 }
 
+type CourseTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """课程名称"""
+  name: String!
+
+  """课程描述"""
+  desc: String
+
+  """适龄人群"""
+  group: String!
+
+  """适合基础"""
+  baseAbility: String!
+
+  """学员人数上限"""
+  limit: Float!
+
+  """课程时长"""
+  duration: Float!
+
+  """预约信息"""
+  reservation: String
+
+  """课程封面"""
+  cover: String
+
+  """退款信息"""
+  refund: String
+
+  """其他说明"""
+  note: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CourseResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: CourseTypeDto
+}
+
+type CourseResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [CourseTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
 type OrganizationImageTypeDto {
   """id"""
   id: String!
@@ -86,11 +156,6 @@ type OrganizationTypeDto {
   """环境图片"""
   otherImgs: [OrganizationImageTypeDto!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type OrganizationResult {
   """状态码"""
@@ -236,6 +301,12 @@ type Query {
 
   """Find organizations"""
   getOrganizations(page: PageInput!, name: String): OrganizationResults!
+
+  """Find course by id"""
+  getCourseInfo(id: String!): CourseResult!
+
+  """Find courses"""
+  getCourses(page: PageInput!, name: String): CourseResults!
 }
 
 input PageInput {
@@ -282,6 +353,15 @@ type Mutation {
 
   """Delete organization by id"""
   deleteOrganization(id: String!): Result!
+
+  """Create course"""
+  createCourse(dto: CreateCourseDto!): CourseResult!
+
+  """Update course by id"""
+  updateCourseInfo(id: String!, dto: UpdateCourseDto!): CourseResult!
+
+  """Delete course by id"""
+  deleteCourse(id: String!): Result!
 }
 
 input CreateUserDto {
@@ -429,4 +509,84 @@ input UpdateOrganizationDto {
 
   """环境图片"""
   otherImgs: [CreateImageDto!]
+}
+
+input CreateCourseDto {
+  id: String
+  createdAt: DateTime
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """课程名称"""
+  name: String!
+
+  """课程描述"""
+  desc: String
+
+  """适龄人群"""
+  group: String!
+
+  """适合基础"""
+  baseAbility: String!
+
+  """学员人数上限"""
+  limit: Float!
+
+  """课程时长"""
+  duration: Float!
+
+  """预约信息"""
+  reservation: String
+
+  """课程封面"""
+  cover: String
+
+  """退款信息"""
+  refund: String
+
+  """其他说明"""
+  note: String
+}
+
+input UpdateCourseDto {
+  id: String
+  createdAt: DateTime
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """课程名称"""
+  name: String
+
+  """课程描述"""
+  desc: String
+
+  """适龄人群"""
+  group: String
+
+  """适合基础"""
+  baseAbility: String
+
+  """学员人数上限"""
+  limit: Float
+
+  """课程时长"""
+  duration: Float
+
+  """预约信息"""
+  reservation: String
+
+  """课程封面"""
+  cover: String
+
+  """退款信息"""
+  refund: String
+
+  """其他说明"""
+  note: String
 }
