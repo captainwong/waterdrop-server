@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserInputDto } from './dto/user-input.dto';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { Entity } from '@/common/decorators/entity.decorator';
@@ -21,7 +20,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => UserResult, { description: 'Create user' })
-  async createUser(@Args('dto') dto: CreateUserDto): Promise<UserResult> {
+  async createUser(@Args('dto') dto: UserInputDto): Promise<UserResult> {
     console.log('createUser', dto);
     const user = await this.userService.create(dto);
     return user
@@ -86,7 +85,7 @@ export class UserResolver {
   @Mutation(() => UserResult, { description: 'Update user by token' })
   async updateUserByToken(
     @CurrentUserId('id') id: string,
-    @Args('dto') dto: UpdateUserDto,
+    @Args('dto') dto: UserInputDto,
   ): Promise<UserResult> {
     const user = await this.userService.update(id, dto);
     return user
