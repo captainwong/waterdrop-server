@@ -16,4 +16,7 @@ export class UserTypeDto {
 
   @Field({ nullable: true, description: '头像' })
   avatar?: string;
+
+  @Field({ nullable: true, description: '账号' })
+  account?: string;
 }

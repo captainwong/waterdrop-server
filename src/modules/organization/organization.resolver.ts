@@ -2,7 +2,6 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { UpdateOrganizationDto } from './dto/organization/update-organization.dto';
 import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import {
   OrganizationResult,

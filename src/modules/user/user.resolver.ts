@@ -8,45 +8,95 @@ import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { Result } from '@/common/dto/result.dto';
 import { Entity } from '@/common/decorators/entity.decorator';
 import { EntityGuard } from '@/common/guards/entity.guard';
+import { UserResult } from './dto/user-result';
+import {
+  CREATE_USER_FAILED,
+  SUCCESS,
+  USER_NOT_EXISTS,
+} from '@/common/const/code';
+import { CodeMsg } from '@/common/const/message';
+import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 
 @Entity('user')
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => Boolean, { description: 'Create user' })
-  async createUser(@Args('params') params: CreateUserDto): Promise<boolean> {
-    console.log('createUser', params);
-    const user = await this.userService.create(params);
-    return user ? true : false;
+  @Mutation(() => UserResult, { description: 'Create user' })
+  async createUser(@Args('dto') dto: CreateUserDto): Promise<UserResult> {
+    console.log('createUser', dto);
+    const user = await this.userService.create(dto);
+    return user
+      ? {
+          code: SUCCESS,
+          message: CodeMsg(SUCCESS),
+          data: user,
+        }
+      : {
+          code: CREATE_USER_FAILED,
+          message: CodeMsg(CREATE_USER_FAILED),
+        };
   }
 
-  @Query(() => UserTypeDto, { description: 'Find user by id' })
-  async findOne(@Args('id') id: string): Promise<UserTypeDto> {
-    return await this.userService.findOne(id);
+  @Query(() => UserResult, { description: 'Find user by id' })
+  async getUser(@Args('id') id: string): Promise<UserResult> {
+    const user = await this.userService.findOne(id);
+    return user
+      ? {
+          code: SUCCESS,
+          message: CodeMsg(SUCCESS),
+          data: user,
+        }
+      : {
+          code: USER_NOT_EXISTS,
+          message: CodeMsg(USER_NOT_EXISTS),
+        };
   }
 
   @UseGuards(GqlAuthGuard, EntityGuard)
-  @Query(() => UserTypeDto, { description: 'Find user by id' })
-  async getUserInfo(@Context() ctx: any): Promise<UserTypeDto> {
-    // console.log('getUserInfo', ctx);
-    const id = ctx.req.user.id;
-    return await this.userService.findOne(id);
+  @Query(() => UserResult, { description: 'Find user by token' })
+  async getUserByToken(@CurrentUserId('id') id: string): Promise<UserResult> {
+    const user = await this.userService.findOne(id);
+    return user
+      ? {
+          code: SUCCESS,
+          message: CodeMsg(SUCCESS),
+          data: user,
+        }
+      : {
+          code: USER_NOT_EXISTS,
+          message: CodeMsg(USER_NOT_EXISTS),
+        };
   }
 
-  @Query(() => UserTypeDto, { description: 'Find user by tel' })
-  async findOneByTel(@Args('tel') tel: string): Promise<UserTypeDto> {
-    return await this.userService.findOneByTel(tel);
+  @Query(() => UserResult, { description: 'Find user by tel' })
+  async getUserByTel(@Args('tel') tel: string): Promise<UserResult> {
+    const user = await this.userService.findOneByTel(tel);
+    return user
+      ? {
+          code: SUCCESS,
+          message: CodeMsg(SUCCESS),
+          data: user,
+        }
+      : {
+          code: USER_NOT_EXISTS,
+          message: CodeMsg(USER_NOT_EXISTS),
+        };
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Result, { description: 'Update user by id' })
-  async updateUserInfo(
-    @Context() ctx: any,
-    @Args('params') params: UpdateUserDto,
-  ): Promise<Result> {
-    const id = ctx.req.user.id;
-    return await this.userService.update(id, params);
+  @Mutation(() => UserResult, { description: 'Update user by token' })
+  async updateUserByToken(
+    @CurrentUserId('id') id: string,
+    @Args('dto') dto: UpdateUserDto,
+  ): Promise<UserResult> {
+    const user = await this.userService.update(id, dto);
+    return user
+      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: user }
+      : {
+          code: USER_NOT_EXISTS,
+          message: CodeMsg(USER_NOT_EXISTS),
+        };
   }
 
   @Mutation(() => Boolean, { description: 'Delete user by id' })

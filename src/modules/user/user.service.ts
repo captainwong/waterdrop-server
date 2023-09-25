@@ -1,11 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
-import { SUCCESS } from '@/common/const/code';
 
 @Injectable()
 export class UserService {
@@ -26,11 +24,7 @@ export class UserService {
   // }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
-    }
-    return user;
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async findOneByTel(tel: string): Promise<User> {
@@ -46,9 +40,13 @@ export class UserService {
     }
   }
 
-  async update(id: string, user: UpdateUserDto): Promise<Result> {
-    await this.userRepository.update(id, user);
-    return createCodeMsgResult(SUCCESS);
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+    if (!user) {
+      return null;
+    }
+    Object.assign(user, dto);
+    return this.userRepository.save(user);
   }
 
   async updateSmsCode(id: string, code: string): Promise<User> {

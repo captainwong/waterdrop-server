@@ -197,6 +197,20 @@ type UserTypeDto {
 
   """头像"""
   avatar: String
+
+  """账号"""
+  account: String
+}
+
+type UserResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: UserTypeDto
 }
 
 type OssType {
@@ -279,13 +293,13 @@ type StudentResults {
 
 type Query {
   """Find user by id"""
-  findOne(id: String!): UserTypeDto!
+  getUser(id: String!): UserResult!
 
-  """Find user by id"""
-  getUserInfo: UserTypeDto!
+  """Find user by token"""
+  getUserByToken: UserResult!
 
   """Find user by tel"""
-  findOneByTel(tel: String!): UserTypeDto!
+  getUserByTel(tel: String!): UserResult!
 
   """oss info"""
   getOSSInfo: OssResult!
@@ -319,10 +333,10 @@ input PageInput {
 
 type Mutation {
   """Create user"""
-  createUser(params: CreateUserDto!): Boolean!
+  createUser(dto: CreateUserDto!): UserResult!
 
-  """Update user by id"""
-  updateUserInfo(params: UpdateUserDto!): Result!
+  """Update user by token"""
+  updateUserByToken(dto: UpdateUserDto!): UserResult!
 
   """Delete user by id"""
   deleteUser(id: String!): Boolean!

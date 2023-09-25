@@ -2,7 +2,6 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { CourseResult, CourseResults } from './dto/course-result';
 import {
