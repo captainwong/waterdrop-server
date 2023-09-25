@@ -355,10 +355,7 @@ type Mutation {
   deleteOrganization(id: String!): Result!
 
   """Create course"""
-  createCourse(dto: CreateCourseDto!): CourseResult!
-
-  """Update course by id"""
-  updateCourseInfo(id: String!, dto: UpdateCourseDto!): CourseResult!
+  createOrUpdateCourse(dto: CreateCourseDto!, id: String): CourseResult!
 
   """Delete course by id"""
   deleteCourse(id: String!): Result!
@@ -537,46 +534,6 @@ input CreateCourseDto {
 
   """课程时长"""
   duration: Float!
-
-  """预约信息"""
-  reservation: String
-
-  """课程封面"""
-  cover: String
-
-  """退款信息"""
-  refund: String
-
-  """其他说明"""
-  note: String
-}
-
-input UpdateCourseDto {
-  id: String
-  createdAt: DateTime
-  createdBy: String
-  updatedAt: DateTime
-  updatedBy: String
-  deletedAt: DateTime
-  deletedBy: String
-
-  """课程名称"""
-  name: String
-
-  """课程描述"""
-  desc: String
-
-  """适龄人群"""
-  group: String
-
-  """适合基础"""
-  baseAbility: String
-
-  """学员人数上限"""
-  limit: Float
-
-  """课程时长"""
-  duration: Float
 
   """预约信息"""
   reservation: String

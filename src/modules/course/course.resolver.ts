@@ -24,22 +24,34 @@ export class CourseResolver {
   constructor(private readonly courseService: CourseService) {}
 
   @Mutation(() => CourseResult, { description: 'Create course' })
-  async createCourse(
+  async createOrUpdateCourse(
     @CurrentUserId('userId') userId: string,
     @Args('dto') dto: CreateCourseDto,
+    @Args('id', { nullable: true }) id?: string,
   ): Promise<CourseResult> {
-    console.log('createCourse', userId);
-    const course = await this.courseService.create({
-      ...dto,
-      createdBy: userId,
-    });
-    if (course) {
-      return { code: SUCCESS, message: CodeMsg(SUCCESS), data: course };
+    console.log('createOrUpdateCourse', userId, id);
+    if (!id) {
+      const course = await this.courseService.create({
+        ...dto,
+        createdBy: userId,
+      });
+      return course
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
+        : {
+            code: CREATE_COURSE_FAILED,
+            message: CodeMsg(CREATE_COURSE_FAILED),
+          };
     } else {
-      return {
-        code: CREATE_COURSE_FAILED,
-        message: CodeMsg(CREATE_COURSE_FAILED),
-      };
+      const course = await this.courseService.update(id, {
+        ...dto,
+        updatedBy: userId,
+      });
+      return course
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
+        : {
+            code: COURSE_NOT_EXISTS,
+            message: CodeMsg(COURSE_NOT_EXISTS),
+          };
     }
   }
 
@@ -51,32 +63,13 @@ export class CourseResolver {
       : { code: COURSE_NOT_EXISTS, message: CodeMsg(COURSE_NOT_EXISTS) };
   }
 
-  @Mutation(() => CourseResult, {
-    description: 'Update course by id',
-  })
-  async updateCourseInfo(
-    @CurrentUserId('userId') userId: string,
-    @Args('id') id: string,
-    @Args('dto') dto: UpdateCourseDto,
-  ): Promise<CourseResult> {
-    const course = await this.courseService.update(id, {
-      ...dto,
-      updatedBy: userId,
-    });
-    return course
-      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
-      : {
-          code: COURSE_NOT_EXISTS,
-          message: CodeMsg(COURSE_NOT_EXISTS),
-        };
-  }
-
   @Query(() => CourseResults, { description: 'Find courses' })
   async getCourses(
     @CurrentUserId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<CourseResults> {
+    console.log('getCourses', userId, pageInput, name);
     const { page, pageSize } = pageInput;
     const [courses, total] = await this.courseService.findAll(
       page,

@@ -24,22 +24,34 @@ export class {{pascalCase name}}Resolver {
   constructor(private readonly {{kebabCase name}}Service: {{pascalCase name}}Service) {}
 
   @Mutation(() => {{pascalCase name}}Result, { description: 'Create {{kebabCase name}}' })
-  async create{{pascalCase name}}(
+  async createOrUpdate{{pascalCase name}}(
     @CurrentUserId('userId') userId: string,
     @Args('dto') dto: Create{{pascalCase name}}Dto,
+    @Args('id', { nullable: true }) id?: string,
   ): Promise<{{pascalCase name}}Result> {
-    console.log('create{{pascalCase name}}', userId);
-    const {{kebabCase name}} = await this.{{kebabCase name}}Service.create({
-      ...dto,
-      createdBy: userId,
-    });
-    if ({{kebabCase name}}) {
-      return { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} };
+    console.log('createOrUpdate{{pascalCase name}}', userId, id);
+    if (!id) {
+      const {{kebabCase name}} = await this.{{kebabCase name}}Service.create({
+        ...dto,
+        createdBy: userId,
+      });
+      return {{kebabCase name}}
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
+        : {
+            code: CREATE_{{constantCase name}}_FAILED,
+            message: CodeMsg(CREATE_{{constantCase name}}_FAILED),
+          };
     } else {
-      return {
-        code: CREATE_{{constantCase name}}_FAILED,
-        message: CodeMsg(CREATE_{{constantCase name}}_FAILED),
-      };
+      const {{kebabCase name}} = await this.{{kebabCase name}}Service.update(id, {
+        ...dto,
+        updatedBy: userId,
+      });
+      return {{kebabCase name}}
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
+        : {
+            code: {{constantCase name}}_NOT_EXISTS,
+            message: CodeMsg({{constantCase name}}_NOT_EXISTS),
+          };
     }
   }
 
@@ -49,26 +61,6 @@ export class {{pascalCase name}}Resolver {
     return {{kebabCase name}}
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
       : { code: {{constantCase name}}_NOT_EXISTS, message: CodeMsg({{constantCase name}}_NOT_EXISTS) };
-  }
-
-  @Mutation(() => {{pascalCase name}}Result, {
-    description: 'Update {{kebabCase name}} by id',
-  })
-  async update{{pascalCase name}}Info(
-    @CurrentUserId('userId') userId: string,
-    @Args('id') id: string,
-    @Args('dto') dto: Update{{pascalCase name}}Dto,
-  ): Promise<{{pascalCase name}}Result> {
-    const {{kebabCase name}} = await this.{{kebabCase name}}Service.update(id, {
-      ...dto,
-      updatedBy: userId,
-    });
-    return {{kebabCase name}}
-      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
-      : {
-          code: {{constantCase name}}_NOT_EXISTS,
-          message: CodeMsg({{constantCase name}}_NOT_EXISTS),
-        };
   }
 
   @Query(() => {{pascalCase name}}Results, { description: 'Find {{kebabCase name}}s' })
