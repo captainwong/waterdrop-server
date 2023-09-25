@@ -27,22 +27,34 @@ export class OrganizationResolver {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Mutation(() => OrganizationResult, { description: 'Create organization' })
-  async createOrganization(
+  async createOrUpdateOrganization(
     @CurrentUserId('userId') userId: string,
     @Args('dto') dto: CreateOrganizationDto,
+    @Args('id', { nullable: true }) id?: string,
   ): Promise<OrganizationResult> {
-    console.log('createOrganization', userId);
-    const organization = await this.organizationService.create({
-      ...dto,
-      createdBy: userId,
-    });
-    if (organization) {
-      return { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization };
+    console.log('createOrUpdateOrganization', userId, id);
+    if (!id) {
+      const organization = await this.organizationService.create({
+        ...dto,
+        createdBy: userId,
+      });
+      return organization
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
+        : {
+            code: CREATE_ORGANIZATION_FAILED,
+            message: CodeMsg(CREATE_ORGANIZATION_FAILED),
+          };
     } else {
-      return {
-        code: CREATE_ORGANIZATION_FAILED,
-        message: CodeMsg(CREATE_ORGANIZATION_FAILED),
-      };
+      const organization = await this.organizationService.update(id, {
+        ...dto,
+        updatedBy: userId,
+      });
+      return organization
+        ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
+        : {
+            code: ORGANIZATION_NOT_EXISTS,
+            message: CodeMsg(ORGANIZATION_NOT_EXISTS),
+          };
     }
   }
 
@@ -54,26 +66,6 @@ export class OrganizationResolver {
     return organization
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
       : { code: ORGANIZATION_NOT_EXISTS, message: 'Organization not exists' };
-  }
-
-  @Mutation(() => OrganizationResult, {
-    description: 'Update organization by id',
-  })
-  async updateOrganizationInfo(
-    @CurrentUserId('userId') userId: string,
-    @Args('id') id: string,
-    @Args('dto') dto: UpdateOrganizationDto,
-  ): Promise<OrganizationResult> {
-    const organization = await this.organizationService.update(id, {
-      ...dto,
-      updatedBy: userId,
-    });
-    return organization
-      ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
-      : {
-          code: ORGANIZATION_NOT_EXISTS,
-          message: CodeMsg(ORGANIZATION_NOT_EXISTS),
-        };
   }
 
   @Query(() => OrganizationResults, { description: 'Find organizations' })
