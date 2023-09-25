@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Course } from './entities/course.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { CourseInputDto } from './dto/course-input.dto';
 
 @Injectable()
 export class CourseService {
@@ -38,11 +37,11 @@ export class CourseService {
     return this.courseRepository.findOne({ where: { id } });
   }
 
-  async create(dto: CreateCourseDto): Promise<Course> {
+  async create(dto: CourseInputDto): Promise<Course> {
     return this.courseRepository.save(this.courseRepository.create(dto));
   }
 
-  async update(id: string, dto: UpdateCourseDto): Promise<Course> {
+  async update(id: string, dto: CourseInputDto): Promise<Course> {
     const course = await this.findOne(id);
     if (!course) {
       return null;

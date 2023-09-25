@@ -366,7 +366,7 @@ type Mutation {
   deleteOrganization(id: String!): Result!
 
   """Create course"""
-  createOrUpdateCourse(dto: CreateCourseDto!, id: String): CourseResult!
+  createOrUpdateCourse(dto: CourseInputDto!, id: String): CourseResult!
 
   """Delete course by id"""
   deleteCourse(id: String!): Result!
@@ -467,7 +467,7 @@ input CreateImageDto {
   remark: String
 }
 
-input CreateCourseDto {
+input CourseInputDto {
   id: String
   createdAt: DateTime
   createdBy: String

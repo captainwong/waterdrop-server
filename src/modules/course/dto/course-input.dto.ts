@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
 
 @InputType()
-export class CreateCourseDto extends CommonInputDto {
+export class CourseInputDto extends CommonInputDto {
   @Field({
     description: '课程名称',
   })

@@ -10,7 +10,7 @@ import {
   SUCCESS,
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
-import { CreateCourseDto } from './dto/create-course.dto';
+import { CourseInputDto } from './dto/course-input.dto';
 import { CodeMsg } from '@/common/const/message';
 import { Entity } from '@/common/decorators/entity.decorator';
 import { EntityGuard } from '@/common/guards/entity.guard';
@@ -25,7 +25,7 @@ export class CourseResolver {
   @Mutation(() => CourseResult, { description: 'Create course' })
   async createOrUpdateCourse(
     @CurrentUserId('userId') userId: string,
-    @Args('dto') dto: CreateCourseDto,
+    @Args('dto') dto: CourseInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<CourseResult> {
     console.log('createOrUpdateCourse', userId, id);
