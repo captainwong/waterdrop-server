@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Organization } from './entities/organization.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { CreateOrganizationDto } from './dto/organization/create-organization.dto';
-import { UpdateOrganizationDto } from './dto/organization/update-organization.dto';
+import { OrganizationInputDto } from './dto/organization/organization-input.dto';
 import { OrganizationImage } from './entities/organization-image.entiry';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class OrganizationService {
     private readonly imgRepository: Repository<OrganizationImage>,
   ) {}
 
-  async create(dto: CreateOrganizationDto): Promise<Organization> {
+  async create(dto: OrganizationInputDto): Promise<Organization> {
     return this.organizationRepository.save(
       this.organizationRepository.create(dto),
     );
@@ -51,7 +50,7 @@ export class OrganizationService {
     });
   }
 
-  async update(id: string, dto: UpdateOrganizationDto): Promise<Organization> {
+  async update(id: string, dto: OrganizationInputDto): Promise<Organization> {
     const organization = await this.findOne(id);
     if (!organization) {
       return null;

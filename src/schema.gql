@@ -360,7 +360,7 @@ type Mutation {
   updateStudentInfo(params: UpdateStudentDto!): StudentResult!
 
   """Create organization"""
-  createOrUpdateOrganization(dto: CreateOrganizationDto!, id: String): OrganizationResult!
+  createOrUpdateOrganization(dto: OrganizationInputDto!, id: String): OrganizationResult!
 
   """Delete organization by id"""
   deleteOrganization(id: String!): Result!
@@ -407,7 +407,7 @@ input UpdateStudentDto {
   password: String
 }
 
-input CreateOrganizationDto {
+input OrganizationInputDto {
   id: String
   createdAt: DateTime
   createdBy: String

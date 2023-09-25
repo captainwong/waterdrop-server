@@ -3,7 +3,7 @@ import { CommonInputDto } from '@/common/dto/common-input.dto';
 import { CreateImageDto } from '../image/create-image.dto';
 
 @InputType()
-export class CreateOrganizationDto extends CommonInputDto {
+export class OrganizationInputDto extends CommonInputDto {
   @Field({
     description: '营业执照',
   })

@@ -13,7 +13,7 @@ import {
   SUCCESS,
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
-import { CreateOrganizationDto } from './dto/organization/create-organization.dto';
+import { OrganizationInputDto } from './dto/organization/organization-input.dto';
 import { CodeMsg } from '@/common/const/message';
 import { Result } from '@/common/dto/result.dto';
 import { Entity } from '@/common/decorators/entity.decorator';
@@ -28,7 +28,7 @@ export class OrganizationResolver {
   @Mutation(() => OrganizationResult, { description: 'Create organization' })
   async createOrUpdateOrganization(
     @CurrentUserId('userId') userId: string,
-    @Args('dto') dto: CreateOrganizationDto,
+    @Args('dto') dto: OrganizationInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<OrganizationResult> {
     console.log('createOrUpdateOrganization', userId, id);
