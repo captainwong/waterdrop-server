@@ -49,22 +49,11 @@ module.exports = (plop) => {
         type: 'add',
         path: path.join(
           __dirname,
-          'src/modules/{{kebabCase name}}/dto/create-{{kebabCase name}}.dto.ts',
+          'src/modules/{{kebabCase name}}/dto/{{kebabCase name}}-input.dto.ts',
         ),
         templateFile: path.join(
           __dirname,
-          'plopTemplates/module/dto/create-module.dto.hbs',
-        ),
-      },
-      {
-        type: 'add',
-        path: path.join(
-          __dirname,
-          'src/modules/{{kebabCase name}}/dto/update-{{kebabCase name}}.dto.ts',
-        ),
-        templateFile: path.join(
-          __dirname,
-          'plopTemplates/module/dto/update-module.dto.hbs',
+          'plopTemplates/module/dto/module-input.dto.hbs',
         ),
       },
       {

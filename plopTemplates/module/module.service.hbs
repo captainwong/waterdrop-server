@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { {{pascalCase name}} } from './entities/{{kebabCase name}}.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { Create{{pascalCase name}}Dto } from './dto/create-{{kebabCase name}}.dto';
-import { Update{{pascalCase name}}Dto } from './dto/update-{{kebabCase name}}.dto';
+import { {{pascalCase name}}InputDto } from './dto/{{kebabCase name}}-input.dto';
 
 @Injectable()
 export class {{pascalCase name}}Service {
@@ -38,11 +37,11 @@ export class {{pascalCase name}}Service {
     return this.{{kebabCase name}}Repository.findOne({ where: { id } });
   }
 
-  async create(dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
+  async create(dto: {{pascalCase name}}InputDto): Promise<{{pascalCase name}}> {
     return this.{{kebabCase name}}Repository.save(this.{{kebabCase name}}Repository.create(dto));
   }
 
-  async update(id: string, dto: Update{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
+  async update(id: string, dto: {{pascalCase name}}InputDto): Promise<{{pascalCase name}}> {
     const {{kebabCase name}} = await this.findOne(id);
     if (!{{kebabCase name}}) {
       return null;

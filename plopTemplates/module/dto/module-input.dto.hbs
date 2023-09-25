@@ -1,0 +1,8 @@
+import { Field, InputType } from '@nestjs/graphql';
+import { CommonInputDto } from '@/common/dto/common-input.dto';
+
+@InputType()
+export class {{pascalCase name}}InputDto extends CommonInputDto {
+  @Field({ nullable: true, description: 'id' })
+  id?: string;
+}

@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { Update{{pascalCase name}}Dto } from './dto/update-{{kebabCase name}}.dto';
+import { {{pascalCase name}}InputDto } from './dto/{{kebabCase name}}-input.dto';
 import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { {{pascalCase name}}Result, {{pascalCase name}}Results } from './dto/{{kebabCase name}}-result';
 import {
@@ -26,7 +26,7 @@ export class {{pascalCase name}}Resolver {
   @Mutation(() => {{pascalCase name}}Result, { description: 'Create {{kebabCase name}}' })
   async createOrUpdate{{pascalCase name}}(
     @CurrentUserId('userId') userId: string,
-    @Args('dto') dto: Create{{pascalCase name}}Dto,
+    @Args('dto') dto: {{pascalCase name}}InputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<{{pascalCase name}}Result> {
     console.log('createOrUpdate{{pascalCase name}}', userId, id);

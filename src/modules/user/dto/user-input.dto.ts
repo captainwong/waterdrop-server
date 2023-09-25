@@ -2,8 +2,8 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class UserInputDto {
-  @Field({ description: '用户id' })
-  id: string;
+  @Field({ description: '用户id', nullable: true })
+  id?: string;
 
   @Field({ description: '姓名' })
   name?: string;
