@@ -24,6 +24,25 @@ type Result {
   data: String
 }
 
+type TimeSlotType {
+  """开始时间"""
+  start: String!
+
+  """结束时间"""
+  end: String!
+
+  """key"""
+  key: Float!
+}
+
+type TimeSlotsType {
+  """weekday"""
+  weekday: String!
+
+  """time slots"""
+  slots: [TimeSlotType!]!
+}
+
 type CourseTypeDto {
   id: String!
   createdAt: DateTime!
@@ -62,6 +81,9 @@ type CourseTypeDto {
 
   """其他说明"""
   note: String
+
+  """可约时间"""
+  resavableTimeSlots: [TimeSlotsType!]
 }
 
 """
@@ -333,10 +355,10 @@ input PageInput {
 
 type Mutation {
   """Create user"""
-  createUser(dto: CreateUserDto!): UserResult!
+  createUser(dto: UserInputDto!): UserResult!
 
   """Update user by token"""
-  updateUserByToken(dto: UpdateUserDto!): UserResult!
+  updateUserByToken(dto: UserInputDto!): UserResult!
 
   """Delete user by id"""
   deleteUser(id: String!): Boolean!
@@ -372,25 +394,33 @@ type Mutation {
   deleteCourse(id: String!): Result!
 }
 
-input CreateUserDto {
-  tel: String!
-  smsCode: String!
-  smsCodeCreatedAt: DateTime!
-  name: String
-  desc: String
-  password: String
-  account: String
-}
+input UserInputDto {
+  """用户id"""
+  id: String
 
-input UpdateUserDto {
   """姓名"""
-  name: String
+  name: String!
 
   """描述"""
-  desc: String
+  desc: String!
 
   """头像"""
   avatar: String
+
+  """手机号码"""
+  tel: String!
+
+  """短信验证码"""
+  smsCode: String
+
+  """短信验证码创建时间"""
+  smsCodeCreatedAt: DateTime
+
+  """账号"""
+  account: String
+
+  """密码"""
+  password: String
 }
 
 input StudentInputDto {
@@ -508,4 +538,26 @@ input CourseInputDto {
 
   """其他说明"""
   note: String
+
+  """可约时间"""
+  resavableTimeSlots: [TimeSlotsInput!]
+}
+
+input TimeSlotsInput {
+  """weekday"""
+  weekday: String!
+
+  """time slots"""
+  slots: [TimeSlotInput!]!
+}
+
+input TimeSlotInput {
+  """开始时间"""
+  start: String!
+
+  """结束时间"""
+  end: String!
+
+  """key"""
+  key: Float!
 }

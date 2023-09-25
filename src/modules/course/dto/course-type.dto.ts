@@ -1,5 +1,6 @@
 import { CommonTypeDto } from '@/common/dto/common-type.dto';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { TimeSlotsType } from './common-type.dto';
 
 @ObjectType()
 export class CourseTypeDto extends CommonTypeDto {
@@ -43,4 +44,7 @@ export class CourseTypeDto extends CommonTypeDto {
 
   @Field({ description: '其他说明', nullable: true })
   note: string;
+
+  @Field(() => [TimeSlotsType], { description: '可约时间', nullable: true })
+  resavableTimeSlots: TimeSlotsType[];
 }

@@ -1,6 +1,7 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { IsInt, IsNotEmpty, Max, Min } from 'class-validator';
 import { Column, Entity } from 'typeorm';
+import { TimeSlotsType } from '../dto/common-type.dto';
 
 @Entity('courses')
 export class Course extends CommonEntity {
@@ -53,4 +54,7 @@ export class Course extends CommonEntity {
 
   @Column({ comment: '其他说明', nullable: true })
   note: string;
+
+  @Column('simple-json', { comment: '可约时间', nullable: true })
+  resavableTimeSlots: TimeSlotsType[];
 }
