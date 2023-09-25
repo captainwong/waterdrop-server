@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Student } from './entities/student.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { StudentInputDto } from './dto/student-input.dto';
 
 @Injectable()
 export class StudentService {
@@ -38,11 +37,11 @@ export class StudentService {
     });
   }
 
-  async create(dto: CreateStudentDto): Promise<Student> {
+  async create(dto: StudentInputDto): Promise<Student> {
     return this.studentRepository.save(this.studentRepository.create(dto));
   }
 
-  async update(id: string, dto: UpdateStudentDto): Promise<boolean> {
+  async update(id: string, dto: StudentInputDto): Promise<boolean> {
     const res = await this.studentRepository.update(id, dto);
     return res.affected > 0;
   }

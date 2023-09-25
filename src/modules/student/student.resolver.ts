@@ -2,7 +2,6 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { UpdateStudentDto } from './dto/update-student.dto';
 import { CurrentUserId } from '@/common/decorators/current-user.decorator';
 import { StudentResult, StudentResults } from './dto/student-result';
 import {
@@ -16,6 +15,7 @@ import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
 import { Entity } from '@/common/decorators/entity.decorator';
 import { EntityGuard } from '@/common/guards/entity.guard';
+import { StudentInputDto } from './dto/student-input.dto';
 
 @UseGuards(GqlAuthGuard, EntityGuard)
 @Resolver()
@@ -51,7 +51,7 @@ export class StudentResolver {
   @Mutation(() => StudentResult, { description: 'Update student by id' })
   async updateStudentInfo(
     @CurrentUserId('id') id: string,
-    @Args('params') params: UpdateStudentDto,
+    @Args('params') params: StudentInputDto,
   ): Promise<StudentResult> {
     const res = await this.studentService.update(id, params);
     return res

@@ -357,7 +357,7 @@ type Mutation {
   createStudent(account: String!, password: String!): Result!
 
   """Update student by id"""
-  updateStudentInfo(params: UpdateStudentDto!): StudentResult!
+  updateStudentInfo(params: StudentInputDto!): StudentResult!
 
   """Create organization"""
   createOrUpdateOrganization(dto: OrganizationInputDto!, id: String): OrganizationResult!
@@ -393,7 +393,7 @@ input UpdateUserDto {
   avatar: String
 }
 
-input UpdateStudentDto {
+input StudentInputDto {
   """姓名"""
   name: String
 
@@ -402,6 +402,9 @@ input UpdateStudentDto {
 
   """头像"""
   avatar: String
+
+  """账号"""
+  account: String
 
   """密码"""
   password: String
