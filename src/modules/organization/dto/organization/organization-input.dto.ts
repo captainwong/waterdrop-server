@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
-import { CreateImageDto } from '../image/create-image.dto';
+import { ImageInputDto } from '../image/image-input.dto';
 
 @InputType()
 export class OrganizationInputDto extends CommonInputDto {
@@ -67,21 +67,21 @@ export class OrganizationInputDto extends CommonInputDto {
   })
   logo?: string;
 
-  @Field(() => [CreateImageDto], {
+  @Field(() => [ImageInputDto], {
     nullable: true,
     description: '门面图片',
   })
-  frontImgs?: CreateImageDto[];
+  frontImgs?: ImageInputDto[];
 
-  @Field(() => [CreateImageDto], {
+  @Field(() => [ImageInputDto], {
     nullable: true,
     description: '室内图片',
   })
-  roomImgs?: CreateImageDto[];
+  roomImgs?: ImageInputDto[];
 
-  @Field(() => [CreateImageDto], {
+  @Field(() => [ImageInputDto], {
     nullable: true,
     description: '环境图片',
   })
-  otherImgs?: CreateImageDto[];
+  otherImgs?: ImageInputDto[];
 }

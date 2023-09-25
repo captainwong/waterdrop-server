@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateImageDto {
+export class ImageInputDto {
   @Field({ description: 'url' })
   url: string;
 
