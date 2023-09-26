@@ -510,22 +510,22 @@ input CourseInputDto {
   deletedBy: String
 
   """课程名称"""
-  name: String!
+  name: String
 
   """课程描述"""
   desc: String
 
   """适龄人群"""
-  group: String!
+  group: String
 
   """适合基础"""
-  baseAbility: String!
+  baseAbility: String
 
   """学员人数上限"""
-  limit: Float!
+  limit: Float
 
   """课程时长"""
-  duration: Float!
+  duration: Float
 
   """预约信息"""
   reservation: String
