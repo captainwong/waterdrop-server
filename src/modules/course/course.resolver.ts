@@ -15,6 +15,7 @@ import { CodeMsg } from '@/common/const/message';
 import { Entity } from '@/common/decorators/entity.decorator';
 import { EntityGuard } from '@/common/guards/entity.guard';
 import { Result } from '@/common/dto/result.dto';
+import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
 
 @Entity('user')
 @UseGuards(GqlAuthGuard, EntityGuard)
@@ -25,14 +26,18 @@ export class CourseResolver {
   @Mutation(() => CourseResult, { description: 'Create course' })
   async createOrUpdateCourse(
     @CurrentUserId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: CourseInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<CourseResult> {
-    console.log('createOrUpdateCourse', userId, id);
+    console.log('createOrUpdateCourse', userId, organizationId, id);
     if (!id) {
       const course = await this.courseService.create({
         ...dto,
         createdBy: userId,
+        organization: {
+          id: organizationId,
+        },
       });
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
@@ -41,7 +46,7 @@ export class CourseResolver {
             message: CodeMsg(CREATE_COURSE_FAILED),
           };
     } else {
-      const course = await this.courseService.update(id, {
+      const course = await this.courseService.update(id, organizationId, {
         ...dto,
         updatedBy: userId,
       });
@@ -64,6 +69,7 @@ export class CourseResolver {
 
   @Query(() => CourseResults, { description: 'Find courses' })
   async getCourses(
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @CurrentUserId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
@@ -74,6 +80,7 @@ export class CourseResolver {
       page,
       pageSize,
       userId,
+      organizationId,
       name,
     );
     return {

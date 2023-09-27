@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
 import { TimeSlotsInput } from './common-input.dto';
+import { Organization } from '@/modules/organization/entities/organization.entity';
 
 @InputType()
 export class CourseInputDto extends CommonInputDto {
@@ -36,4 +37,9 @@ export class CourseInputDto extends CommonInputDto {
 
   @Field(() => [TimeSlotsInput], { description: '可约时间', nullable: true })
   resavableTimeSlots: TimeSlotsInput[];
+
+  // @Field(() => Organization, {
+  //   description: '所属门店',
+  // })
+  // organization: Organization;
 }

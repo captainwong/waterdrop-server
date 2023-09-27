@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Course } from './entities/course.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { CourseInputDto } from './dto/course-input.dto';
+import { DeepPartial, FindOptionsWhere, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class CourseService {
@@ -15,10 +14,14 @@ export class CourseService {
     page: number,
     pageSize: number,
     createdBy: string,
+    organizationId: string,
     name?: string,
   ): Promise<[Course[], number]> {
     const where: FindOptionsWhere<Course> = {
       createdBy: createdBy,
+      organization: {
+        id: organizationId,
+      },
     };
     if (name) {
       where.name = Like(`%${name}%`);
@@ -37,17 +40,30 @@ export class CourseService {
     return this.courseRepository.findOne({ where: { id } });
   }
 
-  async create(dto: CourseInputDto): Promise<Course> {
+  async create(dto: DeepPartial<Course>): Promise<Course> {
     return this.courseRepository.save(this.courseRepository.create(dto));
   }
 
-  async update(id: string, dto: CourseInputDto): Promise<Course> {
-    const course = await this.findOne(id);
-    if (!course) {
+  async update(
+    id: string,
+    organizationId: string,
+    dto: DeepPartial<Course>,
+  ): Promise<Course> {
+    const where: FindOptionsWhere<Course> = {
+      id,
+      organization: {
+        id: organizationId,
+      },
+    };
+    const [courses, total] = await this.courseRepository.findAndCount({
+      where,
+      take: 1,
+    });
+    if (total < 1) {
       return null;
     }
-    Object.assign(course, dto);
-    return this.courseRepository.save(course);
+    Object.assign(courses[0], dto);
+    return this.courseRepository.save(courses[0]);
   }
 
   async remove(id: string, userId: string): Promise<boolean> {
