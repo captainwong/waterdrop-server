@@ -4,7 +4,7 @@ import { OrganizationService } from './organization.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Organization } from './entities/organization.entity';
 import { ConfigModule } from '@nestjs/config';
-import { OrganizationImage } from './entities/organization-image.entiry';
+import { OrganizationImage } from './entities/organization-image.entity';
 
 @Module({
   imports: [

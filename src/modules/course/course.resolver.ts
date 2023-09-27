@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentUserId } from '@/common/decorators/current-user.decorator';
+import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
 import { CourseResult, CourseResults } from './dto/course-result';
 import {
   CREATE_COURSE_FAILED,
@@ -12,33 +12,31 @@ import {
 import { PageInput } from '@/common/dto/page-input.dto';
 import { CourseInputDto } from './dto/course-input.dto';
 import { CodeMsg } from '@/common/const/message';
-import { Entity } from '@/common/decorators/entity.decorator';
-import { EntityGuard } from '@/common/guards/entity.guard';
+import { TokenEntity } from '@/common/decorators/token-entity.decorator';
+import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { Result } from '@/common/dto/result.dto';
 import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
 
-@Entity('user')
-@UseGuards(GqlAuthGuard, EntityGuard)
+@TokenEntity('user')
+@UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class CourseResolver {
   constructor(private readonly courseService: CourseService) {}
 
   @Mutation(() => CourseResult, { description: 'Create course' })
   async createOrUpdateCourse(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: CourseInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<CourseResult> {
-    console.log('createOrUpdateCourse', userId, organizationId, id);
+    console.log('createOrUpdateCourse', { userId, organizationId, id });
     if (!id) {
-      const course = await this.courseService.create({
-        ...dto,
-        createdBy: userId,
-        organization: {
-          id: organizationId,
-        },
-      });
+      const course = await this.courseService.create(
+        userId,
+        organizationId,
+        dto,
+      );
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
         : {
@@ -46,10 +44,12 @@ export class CourseResolver {
             message: CodeMsg(CREATE_COURSE_FAILED),
           };
     } else {
-      const course = await this.courseService.update(id, organizationId, {
-        ...dto,
-        updatedBy: userId,
-      });
+      const course = await this.courseService.update(
+        id,
+        userId,
+        organizationId,
+        dto,
+      );
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
         : {
@@ -60,8 +60,13 @@ export class CourseResolver {
   }
 
   @Query(() => CourseResult, { description: 'Find course by id' })
-  async getCourseInfo(@Args('id') id: string): Promise<CourseResult> {
-    const course = await this.courseService.findOne(id);
+  async getCourseInfo(
+    @CurrentTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
+    @Args('id') id: string,
+  ): Promise<CourseResult> {
+    console.log('getCourseInfo', { userId, organizationId, id });
+    const course = await this.courseService.findOne(id, userId, organizationId);
     return course
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
       : { code: COURSE_NOT_EXISTS, message: CodeMsg(COURSE_NOT_EXISTS) };
@@ -70,11 +75,11 @@ export class CourseResolver {
   @Query(() => CourseResults, { description: 'Find courses' })
   async getCourses(
     @CurrentOrganizationId('organizationId') organizationId: string,
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<CourseResults> {
-    console.log('getCourses', userId, pageInput, name);
+    console.log('getCourses', { userId, organizationId, pageInput, name });
     const { page, pageSize } = pageInput;
     const [courses, total] = await this.courseService.findAll(
       page,
@@ -97,11 +102,12 @@ export class CourseResolver {
 
   @Mutation(() => Result, { description: 'Delete course by id' })
   async deleteCourse(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('id') id: string,
   ): Promise<Result> {
-    console.log('deleteCourse', id, userId);
-    const res = await this.courseService.remove(id, userId);
+    console.log('deleteCourse', { userId, organizationId, id });
+    const res = await this.courseService.remove(id, userId, organizationId);
     return res
       ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
       : {

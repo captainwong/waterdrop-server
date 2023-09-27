@@ -1,8 +1,9 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { IsNotEmpty } from 'class-validator';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { OrganizationImage } from './organization-image.entiry';
+import { OrganizationImage } from './organization-image.entity';
 import { Course } from '@/modules/course/entities/course.entity';
+import { Card } from '@/modules/card/entities/card.entity';
 
 @Entity('organizations')
 export class Organization extends CommonEntity {
@@ -90,6 +91,9 @@ export class Organization extends CommonEntity {
   })
   otherImgs?: OrganizationImage[];
 
-  @OneToMany(() => Course, (course) => course.organization, { cascade: true })
+  @OneToMany(() => Course, (course) => course.organization)
   courses?: Course[];
+
+  @OneToMany(() => Card, (card) => card.organization)
+  cards: Card[];
 }

@@ -36,45 +36,76 @@ export class CourseService {
     });
   }
 
-  async findOne(id: string): Promise<Course> {
-    return this.courseRepository.findOne({ where: { id } });
+  async findOne(
+    id: string,
+    createdBy: string,
+    organizationId: string,
+  ): Promise<Course> {
+    return this.courseRepository.findOne({
+      where: { id, createdBy, organization: { id: organizationId } },
+    });
   }
 
-  async create(dto: DeepPartial<Course>): Promise<Course> {
-    return this.courseRepository.save(this.courseRepository.create(dto));
+  async create(
+    createdBy: string,
+    organizationId: string,
+    dto: DeepPartial<Course>,
+  ): Promise<Course> {
+    return this.courseRepository.save(
+      this.courseRepository.create({
+        ...dto,
+        createdBy,
+        organization: { id: organizationId },
+      }),
+    );
   }
 
   async update(
     id: string,
+    createdBy: string,
     organizationId: string,
     dto: DeepPartial<Course>,
   ): Promise<Course> {
-    const where: FindOptionsWhere<Course> = {
-      id,
-      organization: {
-        id: organizationId,
+    const course = await this.courseRepository.findOne({
+      where: {
+        id,
+        createdBy,
+        organization: {
+          id: organizationId,
+        },
       },
-    };
-    const [courses, total] = await this.courseRepository.findAndCount({
-      where,
-      take: 1,
     });
-    if (total < 1) {
+    if (!course) {
       return null;
     }
-    Object.assign(courses[0], dto);
-    return this.courseRepository.save(courses[0]);
+    Object.assign(course, { ...dto, updatedBy: createdBy });
+    return this.courseRepository.save(course);
   }
 
-  async remove(id: string, userId: string): Promise<boolean> {
-    console.log('remove', id, userId);
-    const res = await this.courseRepository.update(id, {
-      deletedBy: userId,
+  async remove(
+    id: string,
+    createdBy: string,
+    organizationId: string,
+  ): Promise<boolean> {
+    const course = await this.courseRepository.findOne({
+      where: {
+        id,
+        createdBy,
+        organization: {
+          id: organizationId,
+        },
+      },
     });
-    if (res.affected > 0) {
-      const res2 = await this.courseRepository.softDelete(id);
-      return res2.affected > 0;
+    if (!course) {
+      return false;
     }
-    return false;
+    course.deletedBy = createdBy;
+    await this.courseRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(course);
+        return transactionalEntityManager.softDelete(Course, course);
+      },
+    );
+    return true;
   }
 }

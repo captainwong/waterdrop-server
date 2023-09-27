@@ -29,6 +29,11 @@ export const Message = {
   [Code.COURSE_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '课程不存在或密码不匹配',
   [Code.COURSE_PASSWORD_NOT_MATCH]: '课程密码不匹配',
   [Code.CREATE_COURSE_FAILED]: '创建课程失败',
+  [Code.CARD_NOT_EXISTS]: '卡不存在',
+  [Code.CARD_ALREADY_EXISTS]: '卡已存在',
+  [Code.CARD_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '卡不存在或密码不匹配',
+  [Code.CARD_PASSWORD_NOT_MATCH]: '卡密码不匹配',
+  [Code.CREATE_CARD_FAILED]: '创建卡失败',
 };
 
 export const CodeMsg = (code: number): string => {

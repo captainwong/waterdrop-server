@@ -1,8 +1,9 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { IsInt, IsNotEmpty, Max, Min } from 'class-validator';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { TimeSlotsType } from '../dto/common-type.dto';
 import { Organization } from '@/modules/organization/entities/organization.entity';
+import { Card } from '@/modules/card/entities/card.entity';
 
 @Entity('courses')
 export class Course extends CommonEntity {
@@ -59,6 +60,11 @@ export class Course extends CommonEntity {
   @Column('simple-json', { comment: '可约时间', nullable: true })
   resavableTimeSlots: TimeSlotsType[];
 
-  @ManyToOne(() => Organization, (organization) => organization.courses)
+  @ManyToOne(() => Organization, (organization) => organization.courses, {
+    cascade: true,
+  })
   organization: Organization;
+
+  @OneToMany(() => Card, (card) => card.course)
+  cards: Card[];
 }

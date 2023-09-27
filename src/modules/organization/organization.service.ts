@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Organization } from './entities/organization.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { OrganizationInputDto } from './dto/organization/organization-input.dto';
-import { OrganizationImage } from './entities/organization-image.entiry';
+import { DeepPartial, FindOptionsWhere, Like, Repository } from 'typeorm';
+import { OrganizationImage } from './entities/organization-image.entity';
 
 @Injectable()
 export class OrganizationService {
@@ -14,15 +13,15 @@ export class OrganizationService {
     private readonly imgRepository: Repository<OrganizationImage>,
   ) {}
 
-  async create(dto: OrganizationInputDto): Promise<Organization> {
+  async create(dto: DeepPartial<Organization>): Promise<Organization> {
     return this.organizationRepository.save(
       this.organizationRepository.create(dto),
     );
   }
 
-  async findOne(id: string): Promise<Organization> {
+  async findOne(id: string, createdBy: string): Promise<Organization> {
     return this.organizationRepository.findOne({
-      where: { id },
+      where: { id, createdBy },
       relations: ['frontImgs', 'roomImgs', 'otherImgs'],
     });
   }
@@ -34,7 +33,7 @@ export class OrganizationService {
     name?: string,
   ): Promise<[Organization[], number]> {
     const where: FindOptionsWhere<Organization> = {
-      createdBy: createdBy,
+      createdBy,
     };
     if (name) {
       where.name = Like(`%${name}%`);
@@ -50,27 +49,47 @@ export class OrganizationService {
     });
   }
 
-  async update(id: string, dto: OrganizationInputDto): Promise<Organization> {
-    const organization = await this.findOne(id);
+  async update(
+    id: string,
+    createdBy: string,
+    dto: DeepPartial<Organization>,
+  ): Promise<Organization> {
+    const organization = await this.organizationRepository.findOne({
+      where: {
+        id,
+        createdBy: createdBy,
+      },
+    });
     if (!organization) {
       return null;
     }
-
     await this.deleteImgsByOrgId(id);
-    Object.assign(organization, dto);
+    Object.assign(organization, { ...dto, updatedBy: createdBy });
     return this.organizationRepository.save(organization);
   }
 
-  async remove(id: string, userId: string): Promise<boolean> {
-    console.log('remove', id, userId);
-    const res = await this.organizationRepository.update(id, {
-      deletedBy: userId,
+  async remove(id: string, createdBy: string): Promise<boolean> {
+    const organization = await this.organizationRepository.findOne({
+      where: {
+        id,
+        createdBy,
+      },
     });
-    if (res.affected > 0) {
-      const res2 = await this.organizationRepository.softDelete(id);
-      return res2.affected > 0;
+    if (!organization) {
+      return false;
     }
-    return false;
+    await this.deleteImgsByOrgId(id);
+    organization.deletedBy = createdBy;
+    await this.organizationRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(organization);
+        return transactionalEntityManager.softDelete(
+          Organization,
+          organization,
+        );
+      },
+    );
+    return true;
   }
 
   // always return true

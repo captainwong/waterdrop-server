@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentUserId } from '@/common/decorators/current-user.decorator';
+import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
 import { StudentResult, StudentResults } from './dto/student-result';
 import {
   CREATE_STUDENT_FAILED,
@@ -13,16 +13,16 @@ import {
 import { PageInput } from '@/common/dto/page-input.dto';
 import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
-import { Entity } from '@/common/decorators/entity.decorator';
-import { EntityGuard } from '@/common/guards/entity.guard';
+import { TokenEntity } from '@/common/decorators/token-entity.decorator';
+import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { StudentInputDto } from './dto/student-input.dto';
 
-@UseGuards(GqlAuthGuard, EntityGuard)
+@UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
 
-  @Entity('student')
+  @TokenEntity('student')
   @Mutation(() => Result, { description: 'Create student' })
   async createStudent(
     @Args('account') account: string,
@@ -36,10 +36,10 @@ export class StudentResolver {
     return createCodeMsgResult(res ? SUCCESS : CREATE_STUDENT_FAILED);
   }
 
-  @Entity('student')
+  @TokenEntity('student')
   @Query(() => StudentResult, { description: 'Find student by id' })
   async getStudentInfo(
-    @CurrentUserId('id') id: string,
+    @CurrentTokenId('id') id: string,
   ): Promise<StudentResult> {
     const student = await this.studentService.findOne(id);
     return student
@@ -47,10 +47,10 @@ export class StudentResolver {
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
-  @Entity('student')
+  @TokenEntity('student')
   @Mutation(() => StudentResult, { description: 'Update student by id' })
   async updateStudentInfo(
-    @CurrentUserId('id') id: string,
+    @CurrentTokenId('id') id: string,
     @Args('params') params: StudentInputDto,
   ): Promise<StudentResult> {
     const res = await this.studentService.update(id, params);
@@ -59,13 +59,14 @@ export class StudentResolver {
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };
   }
 
-  @Entity('user')
+  @TokenEntity('user')
   @Query(() => StudentResults, { description: 'Find students' })
   async getStudents(
+    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
   ): Promise<StudentResults> {
     const { page, pageSize } = pageInput;
-    const [students, total] = await this.studentService.findAll({
+    const [students, total] = await this.studentService.findAll(userId, {
       page,
       pageSize,
     });

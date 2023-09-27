@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentUserId } from '@/common/decorators/current-user.decorator';
+import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
 import {
   OrganizationResult,
   OrganizationResults,
@@ -16,22 +16,22 @@ import { PageInput } from '@/common/dto/page-input.dto';
 import { OrganizationInputDto } from './dto/organization/organization-input.dto';
 import { CodeMsg } from '@/common/const/message';
 import { Result } from '@/common/dto/result.dto';
-import { Entity } from '@/common/decorators/entity.decorator';
-import { EntityGuard } from '@/common/guards/entity.guard';
+import { TokenEntity } from '@/common/decorators/token-entity.decorator';
+import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 
-@Entity('user')
-@UseGuards(GqlAuthGuard, EntityGuard)
+@TokenEntity('user')
+@UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class OrganizationResolver {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Mutation(() => OrganizationResult, { description: 'Create organization' })
   async createOrUpdateOrganization(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('dto') dto: OrganizationInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<OrganizationResult> {
-    console.log('createOrUpdateOrganization', userId, id);
+    console.log('createOrUpdateOrganization', { userId, id });
     if (!id) {
       const organization = await this.organizationService.create({
         ...dto,
@@ -44,10 +44,11 @@ export class OrganizationResolver {
             message: CodeMsg(CREATE_ORGANIZATION_FAILED),
           };
     } else {
-      const organization = await this.organizationService.update(id, {
-        ...dto,
-        updatedBy: userId,
-      });
+      const organization = await this.organizationService.update(
+        id,
+        userId,
+        dto,
+      );
       return organization
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
         : {
@@ -59,9 +60,11 @@ export class OrganizationResolver {
 
   @Query(() => OrganizationResult, { description: 'Find organization by id' })
   async getOrganizationInfo(
+    @CurrentTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<OrganizationResult> {
-    const organization = await this.organizationService.findOne(id);
+    console.log('getOrganizationInfo', { userId, id });
+    const organization = await this.organizationService.findOne(id, userId);
     return organization
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
       : { code: ORGANIZATION_NOT_EXISTS, message: 'Organization not exists' };
@@ -69,10 +72,11 @@ export class OrganizationResolver {
 
   @Query(() => OrganizationResults, { description: 'Find organizations' })
   async getOrganizations(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<OrganizationResults> {
+    console.log('getOrganizations', { userId, pageInput, name });
     const { page, pageSize } = pageInput;
     const [organizations, total] = await this.organizationService.findAll(
       page,
@@ -94,10 +98,10 @@ export class OrganizationResolver {
 
   @Mutation(() => Result, { description: 'Delete organization by id' })
   async deleteOrganization(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
-    console.log('deleteOrganization', id, userId);
+    console.log('deleteOrganization', { userId, id });
     const res = await this.organizationService.remove(id, userId);
     return res
       ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
