@@ -34,6 +34,11 @@ export const Message = {
   [Code.CARD_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '卡不存在或密码不匹配',
   [Code.CARD_PASSWORD_NOT_MATCH]: '卡密码不匹配',
   [Code.CREATE_CARD_FAILED]: '创建卡失败',
+  [Code.PRODUCT_NOT_EXISTS]: '产品不存在',
+  [Code.PRODUCT_ALREADY_EXISTS]: '产品已存在',
+  [Code.PRODUCT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '产品不存在或密码不匹配',
+  [Code.PRODUCT_PASSWORD_NOT_MATCH]: '产品密码不匹配',
+  [Code.CREATE_PRODUCT_FAILED]: '创建产品失败',
 };
 
 export const CodeMsg = (code: number): string => {

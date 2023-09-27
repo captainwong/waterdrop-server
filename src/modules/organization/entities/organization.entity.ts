@@ -4,6 +4,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { OrganizationImage } from './organization-image.entity';
 import { Course } from '@/modules/course/entities/course.entity';
 import { Card } from '@/modules/card/entities/card.entity';
+import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('organizations')
 export class Organization extends CommonEntity {
@@ -96,4 +97,7 @@ export class Organization extends CommonEntity {
 
   @OneToMany(() => Card, (card) => card.organization)
   cards: Card[];
+
+  @OneToMany(() => Product, (product) => product.organization)
+  products: Product[];
 }

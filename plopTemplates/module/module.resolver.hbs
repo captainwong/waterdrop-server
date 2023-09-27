@@ -2,30 +2,31 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { {{pascalCase name}}InputDto } from './dto/{{kebabCase name}}-input.dto';
-import { CurrentUserId } from '@/common/decorators/current-user.decorator';
+import { Partial{{pascalCase name}}InputDto } from './dto/{{kebabCase name}}-input.dto';
+import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
 import { {{pascalCase name}}Result, {{pascalCase name}}Results } from './dto/{{kebabCase name}}-result';
 import {
   CREATE_{{constantCase name}}_FAILED,
-  {{constantCase name}}_ALREADY_EXISTS,
   {{constantCase name}}_NOT_EXISTS,
   SUCCESS,
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
 import { Result } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
-import { Entity } from '@/common/decorators/entity.decorator';
-import { EntityGuard } from '@/common/guards/entity.guard';
+import { TokenEntity } from '@/common/decorators/token-entity.decorator';
+import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
+import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
 
-@Entity('user')
-@UseGuards(GqlAuthGuard, EntityGuard)
+@TokenEntity('user')
+@UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class {{pascalCase name}}Resolver {
   constructor(private readonly {{kebabCase name}}Service: {{pascalCase name}}Service) {}
 
   @Mutation(() => {{pascalCase name}}Result, { description: 'Create {{kebabCase name}}' })
   async createOrUpdate{{pascalCase name}}(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: {{pascalCase name}}InputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<{{pascalCase name}}Result> {
@@ -34,6 +35,9 @@ export class {{pascalCase name}}Resolver {
       const {{kebabCase name}} = await this.{{kebabCase name}}Service.create({
         ...dto,
         createdBy: userId,
+        organization: {
+          id: organizationId,
+        },
       });
       return {{kebabCase name}}
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: {{kebabCase name}} }
@@ -65,7 +69,7 @@ export class {{pascalCase name}}Resolver {
 
   @Query(() => {{pascalCase name}}Results, { description: 'Find {{kebabCase name}}s' })
   async get{{pascalCase name}}s(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<{{pascalCase name}}Results> {
@@ -88,9 +92,9 @@ export class {{pascalCase name}}Resolver {
     };
   }
 
-  @Mutation(() => Result, { description: 'Delete organization by id' })
+  @Mutation(() => Result, { description: 'Delete {{kebabCase name}} by id' })
   async delete{{pascalCase name}}(
-    @CurrentUserId('userId') userId: string,
+    @CurrentTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('delete{{pascalCase name}}', id, userId);

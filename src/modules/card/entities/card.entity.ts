@@ -1,12 +1,8 @@
+import { CardType } from '@/common/const/enum';
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Course } from '@/modules/course/entities/course.entity';
 import { Organization } from '@/modules/organization/entities/organization.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-
-export enum CardType {
-  DURATION = 'duration',
-  COUNT = 'count',
-}
 
 @Entity('cards')
 export class Card extends CommonEntity {

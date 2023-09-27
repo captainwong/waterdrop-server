@@ -116,56 +116,6 @@ type CardTypeDto {
   course: CourseTypeDto!
 }
 
-type CardResult {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: CardTypeDto
-}
-
-type CardResults {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: [CardTypeDto!]
-
-  """分页信息"""
-  page: PageTypeDto
-}
-
-type CourseResult {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: CourseTypeDto
-}
-
-type CourseResults {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: [CourseTypeDto!]
-
-  """分页信息"""
-  page: PageTypeDto
-}
-
 type ImageTypeDto {
   """id"""
   id: String!
@@ -227,6 +177,152 @@ type OrganizationTypeDto {
 
   """环境图片"""
   otherImgs: [ImageTypeDto!]
+}
+
+type ProductTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """名称"""
+  name: String!
+
+  """描述"""
+  desc: String
+
+  """分类"""
+  category: String
+
+  """状态"""
+  status: String!
+
+  """库存"""
+  stock: Float!
+
+  """销量"""
+  sales: Float!
+
+  """限购"""
+  limit: Float!
+
+  """价格"""
+  price: Float!
+
+  """原价"""
+  originalPrice: Float!
+
+  """封面"""
+  cover: String!
+
+  """banner"""
+  banner: String!
+
+  """机构"""
+  organization: OrganizationTypeDto!
+
+  """卡片"""
+  cards: [CardTypeDto!]
+}
+
+type CategoryType {
+  """分类名称"""
+  name: String!
+
+  """key"""
+  key: String!
+}
+
+type ProductResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: ProductTypeDto
+}
+
+type ProductResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [ProductTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
+type CategoryResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [CategoryType!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
+type CardResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: CardTypeDto
+}
+
+type CardResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [CardTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
+type CourseResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: CourseTypeDto
+}
+
+type CourseResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [CourseTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
 }
 
 type OrganizationResult {
@@ -399,6 +495,15 @@ type Query {
 
   """Find cards"""
   getCards(courseId: String!, name: String): CardResults!
+
+  """Find categories"""
+  getProductCategories: CategoryResults!
+
+  """Find product by id"""
+  getProductInfo(id: String!): ProductResult!
+
+  """Find products"""
+  getProducts(page: PageInput!, name: String): ProductResults!
 }
 
 input PageInput {
@@ -454,6 +559,12 @@ type Mutation {
 
   """Delete organization by id"""
   deleteCard(courseId: String!, id: String!): Result!
+
+  """Create product"""
+  createOrUpdateProduct(dto: PartialProductInputDto!, id: String): Result!
+
+  """Delete organization by id"""
+  deleteProduct(id: String!): Result!
 }
 
 input UserInputDto {
@@ -644,4 +755,51 @@ input CardInputDto {
 
   """有效天数"""
   duration: Float!
+}
+
+input PartialProductInputDto {
+  """id"""
+  id: String
+  createdAt: DateTime
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """名称"""
+  name: String
+
+  """描述"""
+  desc: String
+
+  """分类"""
+  category: String
+
+  """状态"""
+  status: String
+
+  """库存"""
+  stock: Float
+
+  """销量"""
+  sales: Float
+
+  """限购"""
+  limit: Float
+
+  """价格"""
+  price: Float
+
+  """原价"""
+  originalPrice: Float
+
+  """封面"""
+  cover: String
+
+  """banner"""
+  banner: String
+
+  """卡片"""
+  cards: String
 }
