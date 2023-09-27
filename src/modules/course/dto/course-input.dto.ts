@@ -1,7 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
 import { TimeSlotsInput } from './common-input.dto';
-import { Organization } from '@/modules/organization/entities/organization.entity';
 
 @InputType()
 export class CourseInputDto extends CommonInputDto {
