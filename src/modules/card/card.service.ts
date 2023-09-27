@@ -53,6 +53,7 @@ export class CardService {
         course: { id: courseId, organization: { id: organizationId } },
         organization: { id: organizationId },
       },
+      relations: ['course'],
     });
   }
 
