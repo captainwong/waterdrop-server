@@ -34,7 +34,7 @@ export class CardService {
     const [cards] = await this.cardRepository.findAndCount({
       where,
       order: {
-        createdAt: 'DESC',
+        createdAt: 'ASC',
       },
     });
     return cards;
@@ -72,7 +72,7 @@ export class CardService {
     if (!card) {
       return null;
     }
-    Object.assign(card, dto);
+    Object.assign(card, { ...dto, updatedBy: createdBy });
     return this.cardRepository.save(card);
   }
 
@@ -101,12 +101,8 @@ export class CardService {
       return false;
     }
     card.deletedBy = createdBy;
-    await this.cardRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(card);
-        return transactionalEntityManager.softDelete(Card, card);
-      },
-    );
+    card.deletedAt = new Date();
+    await this.cardRepository.save(card);
     return true;
   }
 }

@@ -80,15 +80,8 @@ export class OrganizationService {
     }
     await this.deleteImgsByOrgId(id);
     organization.deletedBy = createdBy;
-    await this.organizationRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(organization);
-        return transactionalEntityManager.softDelete(
-          Organization,
-          organization,
-        );
-      },
-    );
+    organization.deletedAt = new Date();
+    await this.organizationRepository.save(organization);
     return true;
   }
 

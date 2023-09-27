@@ -100,12 +100,8 @@ export class CourseService {
       return false;
     }
     course.deletedBy = createdBy;
-    await this.courseRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(course);
-        return transactionalEntityManager.softDelete(Course, course);
-      },
-    );
+    course.deletedAt = new Date();
+    await this.courseRepository.save(course);
     return true;
   }
 }
