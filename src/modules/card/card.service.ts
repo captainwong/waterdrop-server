@@ -36,6 +36,7 @@ export class CardService {
       order: {
         createdAt: 'ASC',
       },
+      relations: ['course'],
     });
     return cards;
   }

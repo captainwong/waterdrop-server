@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
 
 @InputType()
@@ -24,3 +24,6 @@ export class CardInputDto extends CommonInputDto {
   })
   duration: number;
 }
+
+@InputType()
+export class PartialCardInputDto extends PartialType(CardInputDto) {}

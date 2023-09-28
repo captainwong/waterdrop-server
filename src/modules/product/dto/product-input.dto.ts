@@ -1,5 +1,6 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { CommonInputDto } from '@/common/dto/common-input.dto';
+import { PartialCardInputDto } from '@/modules/card/dto/card-input.dto';
 
 @InputType()
 export class ProductInputDto extends CommonInputDto {
@@ -63,8 +64,8 @@ export class ProductInputDto extends CommonInputDto {
   })
   banner: string;
 
-  @Field(() => String, { description: '卡片' })
-  cards: string[];
+  @Field(() => [PartialCardInputDto], { description: '卡片' })
+  cards: PartialCardInputDto[];
 }
 
 @InputType()

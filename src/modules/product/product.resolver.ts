@@ -83,7 +83,7 @@ export class ProductResolver {
       };
 
       if (dto.cards?.length > 0) {
-        newProduct.cards = dto.cards.map((card) => ({ id: card }));
+        newProduct.cards = dto.cards;
       } else {
         newProduct.cards = product.cards;
       }

@@ -801,5 +801,27 @@ input PartialProductInputDto {
   banner: String
 
   """卡片"""
-  cards: String
+  cards: [PartialCardInputDto!]
+}
+
+input PartialCardInputDto {
+  id: String
+  createdAt: DateTime
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """名称"""
+  name: String
+
+  """类型"""
+  type: String
+
+  """最大使用次数"""
+  count: Float
+
+  """有效天数"""
+  duration: Float
 }
