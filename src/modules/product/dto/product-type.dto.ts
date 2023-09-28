@@ -45,12 +45,12 @@ export class ProductTypeDto extends CommonTypeDto {
   @Field({
     description: '价格',
   })
-  price: number;
+  price: string;
 
   @Field({
     description: '原价',
   })
-  originalPrice: number;
+  originalPrice: string;
 
   @Field({
     description: '封面',

@@ -210,10 +210,10 @@ type ProductTypeDto {
   limit: Float!
 
   """价格"""
-  price: Float!
+  price: String!
 
   """原价"""
-  originalPrice: Float!
+  originalPrice: String!
 
   """封面"""
   cover: String!
@@ -789,10 +789,10 @@ input PartialProductInputDto {
   limit: Float
 
   """价格"""
-  price: Float
+  price: String
 
   """原价"""
-  originalPrice: Float
+  originalPrice: String
 
   """封面"""
   cover: String

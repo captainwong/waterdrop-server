@@ -53,16 +53,18 @@ export class Product extends CommonEntity {
   @Column({
     comment: '价格',
     type: 'decimal',
+    precision: 10,
+    scale: 2,
   })
-  @IsNotEmpty()
-  price: number;
+  price: string;
 
   @Column({
     comment: '原价',
     type: 'decimal',
+    precision: 10,
+    scale: 2,
   })
-  @IsNotEmpty()
-  originalPrice: number;
+  originalPrice: string;
 
   @Column({
     comment: '封面',

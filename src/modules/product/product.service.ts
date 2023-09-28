@@ -29,13 +29,14 @@ export class ProductService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['cards', 'organization'],
     });
   }
 
   async findOne(id: string): Promise<Product> {
     return this.productRepository.findOne({
       where: { id },
-      relations: ['cards'],
+      relations: ['cards', 'organization'],
     });
   }
 

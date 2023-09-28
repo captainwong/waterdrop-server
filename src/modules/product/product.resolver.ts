@@ -22,6 +22,7 @@ import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { ProductStatus } from '@/common/const/enum';
 import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
 import { CategoryList } from './dto/category-type';
+import Decimal from 'decimal.js';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -52,6 +53,10 @@ export class ProductResolver {
         createdBy: userId,
         cards: [],
         status: ProductStatus.NOT_FOR_SAIL,
+        price: dto.price ? new Decimal(dto.price).toString() : '0',
+        originalPrice: dto.originalPrice
+          ? new Decimal(dto.originalPrice).toString()
+          : '0',
         organization: {
           id: organizationId,
         },
