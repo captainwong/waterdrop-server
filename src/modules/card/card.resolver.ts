@@ -15,6 +15,7 @@ import { CodeMsg } from '@/common/const/message';
 import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
+import { CardType } from '@/common/const/enum';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -31,6 +32,9 @@ export class CardResolver {
     @Args('id', { nullable: true }) id?: string,
   ): Promise<CardResult> {
     console.log('createOrUpdateCard', { userId, organizationId, courseId, id });
+    if (dto.type !== CardType.COUNT) {
+      dto.count = 0;
+    }
     if (!id) {
       const card = await this.cardService.create({
         ...dto,
