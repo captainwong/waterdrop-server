@@ -39,6 +39,11 @@ export const Message = {
   [Code.PRODUCT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '产品不存在或密码不匹配',
   [Code.PRODUCT_PASSWORD_NOT_MATCH]: '产品密码不匹配',
   [Code.CREATE_PRODUCT_FAILED]: '创建产品失败',
+  [Code.TEACHER_NOT_EXISTS]: '教师不存在',
+  [Code.TEACHER_ALREADY_EXISTS]: '教师已存在',
+  [Code.TEACHER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '教师不存在或密码不匹配',
+  [Code.TEACHER_PASSWORD_NOT_MATCH]: '教师密码不匹配',
+  [Code.CREATE_TEACHER_FAILED]: '创建教师失败',
 };
 
 export const CodeMsg = (code: number): string => {

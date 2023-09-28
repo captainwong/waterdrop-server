@@ -24,6 +24,70 @@ type Result {
   data: String
 }
 
+type TeacherTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """姓名"""
+  name: String
+
+  """照片"""
+  photo: String
+
+  """教龄"""
+  teachingAge: Float
+
+  """学历"""
+  education: String
+
+  """资历"""
+  seniority: String
+
+  """职业经验"""
+  experience: String
+
+  """获奖经历"""
+  award: String
+
+  """风格标签，以，隔开"""
+  tags: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TeacherResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: TeacherTypeDto
+}
+
+type TeacherResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [TeacherTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
 type TimeSlotType {
   """开始时间"""
   start: String!
@@ -85,11 +149,6 @@ type CourseTypeDto {
   """可约时间"""
   resavableTimeSlots: [TimeSlotsType!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type CardTypeDto {
   id: String!
@@ -504,6 +563,12 @@ type Query {
 
   """Find products"""
   getProducts(page: PageInput!, name: String): ProductResults!
+
+  """Find teacher by id"""
+  getTeacherInfo(id: String!): TeacherResult!
+
+  """Find teachers"""
+  getTeachers(page: PageInput!, name: String): TeacherResults!
 }
 
 input PageInput {
@@ -565,6 +630,12 @@ type Mutation {
 
   """Delete organization by id"""
   deleteProduct(id: String!): Result!
+
+  """Create teacher"""
+  createOrUpdateTeacher(dto: PartialTeacherInputDto!, id: String): TeacherResult!
+
+  """Delete teacher by id"""
+  deleteTeacher(id: String!): Result!
 }
 
 input UserInputDto {
@@ -824,4 +895,38 @@ input PartialCardInputDto {
 
   """有效天数"""
   duration: Float
+}
+
+input PartialTeacherInputDto {
+  id: String
+  createdAt: DateTime
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """姓名"""
+  name: String
+
+  """照片"""
+  photo: String
+
+  """教龄"""
+  teachingAge: Float
+
+  """学历"""
+  education: String
+
+  """资历"""
+  seniority: String
+
+  """职业经验"""
+  experience: String
+
+  """获奖经历"""
+  award: String
+
+  """风格标签，以，隔开"""
+  tags: String
 }

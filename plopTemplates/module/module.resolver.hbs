@@ -27,7 +27,7 @@ export class {{pascalCase name}}Resolver {
   async createOrUpdate{{pascalCase name}}(
     @CurrentTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
-    @Args('dto') dto: {{pascalCase name}}InputDto,
+    @Args('dto') dto: Partial{{pascalCase name}}InputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<{{pascalCase name}}Result> {
     console.log('createOrUpdate{{pascalCase name}}', userId, id);

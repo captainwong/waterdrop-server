@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TeacherModule } from './modules/teacher/teacher.module';
 import { ProductModule } from './modules/product/product.module';
 import { CardModule } from './modules/card/card.module';
 import { CourseModule } from './modules/course/course.module';
@@ -45,6 +46,7 @@ import { StudentModule } from './modules/student/student.module';
     CourseModule,
     CardModule,
     ProductModule,
+    TeacherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
