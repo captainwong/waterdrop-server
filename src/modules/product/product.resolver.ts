@@ -135,6 +135,7 @@ export class ProductResolver {
   @Query(() => ProductResults, { description: 'Find products' })
   async getProducts(
     @CurrentTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<ProductResults> {
@@ -142,6 +143,7 @@ export class ProductResolver {
     const [products, total] = await this.productService.findAll(
       page,
       pageSize,
+      organizationId,
       userId,
       null,
       name,
@@ -178,6 +180,7 @@ export class ProductResolver {
   @UseGuards(TokenEntityGuard)
   @Query(() => ProductResults, { description: 'Find products for mobile' })
   async getProductsH5(
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('page') pageInput: PageInput,
     @Args('category', { nullable: true }) category?: string,
     @Args('name', { nullable: true }) name?: string,
@@ -187,6 +190,7 @@ export class ProductResolver {
     const [products, total] = await this.productService.findAll(
       page,
       pageSize,
+      organizationId,
       null,
       category,
       name,
