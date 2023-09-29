@@ -50,6 +50,7 @@ export class ProductResolver {
   ): Promise<Result> {
     console.log('createOrUpdateProduct', userId, id);
     if (CategoryList.findIndex((item) => dto.category === item.key) === -1) {
+      console.warn('no valid category, set to other', dto.category);
       dto.category = CategoryList[CategoryList.length - 1].key;
     }
     if (!id) {
@@ -147,6 +148,7 @@ export class ProductResolver {
       userId,
       null,
       name,
+      null,
     );
     return {
       code: SUCCESS,
@@ -193,6 +195,7 @@ export class ProductResolver {
       null,
       category,
       name,
+      ProductStatus.ON_SAIL,
     );
     return {
       code: SUCCESS,

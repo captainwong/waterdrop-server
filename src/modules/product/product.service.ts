@@ -18,6 +18,7 @@ export class ProductService {
     createdBy?: string,
     category?: string,
     name?: string,
+    status?: string,
   ): Promise<[Product[], number]> {
     const where: FindOptionsWhere<Product> = {
       organization: {
@@ -32,6 +33,9 @@ export class ProductService {
     }
     if (name) {
       where.name = Like(`%${name}%`);
+    }
+    if (status) {
+      where.status = status;
     }
     return this.productRepository.findAndCount({
       where,
