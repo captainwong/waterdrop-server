@@ -628,6 +628,9 @@ type Mutation {
   """Create product"""
   createOrUpdateProduct(dto: PartialProductInputDto!, id: String): Result!
 
+  """Make products on sale or not for sale"""
+  productBatchOnSale(dto: BatchOnSaleInput!): Result!
+
   """Delete organization by id"""
   deleteProduct(id: String!): Result!
 
@@ -895,6 +898,11 @@ input PartialCardInputDto {
 
   """有效天数"""
   duration: Float
+}
+
+input BatchOnSaleInput {
+  products: [String!]!
+  onSale: Boolean!
 }
 
 input PartialTeacherInputDto {

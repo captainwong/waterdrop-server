@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, FindOptionsWhere, Like, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, In, Like, Repository } from 'typeorm';
+import { ProductStatus } from '@/common/const/enum';
 
 @Injectable()
 export class ProductService {
@@ -51,6 +52,25 @@ export class ProductService {
     }
     Object.assign(product, dto);
     return this.productRepository.save(product);
+  }
+
+  async batchUpdate(
+    userId: string,
+    organizationId: string,
+    ids: string[],
+    onSale: boolean,
+  ): Promise<boolean> {
+    const where: FindOptionsWhere<Product> = {
+      createdBy: userId,
+      organization: {
+        id: organizationId,
+      },
+      id: In(ids),
+    };
+    const res = await this.productRepository.update(where, {
+      status: onSale ? ProductStatus.ON_SAIL : ProductStatus.NOT_FOR_SAIL,
+    });
+    return res.affected > 0;
   }
 
   async remove(id: string, userId: string): Promise<boolean> {

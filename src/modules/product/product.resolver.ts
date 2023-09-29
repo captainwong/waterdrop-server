@@ -23,6 +23,7 @@ import { ProductStatus } from '@/common/const/enum';
 import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
 import { CategoryList } from './dto/category-type';
 import Decimal from 'decimal.js';
+import { BatchOnSaleInput } from './dto/batch-on-sale';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard)
@@ -48,6 +49,9 @@ export class ProductResolver {
     @Args('id', { nullable: true }) id?: string,
   ): Promise<Result> {
     console.log('createOrUpdateProduct', userId, id);
+    if (CategoryList.findIndex((item) => dto.category === item.key) === -1) {
+      dto.category = CategoryList[CategoryList.length - 1].key;
+    }
     if (!id) {
       const product = await this.productService.create({
         ...dto,
@@ -97,6 +101,25 @@ export class ProductResolver {
             message: CodeMsg(PRODUCT_NOT_EXISTS),
           };
     }
+  }
+
+  @UseGuards(TokenEntityGuard)
+  @Mutation(() => Result, {
+    description: 'Make products on sale or not for sale',
+  })
+  async productBatchOnSale(
+    @CurrentTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
+    @Args('dto') dto: BatchOnSaleInput,
+  ): Promise<Result> {
+    console.log('productBatchOnSale', { userId, organizationId, dto });
+    await this.productService.batchUpdate(
+      userId,
+      organizationId,
+      dto.products,
+      dto.onSale,
+    );
+    return { code: SUCCESS, message: CodeMsg(SUCCESS) };
   }
 
   @UseGuards(TokenEntityGuard)
