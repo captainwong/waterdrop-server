@@ -11,20 +11,14 @@ export class StudentService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
-  async findAll(
-    createdBy: string,
-    {
-      page,
-      pageSize,
-    }: {
-      page: number;
-      pageSize: number;
-    },
-  ): Promise<[Student[], number]> {
+  async findAll({
+    page,
+    pageSize,
+  }: {
+    page: number;
+    pageSize: number;
+  }): Promise<[Student[], number]> {
     return this.studentRepository.findAndCount({
-      where: {
-        createdBy,
-      },
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {

@@ -62,11 +62,10 @@ export class StudentResolver {
   @TokenEntity('user')
   @Query(() => StudentResults, { description: 'Find students' })
   async getStudents(
-    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
   ): Promise<StudentResults> {
     const { page, pageSize } = pageInput;
-    const [students, total] = await this.studentService.findAll(userId, {
+    const [students, total] = await this.studentService.findAll({
       page,
       pageSize,
     });
