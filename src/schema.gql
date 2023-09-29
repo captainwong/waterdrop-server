@@ -605,7 +605,7 @@ type Mutation {
   createStudent(account: String!, password: String!): Result!
 
   """Update student by id"""
-  updateStudentInfo(params: StudentInputDto!): StudentResult!
+  updateStudentInfo(dto: StudentInputDto!): StudentResult!
 
   """Create organization"""
   createOrUpdateOrganization(dto: OrganizationInputDto!, id: String): OrganizationResult!

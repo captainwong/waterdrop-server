@@ -8,6 +8,7 @@ export class AuthResolver {
 
   @Mutation(() => Result, { description: 'Send verification code' })
   async sendVerificationCode(@Args('tel') tel: string): Promise<Result> {
+    console.log('sendVerificationCode', { tel });
     return this.authService.sendVerificationCode(tel);
   }
 
@@ -16,6 +17,7 @@ export class AuthResolver {
     @Args('tel') tel: string,
     @Args('smsCode') code: string,
   ): Promise<Result> {
+    console.log('login', { tel, code });
     return this.authService.login(tel, code);
   }
 
@@ -24,6 +26,7 @@ export class AuthResolver {
     @Args('account') account: string,
     @Args('password') password: string,
   ): Promise<Result> {
+    console.log('studentRegister', { account, password });
     return this.authService.studentRegister(account, password);
   }
 
@@ -32,6 +35,7 @@ export class AuthResolver {
     @Args('account') account: string,
     @Args('password') password: string,
   ): Promise<Result> {
+    console.log('studentLogin', { account, password });
     return this.authService.studentLogin(account, password);
   }
 }

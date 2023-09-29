@@ -51,9 +51,9 @@ export class StudentResolver {
   @Mutation(() => StudentResult, { description: 'Update student by id' })
   async updateStudentInfo(
     @CurrentTokenId('id') id: string,
-    @Args('params') params: StudentInputDto,
+    @Args('dto') dto: StudentInputDto,
   ): Promise<StudentResult> {
-    const res = await this.studentService.update(id, params);
+    const res = await this.studentService.update(id, dto);
     return res
       ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
       : { code: STUDENT_NOT_EXISTS, message: CodeMsg(STUDENT_NOT_EXISTS) };

@@ -25,7 +25,7 @@ import { CategoryList } from './dto/category-type';
 import Decimal from 'decimal.js';
 
 @TokenEntity('user')
-@UseGuards(GqlAuthGuard, TokenEntityGuard)
+@UseGuards(GqlAuthGuard)
 @Resolver()
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
@@ -39,6 +39,7 @@ export class ProductResolver {
     };
   }
 
+  @UseGuards(TokenEntityGuard)
   @Mutation(() => Result, { description: 'Create product' })
   async createOrUpdateProduct(
     @CurrentTokenId('userId') userId: string,
@@ -98,6 +99,7 @@ export class ProductResolver {
     }
   }
 
+  @UseGuards(TokenEntityGuard)
   @Query(() => ProductResult, { description: 'Find product by id' })
   async getProductInfo(@Args('id') id: string): Promise<ProductResult> {
     const product = await this.productService.findOne(id);
@@ -106,6 +108,7 @@ export class ProductResolver {
       : { code: PRODUCT_NOT_EXISTS, message: CodeMsg(PRODUCT_NOT_EXISTS) };
   }
 
+  @UseGuards(TokenEntityGuard)
   @Query(() => ProductResults, { description: 'Find products' })
   async getProducts(
     @CurrentTokenId('userId') userId: string,
@@ -131,6 +134,7 @@ export class ProductResolver {
     };
   }
 
+  @UseGuards(TokenEntityGuard)
   @Mutation(() => Result, { description: 'Delete organization by id' })
   async deleteProduct(
     @CurrentTokenId('userId') userId: string,
