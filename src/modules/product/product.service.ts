@@ -14,12 +14,17 @@ export class ProductService {
   async findAll(
     page: number,
     pageSize: number,
-    createdBy: string,
+    createdBy?: string,
+    category?: string,
     name?: string,
   ): Promise<[Product[], number]> {
-    const where: FindOptionsWhere<Product> = {
-      createdBy: createdBy,
-    };
+    const where: FindOptionsWhere<Product> = {};
+    if (createdBy) {
+      where.createdBy = createdBy;
+    }
+    if (category) {
+      where.category = category;
+    }
     if (name) {
       where.name = Like(`%${name}%`);
     }

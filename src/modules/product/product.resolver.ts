@@ -143,6 +143,7 @@ export class ProductResolver {
       page,
       pageSize,
       userId,
+      null,
       name,
     );
     return {
@@ -171,5 +172,34 @@ export class ProductResolver {
           code: PRODUCT_NOT_EXISTS,
           message: CodeMsg(PRODUCT_NOT_EXISTS),
         };
+  }
+
+  @TokenEntity('student')
+  @UseGuards(TokenEntityGuard)
+  @Query(() => ProductResults, { description: 'Find products for mobile' })
+  async getProductsH5(
+    @Args('page') pageInput: PageInput,
+    @Args('category', { nullable: true }) category?: string,
+    @Args('name', { nullable: true }) name?: string,
+  ): Promise<ProductResults> {
+    console.log('getProductsH5', { pageInput, category, name });
+    const { page, pageSize } = pageInput;
+    const [products, total] = await this.productService.findAll(
+      page,
+      pageSize,
+      null,
+      category,
+      name,
+    );
+    return {
+      code: SUCCESS,
+      message: CodeMsg(SUCCESS),
+      data: products,
+      page: {
+        page,
+        pageSize,
+        total,
+      },
+    };
   }
 }

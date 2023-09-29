@@ -12,21 +12,18 @@ export class TokenEntityGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     // see https://github.com/nestjs/nest/issues/2027#issuecomment-527863600
-    // works for graphql resolvers
-    let entity = this.reflector.get<string>(
-      TOKEN_ENTITY_KEY,
-      context.getClass(),
-    );
-    // for controllers, use this
-    if (!entity) {
-      entity = this.reflector.get<string>(
-        TOKEN_ENTITY_KEY,
-        context.getHandler(),
-      );
-    }
+    // works for graphql resolvers and controllers
+    const classEntity: string[] =
+      this.reflector.get<string[]>(TOKEN_ENTITY_KEY, context.getClass()) || [];
+    console.log('TokenEntityGuard', { classEntity });
+    const handlerEntity: string[] =
+      this.reflector.get<string[]>(TOKEN_ENTITY_KEY, context.getHandler()) ||
+      [];
+    console.log('TokenEntityGuard', { handlerEntity });
+    const entity = classEntity.concat(handlerEntity);
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req.user;
-    console.log('TokenEntityGuard', entity, user);
-    return user && user.entity === entity;
+    console.log('TokenEntityGuard', { entity, user });
+    return user && entity && entity.includes(user.entity);
   }
 }

@@ -564,6 +564,9 @@ type Query {
   """Find products"""
   getProducts(page: PageInput!, name: String): ProductResults!
 
+  """Find products for mobile"""
+  getProductsH5(page: PageInput!, category: String, name: String): ProductResults!
+
   """Find teacher by id"""
   getTeacherInfo(id: String!): TeacherResult!
 
