@@ -30,5 +30,16 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
       },
     }
-  ]
+  ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/resolver': {
+      alias: {
+        map: [['@', './src']],
+        extensions: ['.ts', '.tsx', ],
+      },
+    },
+  },
 };

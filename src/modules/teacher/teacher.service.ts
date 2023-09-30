@@ -13,12 +13,9 @@ export class TeacherService {
   async findAll(
     page: number,
     pageSize: number,
-    createdBy: string,
     name?: string,
   ): Promise<[Teacher[], number]> {
-    const where: FindOptionsWhere<Teacher> = {
-      createdBy: createdBy,
-    };
+    const where: FindOptionsWhere<Teacher> = {};
     if (name) {
       where.name = Like(`%${name}%`);
     }

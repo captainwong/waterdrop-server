@@ -69,7 +69,6 @@ export class TeacherResolver {
 
   @Query(() => TeacherResults, { description: 'Find teachers' })
   async getTeachers(
-    @CurrentTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<TeacherResults> {
@@ -77,7 +76,6 @@ export class TeacherResolver {
     const [teachers, total] = await this.teacherService.findAll(
       page,
       pageSize,
-      userId,
       name,
     );
     return {

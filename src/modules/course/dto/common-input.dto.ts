@@ -1,13 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-
-export type TWeek =
-  | 'monday'
-  | 'tuesday'
-  | 'wednesday'
-  | 'thursday'
-  | 'friday'
-  | 'saturday'
-  | 'sunday';
+import { TWeek } from './common-type.dto';
 
 @InputType()
 export class TimeSlotInput {

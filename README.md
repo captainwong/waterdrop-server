@@ -71,3 +71,23 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Seed
+
+1. 安装依赖项
+  
+    ```bash
+    yarn add -D typeorm-extension @faker-js/faker
+    ```
+
+2. 编写各种 `factroy`
+
+3. 编写 `seed.ts`
+
+4. 编写 `seed` 脚本
+
+    ```json
+    "seed": "ts-node -r tsconfig-paths/register src/seed/seed.ts",
+    ```
+
+    此处 `ts-node` 依赖插件 `tsconfig-paths`，否则会找不到自定义的 `paths map`，可以用 `yarn add -D tsconfig-paths` 安装.

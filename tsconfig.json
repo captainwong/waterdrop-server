@@ -19,8 +19,20 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*",
       ]
     },
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES2021",
+      "paths": {
+        "@/*": [
+          "src/*",
+        ]
+      },
+    }
   }
 }

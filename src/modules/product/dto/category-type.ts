@@ -15,7 +15,7 @@ export const CategoryList = [
     name: '音乐',
   },
   {
-    key: 'art',
+    key: 'painting',
     name: '美术',
   },
   {

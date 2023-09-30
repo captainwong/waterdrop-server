@@ -14,6 +14,12 @@ export class Course extends CommonEntity {
   name: string;
 
   @Column({
+    comment: '分类',
+    nullable: true,
+  })
+  category: string;
+
+  @Column({
     comment: '课程描述',
     nullable: true,
     type: 'text',
