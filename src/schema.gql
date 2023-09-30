@@ -280,6 +280,9 @@ type ProductTypeDto {
   """banner"""
   banner: String!
 
+  """距离"""
+  distance: String!
+
   """机构"""
   organization: OrganizationTypeDto!
 
@@ -565,7 +568,7 @@ type Query {
   getProducts(page: PageInput!, name: String): ProductResults!
 
   """Find products for mobile"""
-  getProductsH5(page: PageInput!, category: String, name: String): ProductResults!
+  getProductsH5(latitude: Float!, longitude: Float!, page: PageInput!, category: String, name: String): ProductResults!
 
   """Find teacher by id"""
   getTeacherInfo(id: String!): TeacherResult!

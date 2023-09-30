@@ -14,17 +14,18 @@ export class ProductService {
   async findAll(
     page: number,
     pageSize: number,
-    organizationId: string,
+    organizationId?: string,
     createdBy?: string,
     category?: string,
     name?: string,
     status?: string,
   ): Promise<[Product[], number]> {
-    const where: FindOptionsWhere<Product> = {
-      organization: {
+    const where: FindOptionsWhere<Product> = {};
+    if (organizationId) {
+      where.organization = {
         id: organizationId,
-      },
-    };
+      };
+    }
     if (createdBy) {
       where.createdBy = createdBy;
     }
@@ -46,6 +47,43 @@ export class ProductService {
       },
       relations: ['cards', 'organization'],
     });
+  }
+
+  async findAllByDistance(
+    latitude: number,
+    longitude: number,
+    page: number,
+    pageSize: number,
+    organizationId?: string,
+    createdBy?: string,
+    category?: string,
+    name?: string,
+    status?: string,
+  ) {
+    return this.productRepository
+      .createQueryBuilder('products')
+      .select('products')
+      .addSelect(
+        `ST_Distance(ST_GeomFromText('POINT(${latitude} ${longitude})', 4326), 
+        ST_GeomFromText(CONCAT('POINT(', organizations.latitude, ' ', organizations.longitude, ')'), 4326))`,
+        'distance',
+      )
+      .innerJoin('products.organization', 'organizations')
+      .leftJoinAndSelect('products.cards', 'cards')
+      .leftJoinAndSelect('products.organization', 'organization')
+      .where(
+        organizationId
+          ? `products.organizationId = '${organizationId}'`
+          : '1=1',
+      )
+      .andWhere(createdBy ? `products.createdBy = '${createdBy}'` : '1=1')
+      .andWhere(category ? `products.category = '${category}'` : '1=1')
+      .andWhere(name ? `products.name like '%${name}%'` : '1=1')
+      .andWhere(status ? `products.status = '${status}'` : '1=1')
+      .orderBy('distance', 'ASC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getRawAndEntities();
   }
 
   async findOne(id: string): Promise<Product> {

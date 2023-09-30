@@ -182,13 +182,17 @@ export class ProductResolver {
   @UseGuards(TokenEntityGuard)
   @Query(() => ProductResults, { description: 'Find products for mobile' })
   async getProductsH5(
+    @Args('latitude') latitude: number,
+    @Args('longitude') longitude: number,
     @Args('page') pageInput: PageInput,
     @Args('category', { nullable: true }) category?: string,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<ProductResults> {
     console.log('getProductsH5', { pageInput, category, name });
     const { page, pageSize } = pageInput;
-    const [products, total] = await this.productService.findAll(
+    const { entities, raw } = await this.productService.findAllByDistance(
+      latitude,
+      longitude,
       page,
       pageSize,
       null,
@@ -197,14 +201,29 @@ export class ProductResolver {
       name,
       ProductStatus.ON_SAIL,
     );
+    // console.log({ entities, raw });
     return {
       code: SUCCESS,
       message: CodeMsg(SUCCESS),
-      data: products,
+      data: entities.map((product, index) => {
+        const distance = raw[index].distance;
+        let ds = '';
+        if (distance < 1000) {
+          ds = `${distance.toFixed(0)}m`;
+        } else if (distance < 5000) {
+          ds = `${(distance / 1000).toFixed(1)}km`;
+        } else {
+          ds = '>5km';
+        }
+        return {
+          ...product,
+          distance: ds,
+        };
+      }),
       page: {
         page,
         pageSize,
-        total,
+        total: entities.length,
       },
     };
   }

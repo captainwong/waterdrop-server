@@ -62,6 +62,11 @@ export class ProductTypeDto extends CommonTypeDto {
   })
   banner: string;
 
+  @Field({
+    description: '距离',
+  })
+  distance?: string;
+
   @Field(() => OrganizationTypeDto, { description: '机构' })
   organization: OrganizationTypeDto;
 
