@@ -91,3 +91,14 @@ Nest is [MIT licensed](LICENSE).
     ```
 
     此处 `ts-node` 依赖插件 `tsconfig-paths`，否则会找不到自定义的 `paths map`，可以用 `yarn add -D tsconfig-paths` 安装.
+
+references:
+
+- [How to Seed Database using TypeORM Seeding](https://dev.to/franciscomendes10866/how-to-seed-database-using-typeorm-seeding-4kd5)
+- [[Discontinued] Cannot deploy new versions #201](https://github.com/w3tecch/typeorm-seeding/issues/201)
+- [How to seed a database with TypeORM and Faker in 2023](https://www.devist.xyz/posts/how-to-seed-a-database-with-type-orm-and-faker-in-2023)
+- [typeorm-extension](https://typeorm-extension.tada5hi.net/)
+- [faker](https://fakerjs.dev/)
+- [Feature: set locale for faker instance](https://github.com/tada5hi/typeorm-extension/issues/605)
+- [paths and baseUrl](https://typestrong.org/ts-node/docs/paths/)
+- [社会主义核心价值观](https://zh.wikipedia.org/wiki/%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC%E8%A7%82)
