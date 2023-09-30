@@ -280,29 +280,13 @@ const linkProductsAndCards = async (
   console.time('linking products and cards...');
   const repo = dataSource.getRepository(Product);
   for (const product of products) {
-    let name: string[] = [];
-    let courses = allCourses.filter(
+    const courses = allCourses.filter(
       (course) => course.organization.id === product.organization.id,
     );
-    courses = faker.helpers.arrayElements(courses, {
-      min: 1,
-      max: 3,
-    });
-    if (courses.length === 0) continue;
-    let cards: Card[] = [];
-    for (const course of courses) {
-      cards = cards.concat(
-        faker.helpers.arrayElements(course.cards, {
-          min: 1,
-          max: 3,
-        }),
-      );
-      name.push(course.name);
-    }
-    name = name.filter((item, index) => name.indexOf(item) === index);
-    product.category = courses[0].category;
-    product.name = name.join(',').slice(0, 10);
-    product.cards = cards;
+    const course = faker.helpers.arrayElement(courses);
+    product.category = course.category;
+    product.name = course.name;
+    product.cards = [faker.helpers.arrayElement(course.cards)];
     await repo.save(product);
   }
   console.timeEnd('linking products and cards...');
@@ -318,7 +302,7 @@ export default class MainSeeder implements Seeder {
     const FAKE_ORGS = FAKE_USERS * 5;
     const FAKE_STUDENTS = 2;
     const FAKE_TEACHERS = FAKE_ORGS * 5;
-    const FAKE_COURSES = FAKE_ORGS * 10;
+    const FAKE_COURSES = FAKE_ORGS * 20;
 
     const users = await createUsers(FAKE_USERS, factoryManager);
     const orgs = await createOrgs(FAKE_ORGS, dataSource, factoryManager, users);

@@ -105,6 +105,9 @@ const randomProgrammingCourseName = (faker: Faker) => {
 
 const randomCourseName = (faker: Faker) => {
   const courseKeys = CategoryList.map((item) => item.key);
+  for (let i = 0; i < 5; i += 1) {
+    courseKeys.push('programming');
+  }
   const category = faker.helpers.arrayElement(courseKeys);
   switch (category) {
     case 'programming':
@@ -129,7 +132,10 @@ const randomCourseName = (faker: Faker) => {
       return { category, name: faker.helpers.arrayElement(SportCourses) };
     case 'other':
     default:
-      return { category, name: faker.helpers.arrayElement(OtherCourses) };
+      return {
+        category: 'other',
+        name: faker.helpers.arrayElement(OtherCourses),
+      };
   }
 };
 

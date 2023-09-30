@@ -51,6 +51,10 @@ export const CategoryList = [
     name: '编程',
   },
   {
+    key: 'crosstalk',
+    name: '相声',
+  },
+  {
     key: 'other',
     name: '其他',
   },
