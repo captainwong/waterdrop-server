@@ -256,7 +256,7 @@ const createProducts = async (
   const repo = dataSource.getRepository(Product);
   for (const org of orgs) {
     const products = await Promise.all(
-      Array(faker.number.int({ min: 3, max: 5 }))
+      Array(faker.number.int({ min: 3, max: 20 }))
         .fill('')
         .map(async () => {
           const product = await factory.make({

@@ -196,17 +196,18 @@ export class ProductResolver {
       name,
     });
     const { page, pageSize } = pageInput;
-    const { entities, raw } = await this.productService.findAllByDistance(
-      latitude,
-      longitude,
-      page,
-      pageSize,
-      null,
-      null,
-      category,
-      name,
-      ProductStatus.ON_SAIL,
-    );
+    const { entities, raw, total } =
+      await this.productService.findAllByDistance(
+        latitude,
+        longitude,
+        page,
+        pageSize,
+        null,
+        null,
+        category,
+        name,
+        ProductStatus.ON_SAIL,
+      );
     // console.log({ entities, raw });
     return {
       code: SUCCESS,
@@ -229,7 +230,7 @@ export class ProductResolver {
       page: {
         page,
         pageSize,
-        total: entities.length,
+        total,
       },
     };
   }

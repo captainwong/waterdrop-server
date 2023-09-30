@@ -60,7 +60,23 @@ export class ProductService {
     name?: string,
     status?: string,
   ) {
-    return this.productRepository
+    const total = await this.productRepository
+      .createQueryBuilder('products')
+      .select('products')
+      .where(
+        organizationId
+          ? `products.organizationId = '${organizationId}'`
+          : '1=1',
+      )
+      .andWhere(createdBy ? `products.createdBy = '${createdBy}'` : '1=1')
+      .andWhere(category ? `products.category = '${category}'` : '1=1')
+      .andWhere(name ? `products.name like '%${name}%'` : '1=1')
+      .andWhere(status ? `products.status = '${status}'` : '1=1')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getCount();
+
+    const { entities, raw } = await this.productRepository
       .createQueryBuilder('products')
       .select('products')
       .addSelect(
@@ -84,6 +100,8 @@ export class ProductService {
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .getRawAndEntities();
+
+    return { entities, raw, total };
   }
 
   async findOne(id: string): Promise<Product> {
