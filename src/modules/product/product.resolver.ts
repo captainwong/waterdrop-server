@@ -188,7 +188,13 @@ export class ProductResolver {
     @Args('category', { nullable: true }) category?: string,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<ProductResults> {
-    console.log('getProductsH5', { pageInput, category, name });
+    console.log('getProductsH5', {
+      latitude,
+      longitude,
+      pageInput,
+      category,
+      name,
+    });
     const { page, pageSize } = pageInput;
     const { entities, raw } = await this.productService.findAllByDistance(
       latitude,
@@ -210,10 +216,10 @@ export class ProductResolver {
         let ds = '';
         if (distance < 1000) {
           ds = `${distance.toFixed(0)}m`;
-        } else if (distance < 5000) {
+        } else if (distance < 10000) {
           ds = `${(distance / 1000).toFixed(1)}km`;
         } else {
-          ds = '>5km';
+          ds = `${(distance / 1000).toFixed(0)}km`;
         }
         return {
           ...product,

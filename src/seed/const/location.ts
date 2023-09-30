@@ -1,6 +1,6 @@
 export const Location = {
-  longitudeMin: 115.378678,
-  longitudeMax: 115.550146,
-  latitudeMin: 35.221155,
-  latitudeMax: 35.292483,
+  longitudeMin: 114.722268,
+  longitudeMax: 116.47691,
+  latitudeMin: 34.905847,
+  latitudeMax: 35.666709,
 };

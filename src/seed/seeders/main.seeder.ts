@@ -19,6 +19,7 @@ const createUsers = async (
   count: number,
   factoryManager: SeederFactoryManager,
 ) => {
+  console.time('creating users...');
   const userFactory = factoryManager.get(User);
   userFactory.setLocale(['zh_CN', 'en']);
   const me = await userFactory.make();
@@ -32,6 +33,7 @@ const createUsers = async (
   count -= 1;
   let users = [me];
   users = users.concat(await userFactory.saveMany(count));
+  console.timeEnd('creating users...');
   return users;
 };
 
@@ -39,6 +41,7 @@ const makeOrgImgs = async (
   count: number,
   factoryManager: SeederFactoryManager,
 ) => {
+  console.time('creating org images...');
   const orgImgs = await Promise.all(
     Array(count)
       .fill('')
@@ -46,6 +49,7 @@ const makeOrgImgs = async (
         return await factoryManager.get(OrganizationImage).make();
       }),
   );
+  console.timeEnd('creating org images...');
   return orgImgs;
 };
 
@@ -55,6 +59,7 @@ const createOrgs = async (
   factoryManager: SeederFactoryManager,
   users: User[],
 ) => {
+  console.time('creating orgs...');
   const organizationFactory = factoryManager.get(Organization);
   organizationFactory.setLocale(['zh_CN', 'en']);
   let imgs = await makeOrgImgs(count * 9, factoryManager);
@@ -81,7 +86,6 @@ const createOrgs = async (
       }),
   );
 
-  console.log('users', users);
   const orgs = await Promise.all(
     Array(count - 1)
       .fill('')
@@ -97,15 +101,18 @@ const createOrgs = async (
       }),
   );
 
-  const allOrgs = myOrgs.concat(orgs);
+  let allOrgs = myOrgs.concat(orgs);
   const orgRepository = dataSource.getRepository(Organization);
-  return await orgRepository.save(allOrgs);
+  allOrgs = await orgRepository.save(allOrgs);
+  console.timeEnd('creating orgs...');
+  return allOrgs;
 };
 
 const createStudents = async (
   count: number,
   factoryManager: SeederFactoryManager,
 ) => {
+  console.time('creating students...');
   const factory = factoryManager.get(Student);
   factory.setLocale(['zh_CN', 'en']);
   const me = await factory.make({
@@ -119,6 +126,7 @@ const createStudents = async (
   count -= 1;
   const students = await factory.saveMany(count);
   students.push(me);
+  console.timeEnd('creating students...');
   return students;
 };
 
@@ -128,6 +136,7 @@ const createTeachers = async (
   factoryManager: SeederFactoryManager,
   orgs: Organization[],
 ) => {
+  console.time('creating teachers...');
   const factory = factoryManager.get(Teacher);
   factory.setLocale(['zh_CN', 'en']);
 
@@ -151,9 +160,11 @@ const createTeachers = async (
         return teacher;
       }),
   );
-  const allTeachers = myTeachers.concat(teachers);
+  let allTeachers = myTeachers.concat(teachers);
   const repo = dataSource.getRepository(Teacher);
-  return await repo.save(allTeachers);
+  allTeachers = await repo.save(allTeachers);
+  console.timeEnd('creating teachers...');
+  return allTeachers;
 };
 
 const createCourseCards = async (
@@ -161,6 +172,7 @@ const createCourseCards = async (
   factoryManager: SeederFactoryManager,
   course: Course,
 ) => {
+  // console.time('creating course cards...');
   const factory = factoryManager.get(Card);
   factory.setLocale(['zh_CN', 'en']);
   let allCards: Card[] = [];
@@ -179,6 +191,7 @@ const createCourseCards = async (
   );
   allCards = allCards.concat(await repo.save(cards));
   course.cards = allCards;
+  // console.timeEnd('creating course cards...');
   return course;
 };
 
@@ -188,6 +201,7 @@ const createCourses = async (
   factoryManager: SeederFactoryManager,
   orgs: Organization[],
 ) => {
+  console.time('creating courses...');
   const factory = factoryManager.get(Course);
   factory.setLocale(['zh_CN', 'en']);
   const myCourses = await Promise.all(
@@ -226,6 +240,7 @@ const createCourses = async (
     );
     res.push(courseWithCards);
   }
+  console.timeEnd('creating courses...');
   return res;
 };
 
@@ -234,6 +249,7 @@ const createProducts = async (
   factoryManager: SeederFactoryManager,
   orgs: Organization[],
 ) => {
+  console.time('creating products...');
   const factory = factoryManager.get(Product);
   factory.setLocale(['zh_CN', 'en']);
   let allProducts: Product[] = [];
@@ -252,6 +268,7 @@ const createProducts = async (
     );
     allProducts = allProducts.concat(await repo.save(products));
   }
+  console.timeEnd('creating products...');
   return allProducts;
 };
 
@@ -260,6 +277,7 @@ const linkProductsAndCards = async (
   products: Product[],
   allCourses: Course[],
 ) => {
+  console.time('linking products and cards...');
   const repo = dataSource.getRepository(Product);
   for (const product of products) {
     let name: string[] = [];
@@ -287,6 +305,7 @@ const linkProductsAndCards = async (
     product.cards = cards;
     await repo.save(product);
   }
+  console.timeEnd('linking products and cards...');
 };
 
 export default class MainSeeder implements Seeder {
@@ -294,6 +313,7 @@ export default class MainSeeder implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
+    console.time('seeding done!');
     const FAKE_USERS = 3;
     const FAKE_ORGS = FAKE_USERS * 5;
     const FAKE_STUDENTS = 2;
@@ -312,7 +332,7 @@ export default class MainSeeder implements Seeder {
     );
     const products = await createProducts(dataSource, factoryManager, orgs);
     await linkProductsAndCards(dataSource, products, courses);
-
+    console.timeEnd('seeding done!');
     return true;
   }
 }
