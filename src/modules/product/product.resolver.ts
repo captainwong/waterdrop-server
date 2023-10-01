@@ -123,6 +123,7 @@ export class ProductResolver {
     return { code: SUCCESS, message: CodeMsg(SUCCESS) };
   }
 
+  @TokenEntity('student')
   @UseGuards(TokenEntityGuard)
   @Query(() => ProductResult, { description: 'Find product by id' })
   async getProductInfo(@Args('id') id: string): Promise<ProductResult> {

@@ -20,7 +20,8 @@ export const ProductFactory = setSeederFactory(Product, (faker: Faker) => {
   entity.cover = faker.helpers.arrayElement(Avatars);
   entity.desc = faker.lorem.sentence();
   entity.name = faker.commerce.productName();
-  entity.limit = faker.number.int({ min: 20, max: 60 });
-  entity.stock = faker.number.int({ min: 100, max: 600 });
+  entity.limit = faker.number.int({ min: 1, max: 10 });
+  entity.stock = faker.number.int({ min: 1, max: 10000 });
+  entity.sales = faker.number.int({ min: 1, max: 1000 });
   return entity;
 });
