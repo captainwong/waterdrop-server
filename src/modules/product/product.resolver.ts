@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { PartialProductInputDto } from './dto/product-input.dto';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import {
   CategoryResults,
   ProductResult,
@@ -43,7 +43,7 @@ export class ProductResolver {
   @UseGuards(TokenEntityGuard)
   @Mutation(() => Result, { description: 'Create product' })
   async createOrUpdateProduct(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: PartialProductInputDto,
     @Args('id', { nullable: true }) id?: string,
@@ -109,7 +109,7 @@ export class ProductResolver {
     description: 'Make products on sale or not for sale',
   })
   async productBatchOnSale(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: BatchOnSaleInput,
   ): Promise<Result> {
@@ -136,7 +136,7 @@ export class ProductResolver {
   @UseGuards(TokenEntityGuard)
   @Query(() => ProductResults, { description: 'Find products' })
   async getProducts(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
@@ -166,7 +166,7 @@ export class ProductResolver {
   @UseGuards(TokenEntityGuard)
   @Mutation(() => Result, { description: 'Delete organization by id' })
   async deleteProduct(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('deleteProduct', id, userId);

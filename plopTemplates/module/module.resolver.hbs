@@ -3,7 +3,7 @@ import { UseGuards } from '@nestjs/common';
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { Partial{{pascalCase name}}InputDto } from './dto/{{kebabCase name}}-input.dto';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { {{pascalCase name}}Result, {{pascalCase name}}Results } from './dto/{{kebabCase name}}-result';
 import {
   CREATE_{{constantCase name}}_FAILED,
@@ -25,7 +25,7 @@ export class {{pascalCase name}}Resolver {
 
   @Mutation(() => {{pascalCase name}}Result, { description: 'Create {{kebabCase name}}' })
   async createOrUpdate{{pascalCase name}}(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: Partial{{pascalCase name}}InputDto,
     @Args('id', { nullable: true }) id?: string,
@@ -69,7 +69,7 @@ export class {{pascalCase name}}Resolver {
 
   @Query(() => {{pascalCase name}}Results, { description: 'Find {{kebabCase name}}s' })
   async get{{pascalCase name}}s(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<{{pascalCase name}}Results> {
@@ -94,7 +94,7 @@ export class {{pascalCase name}}Resolver {
 
   @Mutation(() => Result, { description: 'Delete {{kebabCase name}} by id' })
   async delete{{pascalCase name}}(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('delete{{pascalCase name}}', id, userId);

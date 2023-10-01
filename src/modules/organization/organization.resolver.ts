@@ -1,8 +1,8 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import {
   OrganizationResult,
   OrganizationResults,
@@ -27,7 +27,7 @@ export class OrganizationResolver {
 
   @Mutation(() => OrganizationResult, { description: 'Create organization' })
   async createOrUpdateOrganization(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('dto') dto: OrganizationInputDto,
     @Args('id', { nullable: true }) id?: string,
   ): Promise<OrganizationResult> {
@@ -72,7 +72,7 @@ export class OrganizationResolver {
 
   @Query(() => OrganizationResults, { description: 'Find organizations' })
   async getOrganizations(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<OrganizationResults> {
@@ -98,7 +98,7 @@ export class OrganizationResolver {
 
   @Mutation(() => Result, { description: 'Delete organization by id' })
   async deleteOrganization(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('deleteOrganization', { userId, id });

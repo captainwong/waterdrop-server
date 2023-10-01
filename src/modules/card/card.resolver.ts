@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CardService } from './card.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { CardInputDto } from './dto/card-input.dto';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { CardResult, CardResults } from './dto/card-result';
 import {
   CREATE_CARD_FAILED,
@@ -25,7 +25,7 @@ export class CardResolver {
 
   @Mutation(() => CardResult, { description: 'Create card' })
   async createOrUpdateCard(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('courseId') courseId: string,
     @Args('dto') dto: CardInputDto,
@@ -71,7 +71,7 @@ export class CardResolver {
 
   @Query(() => CardResult, { description: 'Find card by id' })
   async getCardInfo(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('courseId') courseId: string,
     @Args('id') id: string,
@@ -90,7 +90,7 @@ export class CardResolver {
 
   @Query(() => CardResults, { description: 'Find cards' })
   async getCards(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('courseId') courseId: string,
     @Args('name', { nullable: true }) name?: string,
@@ -111,7 +111,7 @@ export class CardResolver {
 
   @Mutation(() => Result, { description: 'Delete organization by id' })
   async deleteCard(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('courseId') courseId: string,
     @Args('id') id: string,

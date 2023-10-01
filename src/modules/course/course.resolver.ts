@@ -1,8 +1,8 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { CourseResult, CourseResults } from './dto/course-result';
 import {
   CREATE_COURSE_FAILED,
@@ -25,7 +25,7 @@ export class CourseResolver {
 
   @Mutation(() => CourseResult, { description: 'Create course' })
   async createOrUpdateCourse(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: CourseInputDto,
     @Args('id', { nullable: true }) id?: string,
@@ -61,7 +61,7 @@ export class CourseResolver {
 
   @Query(() => CourseResult, { description: 'Find course by id' })
   async getCourseInfo(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('id') id: string,
   ): Promise<CourseResult> {
@@ -75,7 +75,7 @@ export class CourseResolver {
   @Query(() => CourseResults, { description: 'Find courses' })
   async getCourses(
     @CurrentOrganizationId('organizationId') organizationId: string,
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<CourseResults> {
@@ -102,7 +102,7 @@ export class CourseResolver {
 
   @Mutation(() => Result, { description: 'Delete course by id' })
   async deleteCourse(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('id') id: string,
   ): Promise<Result> {

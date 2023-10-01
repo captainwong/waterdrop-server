@@ -14,6 +14,7 @@ import { OssModule } from './modules/oss/oss.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { StudentModule } from './modules/student/student.module';
+import { WxpayModule } from './modules/wxpay/wxpay.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { StudentModule } from './modules/student/student.module';
     CardModule,
     ProductModule,
     TeacherModule,
+    WxpayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

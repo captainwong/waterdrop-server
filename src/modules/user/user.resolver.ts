@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserInputDto } from './dto/user-input.dto';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { UserResult } from './dto/user-result';
@@ -12,7 +12,7 @@ import {
   USER_NOT_EXISTS,
 } from '@/common/const/code';
 import { CodeMsg } from '@/common/const/message';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 
 @TokenEntity('user')
 @Resolver()
@@ -52,7 +52,9 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard, TokenEntityGuard)
   @Query(() => UserResult, { description: 'Find user by token' })
-  async getUserByToken(@CurrentTokenId('id') id: string): Promise<UserResult> {
+  async getUserByToken(
+    @CurrentGqlTokenId('id') id: string,
+  ): Promise<UserResult> {
     const user = await this.userService.findOne(id);
     return user
       ? {
@@ -84,7 +86,7 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => UserResult, { description: 'Update user by token' })
   async updateUserByToken(
-    @CurrentTokenId('id') id: string,
+    @CurrentGqlTokenId('id') id: string,
     @Args('dto') dto: UserInputDto,
   ): Promise<UserResult> {
     const user = await this.userService.update(id, dto);

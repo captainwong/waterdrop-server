@@ -521,6 +521,37 @@ type StudentResults {
   page: PageTypeDto
 }
 
+type WxpayConfigType {
+  """公众号ID"""
+  appId: String!
+
+  """时间戳，自1970年以来的秒数"""
+  timeStamp: String!
+
+  """随机串"""
+  nonceStr: String!
+
+  """参数包"""
+  package: String!
+
+  """微信签名方式"""
+  signType: String!
+
+  """微信签名"""
+  paySign: String!
+}
+
+type WxpayConfigResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: WxpayConfigType
+}
+
 type Query {
   """Find user by id"""
   getUser(id: String!): UserResult!
@@ -648,6 +679,9 @@ type Mutation {
 
   """Delete teacher by id"""
   deleteTeacher(id: String!): Result!
+
+  """获取微信支付配置"""
+  wxpayConfig(productId: String!, quantity: Float!, amount: Float!): WxpayConfigResult!
 }
 
 input UserInputDto {

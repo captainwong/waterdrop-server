@@ -2,7 +2,7 @@ import { Resolver } from '@nestjs/graphql';
 import { Query } from '@nestjs/graphql';
 import { OssService } from './oss.service';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { OssResult } from './dto/oss.result';
 import { CodeMsg } from '@/common/const/message';
 import { OSS_GET_SIGNATURE_ERROR, SUCCESS } from '@/common/const/code';

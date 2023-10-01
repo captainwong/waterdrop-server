@@ -44,6 +44,7 @@ export const Message = {
   [Code.TEACHER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '教师不存在或密码不匹配',
   [Code.TEACHER_PASSWORD_NOT_MATCH]: '教师密码不匹配',
   [Code.CREATE_TEACHER_FAILED]: '创建教师失败',
+  [Code.PRODUCT_NOT_ENOUGH]: '库存不足',
 };
 
 export const CodeMsg = (code: number): string => {

@@ -1,8 +1,8 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { StudentResult, StudentResults } from './dto/student-result';
 import {
   CREATE_STUDENT_FAILED,
@@ -39,7 +39,7 @@ export class StudentResolver {
   @TokenEntity('student')
   @Query(() => StudentResult, { description: 'Find student by id' })
   async getStudentInfo(
-    @CurrentTokenId('id') id: string,
+    @CurrentGqlTokenId('id') id: string,
   ): Promise<StudentResult> {
     const student = await this.studentService.findOne(id);
     return student
@@ -50,7 +50,7 @@ export class StudentResolver {
   @TokenEntity('student')
   @Mutation(() => StudentResult, { description: 'Update student by id' })
   async updateStudentInfo(
-    @CurrentTokenId('id') id: string,
+    @CurrentGqlTokenId('id') id: string,
     @Args('dto') dto: StudentInputDto,
   ): Promise<StudentResult> {
     const res = await this.studentService.update(id, dto);

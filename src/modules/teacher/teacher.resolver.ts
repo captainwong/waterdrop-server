@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
-import { GqlAuthGuard } from '@/common/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { PartialTeacherInputDto } from './dto/teacher-input.dto';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
+import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { TeacherResult, TeacherResults } from './dto/teacher-result';
 import {
   CREATE_TEACHER_FAILED,
@@ -25,7 +25,7 @@ export class TeacherResolver {
 
   @Mutation(() => TeacherResult, { description: 'Create teacher' })
   async createOrUpdateTeacher(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('dto') dto: PartialTeacherInputDto,
     @Args('id', { nullable: true }) id?: string,
@@ -92,7 +92,7 @@ export class TeacherResolver {
 
   @Mutation(() => Result, { description: 'Delete teacher by id' })
   async deleteTeacher(
-    @CurrentTokenId('userId') userId: string,
+    @CurrentGqlTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('deleteTeacher', id, userId);
