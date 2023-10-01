@@ -4,6 +4,7 @@ import { Faker } from '@faker-js/faker';
 import { Avatars } from '../const/avatars';
 import { Location } from '../const/location';
 import { Tags } from '../const/tags';
+import { CompanyDescs } from '../const/descs';
 
 export const OrganizationFactory = setSeederFactory(
   Organization,
@@ -11,7 +12,9 @@ export const OrganizationFactory = setSeederFactory(
     const organization = new Organization();
     organization.address = faker.location.streetAddress();
     organization.businessLicense = faker.helpers.arrayElement(Avatars);
-    organization.desc = faker.company.catchPhrase();
+    organization.desc = faker.helpers
+      .arrayElements(CompanyDescs, { min: 5, max: 10 })
+      .join('<br />');
     organization.identityCardBackImg = faker.helpers.arrayElement(Avatars);
     organization.identityCardFrontImg = faker.helpers.arrayElement(Avatars);
     organization.latitude = faker.location
