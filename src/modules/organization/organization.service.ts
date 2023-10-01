@@ -19,9 +19,9 @@ export class OrganizationService {
     );
   }
 
-  async findOne(id: string, createdBy: string): Promise<Organization> {
+  async findOne(id: string): Promise<Organization> {
     return this.organizationRepository.findOne({
-      where: { id, createdBy },
+      where: { id },
       relations: ['frontImgs', 'roomImgs', 'otherImgs'],
     });
   }

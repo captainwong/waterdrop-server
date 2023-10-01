@@ -58,13 +58,13 @@ export class OrganizationResolver {
     }
   }
 
+  @TokenEntity('student')
   @Query(() => OrganizationResult, { description: 'Find organization by id' })
   async getOrganizationInfo(
-    @CurrentTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<OrganizationResult> {
-    console.log('getOrganizationInfo', { userId, id });
-    const organization = await this.organizationService.findOne(id, userId);
+    console.log('getOrganizationInfo', { id });
+    const organization = await this.organizationService.findOne(id);
     return organization
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: organization }
       : { code: ORGANIZATION_NOT_EXISTS, message: 'Organization not exists' };
