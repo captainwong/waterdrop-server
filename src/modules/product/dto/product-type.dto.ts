@@ -64,6 +64,7 @@ export class ProductTypeDto extends CommonTypeDto {
 
   @Field({
     description: '距离',
+    nullable: true,
   })
   distance?: string;
 

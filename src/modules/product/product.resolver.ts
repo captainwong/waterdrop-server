@@ -234,4 +234,36 @@ export class ProductResolver {
       },
     };
   }
+
+  @TokenEntity('student')
+  @UseGuards(TokenEntityGuard)
+  @Query(() => ProductResults, {
+    description: 'Find at most 5 products by organization id for mobile',
+  })
+  async getProductsByOrgH5(
+    @Args('organizationId') organizationId: string,
+  ): Promise<ProductResults> {
+    console.log('getProductsByOrgH5', {
+      organizationId,
+    });
+    const [products, total] = await this.productService.findAll(
+      1,
+      5,
+      organizationId,
+      null,
+      null,
+      null,
+      ProductStatus.ON_SAIL,
+    );
+    return {
+      code: SUCCESS,
+      message: CodeMsg(SUCCESS),
+      data: products,
+      page: {
+        page: 1,
+        pageSize: 5,
+        total,
+      },
+    };
+  }
 }
