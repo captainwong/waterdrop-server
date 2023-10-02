@@ -1,4 +1,8 @@
 *.env
+.env.captainwong.cn
+dist.tgz
+waterdrop-server-dist/
+waterdrop-server-dist.tar.gz
 
 # compiled output
 /dist

@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "dist": "nest build && cp package.json yarn.lock dist/ && cp .env.captainwong.cn dist/.env && cd dist && yarn install --production && cd .. && tar -zcvf dist.tgz dist/",
     "seed:test": "ts-node -r tsconfig-paths/register src/seed/test.ts",
     "seed": "ts-node -r tsconfig-paths/register src/seed/seed.ts",
     "plop": "plop",
@@ -64,6 +65,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
+    "@types/md5": "^2.3.3",
     "@types/node": "^20.3.1",
     "@types/passport-jwt": "^3.0.9",
     "@types/supertest": "^2.0.12",
@@ -73,6 +75,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^29.5.0",
+    "md5": "^2.3.0",
     "plop": "^4.0.0",
     "prettier": "^2.8.8",
     "source-map-support": "^0.5.21",

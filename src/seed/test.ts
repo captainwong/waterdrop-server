@@ -1,3 +1,4 @@
+import { hash } from '@/utils/hash';
 import { Faker, zh_CN, en } from '@faker-js/faker';
 
 const faker = new Faker({
@@ -30,3 +31,10 @@ for (let i = 0; i < 5; i++) {
 name = name.filter((item, index) => name.indexOf(item) === index);
 
 console.log({ name });
+
+async function test() {
+  const pwd = await hash('e10adc3949ba59abbe56e057f20f883e');
+  console.log({ pwd });
+}
+
+test();
