@@ -42,23 +42,29 @@ export class AuthService {
         return createCodeMsgResult(SMS_CODE_STILL_VALID);
       }
     }
-    const code = getRandomVerificationCode4();
-    const sendSmsRequest = new Dysmsapi.SendSmsRequest({
-      signName: process.env['SMS_SIGN_NAME'],
-      templateCode: process.env['SMS_TEPL_REGISTER'],
-      phoneNumbers: tel,
-      templateParam: `{"code":${code}}`,
-    });
-    const runtime = new Utils.RuntimeOptions({});
+    // const code = getRandomVerificationCode4();
+    const code = '1234';
     try {
-      // 复制代码运行请自行打印 API 的返回值
-      await smsClient.sendSmsWithOptions(sendSmsRequest, runtime);
+      if (0) {
+        const sendSmsRequest = new Dysmsapi.SendSmsRequest({
+          signName: process.env['SMS_SIGN_NAME'],
+          templateCode: process.env['SMS_TEPL_REGISTER'],
+          phoneNumbers: tel,
+          templateParam: `{"code":${code}}`,
+        });
+        const runtime = new Utils.RuntimeOptions({});
+        // 复制代码运行请自行打印 API 的返回值
+        await smsClient.sendSmsWithOptions(sendSmsRequest, runtime);
+      }
       if (user) {
         console.log('update user');
         const result = await this.userService.updateSmsCode(user.id, code);
         console.log('update user result', result);
         if (result) {
-          return createCodeMsgResult(SUCCESS);
+          return {
+            code: SUCCESS,
+            message: "code 是 1234",
+          };
         } else {
           return createCodeMsgResult(UPDATE_USER_SMS_CODE_FAILED);
         }
@@ -70,8 +76,11 @@ export class AuthService {
           smsCodeCreatedAt: new Date(),
         });
         console.log('create user result', result);
-        if (result) {
-          return createCodeMsgResult(SUCCESS);
+        if (result) {          
+          return {
+            code: SUCCESS,
+            message: "code 是 1234",
+          };
         } else {
           return createCodeMsgResult(CREATE_USER_FAILED);
         }
