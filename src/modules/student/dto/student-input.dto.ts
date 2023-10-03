@@ -2,6 +2,9 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class StudentInputDto {
+  @Field({ nullable: true, description: '微信openid' })
+  wx_openid?: string;
+
   @Field({ nullable: true, description: '姓名' })
   name?: string;
 

@@ -5,6 +5,12 @@ import { Column, Entity } from 'typeorm';
 @Entity('students')
 export class Student extends CommonEntity {
   @Column({
+    comment: '微信openid',
+    nullable: true,
+  })
+  wx_openid: string;
+
+  @Column({
     comment: '学生姓名',
     nullable: true,
   })

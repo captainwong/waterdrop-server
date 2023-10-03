@@ -3,6 +3,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class StudentTypeDto extends CommonTypeDto {
+  @Field({ nullable: true, description: '微信openid' })
+  wx_openid?: string;
+  
   @Field({ nullable: true, description: '姓名' })
   name?: string;
 
