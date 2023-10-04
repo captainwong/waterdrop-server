@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
 import { Response } from 'express';
-import { CurrentTokenId } from '@/common/decorators/current-token-id.decorator';
-import { AuthGuard } from '@/common/guards/auth.gard';
-import { STUDENT_NOT_EXISTS, SUCCESS } from '@/common/const/code';
+import {
+  INVALID_PARAMS,
+  STUDENT_NOT_EXISTS,
+  SUCCESS,
+} from '@/common/const/code';
 import { CodeMsg } from '@/common/const/message';
 import axios from 'axios';
 import { URL } from 'url';
@@ -20,11 +22,29 @@ export class WxpayController {
     @Res() res: Response,
   ): Promise<void> {
     console.log('wxlogin', { studentId, redirect });
+    let urlValid = true;
+    try {
+      new URL(redirect);
+    } catch {
+      urlValid = false;
+    }
+    if (!studentId || !redirect || !urlValid) {
+      res
+        .status(HttpStatus.BAD_REQUEST)
+        .json({
+          code: INVALID_PARAMS,
+          message: CodeMsg(INVALID_PARAMS),
+        })
+        .end();
+    }
     const student = await this.studentService.findOne(studentId);
     if (!student) {
       const url = new URL(redirect);
       url.searchParams.append('code', `${STUDENT_NOT_EXISTS}`);
-      url.searchParams.append('msg', encodeURIComponent(CodeMsg(STUDENT_NOT_EXISTS)));
+      url.searchParams.append(
+        'msg',
+        encodeURIComponent(CodeMsg(STUDENT_NOT_EXISTS)),
+      );
       res.redirect(url.toString());
       return;
     }
@@ -58,11 +78,14 @@ export class WxpayController {
     if (!student) {
       const url = new URL(redirectUri);
       url.searchParams.append('code', `${STUDENT_NOT_EXISTS}`);
-      url.searchParams.append('msg', encodeURIComponent(CodeMsg(STUDENT_NOT_EXISTS)));
+      url.searchParams.append(
+        'msg',
+        encodeURIComponent(CodeMsg(STUDENT_NOT_EXISTS)),
+      );
       res.redirect(url.toString());
       return;
     }
-    await this.studentService.update(studentId, { wxOpenid: openid });    
+    await this.studentService.update(studentId, { wxOpenid: openid });
     const url = new URL(redirectUri);
     url.searchParams.append('code', `${SUCCESS}`);
     res.redirect(url.toString());

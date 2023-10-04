@@ -17,6 +17,7 @@ export const Message = {
   [Code.STUDENT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '学生不存在或密码不匹配',
   [Code.STUDENT_PASSWORD_NOT_MATCH]: '学生密码不匹配',
   [Code.CREATE_STUDENT_FAILED]: '创建学生失败',
+  [Code.STUDENT_HAS_NO_OPENID]: '学生没有openid',
   [Code.ORGANIZATION_NOT_EXISTS]: '门店不存在',
   [Code.ORGANIZATION_ALREADY_EXISTS]: '门店已存在',
   [Code.ORGANIZATION_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]:
@@ -45,6 +46,7 @@ export const Message = {
   [Code.TEACHER_PASSWORD_NOT_MATCH]: '教师密码不匹配',
   [Code.CREATE_TEACHER_FAILED]: '创建教师失败',
   [Code.PRODUCT_NOT_ENOUGH]: '库存不足',
+  [Code.INVALID_PARAMS]: '参数错误',
 };
 
 export const CodeMsg = (code: number): string => {
