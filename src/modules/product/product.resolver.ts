@@ -140,6 +140,7 @@ export class ProductResolver {
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
+    @Args('category', { nullable: true }) category?: string,
   ): Promise<ProductResults> {
     const { page, pageSize } = pageInput;
     const [products, total] = await this.productService.findAll(
@@ -147,7 +148,7 @@ export class ProductResolver {
       pageSize,
       organizationId,
       userId,
-      null,
+      category,
       name,
       null,
     );

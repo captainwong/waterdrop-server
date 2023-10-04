@@ -599,7 +599,7 @@ type Query {
   getProductInfo(id: String!): ProductResult!
 
   """Find products"""
-  getProducts(page: PageInput!, name: String): ProductResults!
+  getProducts(page: PageInput!, name: String, category: String): ProductResults!
 
   """Find products for mobile"""
   getProductsH5(latitude: Float!, longitude: Float!, page: PageInput!, category: String, name: String): ProductResults!

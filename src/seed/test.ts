@@ -1,3 +1,4 @@
+import { CategoryList } from '@/modules/product/dto/category-type';
 import { hash } from '@/utils/hash';
 import { Faker, zh_CN, en } from '@faker-js/faker';
 
@@ -35,6 +36,18 @@ console.log({ name });
 async function test() {
   const pwd = await hash('e10adc3949ba59abbe56e057f20f883e');
   console.log({ pwd });
+
+  // const enums = CategoryList.reduce((key, name) => ({ key: item.key, text: item.name })),
+  // console.log(enums, enums);
+
+  // convert CategoryList to object with key and text
+  const enums = CategoryList.reduce((acc, item) => {
+    acc[item.key] = {
+      text: item.name,
+    };
+    return acc;
+  }, {});
+  console.log('enums', enums);
 }
 
 test();
