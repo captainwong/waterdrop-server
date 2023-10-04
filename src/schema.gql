@@ -484,7 +484,7 @@ type StudentTypeDto {
   deletedBy: String
 
   """微信openid"""
-  wx_openid: String
+  wxOpenid: String
 
   """姓名"""
   name: String
@@ -718,7 +718,7 @@ input UserInputDto {
 
 input StudentInputDto {
   """微信openid"""
-  wx_openid: String
+  wxOpenid: String
 
   """姓名"""
   name: String

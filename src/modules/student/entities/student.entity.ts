@@ -8,7 +8,7 @@ export class Student extends CommonEntity {
     comment: '微信openid',
     nullable: true,
   })
-  wx_openid: string;
+  wxOpenid: string;
 
   @Column({
     comment: '学生姓名',

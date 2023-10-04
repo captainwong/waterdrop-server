@@ -62,7 +62,7 @@ export class WxpayController {
       res.redirect(url.toString());
       return;
     }
-    await this.studentService.update(studentId, { wx_openid: openid });    
+    await this.studentService.update(studentId, { wxOpenid: openid });    
     const url = new URL(redirectUri);
     url.searchParams.append('code', `${SUCCESS}`);
     res.redirect(url.toString());
