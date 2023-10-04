@@ -25,8 +25,8 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -41,7 +41,7 @@
 			]
 		},
 		{
-			"name": "users",
+			"name": "user",
 			"item": [
 				{
 					"name": "rest",
@@ -52,8 +52,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/users",
-									"protocol": "http",
+									"raw": "{{protocol}}://{{host}}:{{port}}/users",
+									"protocol": "{{protocol}}",
 									"host": [
 										"{{host}}"
 									],
@@ -71,15 +71,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/users/1",
-									"protocol": "http",
+									"raw": "{{protocol}}://{{host}}:{{port}}/users/3",
+									"protocol": "{{protocol}}",
 									"host": [
 										"{{host}}"
 									],
 									"port": "{{port}}",
 									"path": [
 										"users",
-										"1"
+										"3"
 									]
 								}
 							},
@@ -92,7 +92,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"jack\",\r\n    \"desc\": \"king of the world\"\r\n}",
+									"raw": "{\r\n    \"name\": \"jacky\",\r\n    \"desc\": \"king of the world\",\r\n    \"tel\": \"133\",\r\n    \"password\": \"password\",\r\n    \"account\": \"国风才是最屌的\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -100,8 +100,8 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{host}}:{{port}}/users",
-									"protocol": "http",
+									"raw": "{{protocol}}://{{host}}:{{port}}/users",
+									"protocol": "{{protocol}}",
 									"host": [
 										"{{host}}"
 									],
@@ -119,8 +119,8 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/users/3",
-									"protocol": "http",
+									"raw": "{{protocol}}://{{host}}:{{port}}/users/3",
+									"protocol": "{{protocol}}",
 									"host": [
 										"{{host}}"
 									],
@@ -148,8 +148,8 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{host}}:{{port}}/users/1",
-									"protocol": "http",
+									"raw": "{{protocol}}://{{host}}:{{port}}/users/1",
+									"protocol": "{{protocol}}",
 									"host": [
 										"{{host}}"
 									],
@@ -180,8 +180,145 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getUser($id: String!){\r\n  getUser(id: $id){\r\n    code\r\n    message\r\n    data{\r\n        name\r\n        desc\r\n        tel\r\n        account\r\n        avatar\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\":\"3d44569f-a9b9-4266-aafd-7a85f7c03419\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserByTel",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getUserByTel($tel: String!){\r\n  getUserByTel(tel: $tel){\r\n    code\r\n    message\r\n    data{\r\n        name\r\n        desc\r\n        tel\r\n        account\r\n        avatar\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"tel\":\"13385401630\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserByToken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getUserByToken{\r\n  getUserByToken{\r\n    code\r\n    message\r\n    data{\r\n        name\r\n        desc\r\n        tel\r\n        account\r\n        avatar\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserByToken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateUserByToken($dto: UpdateUserDto!){\r\n  updateUserByToken(dto: $dto){\r\n    code\r\n    message\r\n    data{\r\n        name\r\n        desc\r\n        tel\r\n        account\r\n        avatar\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n    \"dto\":{\r\n        \"name\": \"阿凡达\",\r\n        \"desc\": \"你妈喊你回家吃饭\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -216,13 +353,13 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getOSSInfo {\r\n  getOSSInfo{\r\n    expire\r\n    policy\r\n    signature\r\n    accessId\r\n    host\r\n  }\r\n}",
+								"query": "query getOSSInfo {\r\n  getOSSInfo{\r\n      code\r\n      message\r\n      data {\r\n        expire\r\n        policy\r\n        signature\r\n        accessId\r\n        host\r\n      }\r\n  }\r\n}",
 								"variables": ""
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -257,13 +394,13 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createOrganization($dto: CreateOrganizationDto!){\r\n  createOrganization(dto: $dto){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
+								"query": "mutation createOrUpdateOrganization($dto: OrganizationInputDto!, $id:String){\r\n  createOrUpdateOrganization(dto: $dto, id:$id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
 								"variables": "{\r\n  \"dto\": {\r\n    \"businessLicense\":\"asdfasdf;alkj;lkasjdf\",\r\n    \"identityCardBackImg\":\"赛发塞缝sdf\",\r\n    \"identityCardFrontImg\":\"asdf\",\r\n    \"tags\":\"a,b,c\",\r\n    \"desc\":\"安东风\",\r\n    \"name\":\"一号店\",\r\n    \"tel\":\"233\",\r\n    \"address\": \"asdfdflkj\",\r\n    \"longitude\": \"23434\",\r\n    \"latitude\": \"3434\",\r\n    \"logo\": \"23432dlkjflskdjf\",\r\n    \"frontImgs\": [\r\n      {\r\n        \"url\":\"11111\",\r\n        \"remark\": \"11111\"\r\n      },\r\n      {\r\n        \"url\": \"22222\",\r\n        \"remark\": \"22222\"\r\n      }\r\n    ]\r\n  }\r\n}"
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -293,13 +430,49 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation updateOrganizationInfo($id: String!, $dto: UpdateOrganizationDto!){\r\n  updateOrganizationInfo(id:$id, dto: $dto){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n  \"id\": \"22399e06-4032-462d-99af-34e180009107\",\r\n  \"dto\": {\r\n    \"businessLicense\":\"asdfasdf;alkj;lkasjdf\",\r\n    \"identityCardBackImg\":\"赛发塞缝sdf\",\r\n    \"identityCardFrontImg\":\"asdf\",\r\n    \"tags\":\"a,b,c\",\r\n    \"desc\":\"安东风\",\r\n    \"name\":\"一号店\",\r\n    \"tel\":\"233\",\r\n    \"address\": \"asdfdflkj\",\r\n    \"longitude\": \"23434\",\r\n    \"latitude\": \"3434\",\r\n    \"logo\": \"23432dlkjflskdjf\",\r\n    \"frontImgs\": [\r\n      {\r\n        \"url\":\"11111\",\r\n        \"remark\": \"11111\"\r\n      },\r\n      {\r\n        \"url\": \"22222\",\r\n        \"remark\": \"22222\"\r\n      }\r\n    ]\r\n  }\r\n}"
+								"query": "mutation createOrUpdateOrganization($dto: OrganizationInputDto!, $id:String){\r\n  createOrUpdateOrganization(dto: $dto, id:$id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      createdAt\r\n      createdBy\r\n      updatedAt\r\n      updatedBy\r\n      deletedAt\r\n      deletedBy\r\n      businessLicense\r\n      identityCardBackImg\r\n      identityCardFrontImg\r\n      tags\r\n      desc\r\n      name\r\n      tel\r\n      address\r\n      longitude\r\n      latitude\r\n      logo\r\n      frontImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      roomImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n      otherImgs{\r\n        id\r\n        url\r\n        remark\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"b7c571ae-45d2-41e9-b8ad-536702d7c711\",\r\n  \"dto\": {\r\n    \"businessLicense\":\"asdfasdf;alkj;lkasjdf\",\r\n    \"identityCardBackImg\":\"东分分分扥扥扥扥扥扥f\",\r\n    \"identityCardFrontImg\":\"asdf\",\r\n    \"tags\":\"a,b,c\",\r\n    \"desc\":\"安东风\",\r\n    \"name\":\"一号店\",\r\n    \"tel\":\"233\",\r\n    \"address\": \"asdfdflkj\",\r\n    \"longitude\": \"23434\",\r\n    \"latitude\": \"3434\",\r\n    \"logo\": \"23432dlkjflskdjf\",\r\n    \"frontImgs\": [\r\n      {\r\n        \"url\":\"11111\",\r\n        \"remark\": \"11111\"\r\n      },\r\n      {\r\n        \"url\": \"22222\",\r\n        \"remark\": \"22222\"\r\n      }\r\n    ]\r\n  }\r\n}"
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getOrganizationInfo($id: String!) {\r\n    getOrganizationInfo(id: $id) {\r\n      code\r\n      message\r\n      data {\r\n        id\r\n        createdAt\r\n        createdBy\r\n        updatedAt\r\n        updatedBy\r\n        deletedAt\r\n        deletedBy\r\n        businessLicense\r\n        identityCardBackImg\r\n        identityCardFrontImg\r\n        tags\r\n        desc\r\n        name\r\n        tel\r\n        address\r\n        longitude\r\n        latitude\r\n        logo\r\n        frontImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        roomImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        otherImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n      }\r\n    }\r\n  }",
+								"variables": "{\r\n  \"id\": \"3decec06-855c-40a1-8479-bb19344494ba\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -334,8 +507,44 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getOrganizations($page: PageInput!) {\r\n    getOrganizations(page: $page) {\r\n      code\r\n      message\r\n      page {\r\n        total\r\n        page\r\n        pageSize\r\n      }\r\n      data {\r\n        id\r\n        createdAt\r\n        createdBy\r\n        updatedAt\r\n        updatedBy\r\n        deletedAt\r\n        deletedBy\r\n        businessLicense\r\n        identityCardBackImg\r\n        identityCardFrontImg\r\n        tags\r\n        desc\r\n        name\r\n        tel\r\n        address\r\n        longitude\r\n        latitude\r\n        logo\r\n        frontImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        roomImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        otherImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n      }\r\n    }\r\n  }",
+								"variables": "{\r\n  \"page\":{\r\n      \"page\":1,\r\n      \"pageSize\": 10\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -368,8 +577,8 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -393,12 +602,12 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "mutation studentLogin($account: String!, $password: String!){\r\n  studentLogin(account: $account, password: $password){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
-								"variables": "{\r\n  \"account\":\"abcdefg\",\r\n  \"password\": \"234234234asdf\"\r\n}"
+								"variables": "{\r\n  \"account\":\"captainwong\",\r\n  \"password\": \"e10adc3949ba59abbe56e057f20f883e\"\r\n}"
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -433,8 +642,8 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -464,13 +673,13 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation updateStudentInfo($params: UpdateStudentDto!){\r\n  updateStudentInfo(params: $params){\r\n      code\r\n      message\r\n      data{\r\n        id\r\n        name\r\n        tel\r\n        avatar\r\n      }\r\n  }\r\n  \r\n}",
-								"variables": "{\r\n    \"params\":{\r\n        \"name\":\"啊赛发塞缝\",\r\n        \"tel\":\"234234\",\r\n        \"avatar\": \"dfasdfasdf\"\r\n    }\r\n}"
+								"query": "mutation updateStudentInfo($dto: StudentInputDto!){\r\n  updateStudentInfo(dto: $dto){\r\n      code\r\n      message\r\n      data{\r\n        id\r\n        name\r\n        tel\r\n        avatar\r\n      }\r\n  }\r\n  \r\n}",
+								"variables": "{\r\n    \"dto\":{\r\n        \"name\":\"啊赛发塞缝\",\r\n        \"tel\":\"234234\",\r\n        \"avatar\": \"dfasdfasdf\"\r\n    }\r\n}"
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
@@ -483,7 +692,719 @@
 					"response": []
 				},
 				{
-					"name": "getStudents",
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getStudents($page: PageInput!){\r\n  getStudents(page: $page){\r\n    code\r\n    data{\r\n      id\r\n      account\r\n      name\r\n      tel\r\n      avatar\r\n      createdAt\r\n      createdBy\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":5\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "course",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\": {\r\n    \"name\":\"歼星舰喷漆教程\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\",\r\n    \"resavableTimeSlots\":[\r\n      {\r\n        \"weekday\": \"monday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"9:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"10:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      },\r\n      {\r\n        \"weekday\": \"sunday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"6:00:00\",\r\n            \"end\": \"7:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "6da9b006-6209-49a2-8adc-1fa6a6e4d68a",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n    \"id\": \"23840ca6-0cde-418c-b53b-d6789688ca3e\",\r\n  \"dto\": {\r\n    \"name\":\"迫击炮制造教程3\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\"\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getCourseInfo($id: String!){\r\n  getCourseInfo(id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"23840ca6-0cde-418c-b53b-d6789688ca3e\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteCourse($id: String!){\r\n  deleteCourse(id: $id){\r\n    code\r\n    message\r\n    data\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"09265524-a666-4f7a-a288-0409f7a4eedd\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "6da9b006-6209-49a2-8adc-1fa6a6e4d68a",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getCourses($page: PageInput!, $name: String){\r\n  getCourses(page: $page, name: $name){\r\n    code\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n    \"name\":\"喷漆\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "card",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateCard($courseId:String!, $dto: CardInputDto!, $id: String){\r\n  createOrUpdateCard(courseId:$courseId, dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      type\r\n      count\r\n      duration\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"courseId\":\"efeb3e20-d923-40c9-b7e2-151337860e03\",\r\n  \"dto\": {\r\n    \"name\":\"300次卡有效期一年\",\r\n    \"type\":\"duration\",\r\n    \"count\":300,\r\n    \"duration\":365\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateCard($courseId:String!, $dto: CardInputDto!, $id: String){\r\n  createOrUpdateCard(courseId:$courseId, dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      type\r\n      count\r\n      duration\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"courseId\":\"5183e22d-5eb6-4c35-9a58-2707738988e4\",\r\n  \"dto\": {\r\n    \"name\":\"300次卡有效期一年2\",\r\n    \"type\":\"count\",\r\n    \"count\":300,\r\n    \"duration\":365\r\n  },\r\n  \"id\":\"528e3a82-04ce-4852-a773-e6d7a5eb8e5c\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getCardInfo($courseId:String!, $id: String!){\r\n  getCardInfo(courseId:$courseId, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      type\r\n      count\r\n      duration\r\n      course{\r\n        id\r\n        name\r\n        desc\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"courseId\":\"efeb3e20-d923-40c9-b7e2-151337860e03\",\r\n  \"id\":\"089ed8ee-6df5-4111-873c-1788e92350da\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteCard($courseId:String!, $id: String!){\r\n  deleteCard(courseId:$courseId, id: $id){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"courseId\":\"5183e22d-5eb6-4c35-9a58-2707738988e4\",\r\n  \"id\":\"4a32e57a-12f4-4499-9a90-a7c3612b6680\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getCards($courseId:String!, $name: String){\r\n  getCards(courseId:$courseId, name: $name){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      type\r\n      count\r\n      duration\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"courseId\":\"efeb3e20-d923-40c9-b7e2-151337860e03\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getProductCategories{\r\n  getProductCategories{\r\n    code\r\n    message\r\n    data{\r\n      key\r\n      name\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateProduct($dto: PartialProductInputDto!){\r\n  createOrUpdateProduct(dto: $dto){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\":{\r\n    \"name\":\"怎样防突不防投\",\r\n    \"desc\": \"就是好\",\r\n    \"category\":\"other\",\r\n    \"stock\": 200,\r\n    \"price\": \"998.99\",\r\n    \"originalPrice\": \"2998.99\",\r\n    \"cover\": \"http://waterdrop-server-assets.oss-cn-zhangjiakou.aliyuncs.com/images/rc-upload-1695372364371-2.jpg\",\r\n    \"banner\": \"http://waterdrop-server-assets.oss-cn-zhangjiakou.aliyuncs.com/images/rc-upload-1695372364371-2.jpg\"\r\n\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateProduct($dto: PartialProductInputDto!, $id: String){\r\n  createOrUpdateProduct(dto: $dto, id: $id){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"892b58f7-35e3-43cc-bca7-2739c3088dbb\",\r\n  \"dto\":{\r\n    \"name\":\"C#大法\",\r\n    \"desc\": \"就是好\",\r\n    \"category\":\"programming\",\r\n    \"stock\": 200,\r\n    \"price\": \"998.99\",\r\n    \"originalPrice\": \"2998.99\",\r\n    \"cover\": \"sdfsdf\",\r\n    \"banner\": \"sdfsdf\"\r\n\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getProductInfo($id: String!){\r\n  getProductInfo(id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      category\r\n      stock\r\n      price\r\n      originalPrice\r\n      cover\r\n      banner\r\n      organization{\r\n        id\r\n        name\r\n      }\r\n      cards{\r\n        id\r\n        name\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"892b58f7-35e3-43cc-bca7-2739c3088dbb\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteProduct($id: String!){\r\n  deleteProduct(id: $id){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"892b58f7-35e3-43cc-bca7-2739c3088dbb\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getProducts($page: PageInput!, $name: String, $category: String){\r\n  getProducts(page: $page, name: $name, category: $category){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      category\r\n      stock\r\n      price\r\n      originalPrice\r\n      cover\r\n      banner\r\n      organization{\r\n        id\r\n        name\r\n      }\r\n      cards{\r\n        id\r\n        name\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listH5",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -496,23 +1417,358 @@
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "# Write your query or mutation here\r\nquery getStudents($page: PageInput!){\r\n  getStudents(page: $page){\r\n    code\r\n    data{\r\n      id\r\n      name\r\n      tel\r\n      avatar\r\n      createdAt\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":5\r\n  }\r\n}"
+								"query": "query getProductsH5($latitude: Float!, $longitude: Float!, $page: PageInput!, $category:String, $name: String){\r\n  getProductsH5(latitude:$latitude, longitude:$longitude, page: $page, category:$category, name: $name){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      category\r\n      stock\r\n      price\r\n      originalPrice\r\n      cover\r\n      banner\r\n      distance\r\n      organization{\r\n        id\r\n        name\r\n        longitude\r\n        latitude\r\n      }\r\n      cards{\r\n        id\r\n        name\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"longitude\": 115.526575,\r\n  \"latitude\":35.249694,\r\n  \"category\":\"music\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/graphql",
-							"protocol": "http",
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
 								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listByOrgH5",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getProductsByOrgH5($organizationId:String!){\r\n  getProductsByOrgH5(organizationId: $organizationId){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      category\r\n      stock\r\n      price\r\n      originalPrice\r\n      cover\r\n      banner\r\n      distance\r\n      organization{\r\n        id\r\n        name\r\n      }\r\n      cards{\r\n        id\r\n        name\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"organizationId\":\"37f1fd67-3144-4211-bb27-87e20363f6b5\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "batchOnSale",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation productBatchOnSale($dto: BatchOnSaleInput!){\r\n  productBatchOnSale(dto: $dto){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\":{\r\n  \"products\":[\r\n    \"0e4315e9-8196-4656-ac90-03d8598f3756\",\r\n\"17c9252c-5314-4c85-8f02-91f92235ff56\",\r\n\"2d1216bb-5d33-4f45-b8eb-3a739e919c8a\",\r\n\"35034b1d-7291-4fe7-bc9a-5dcf142bda38\",\r\n\"36abcbd4-8bef-448b-b8b3-532a12862765\",\r\n\"5fffd170-9d6f-43a3-9eca-58a245e4617e\",\r\n\"6b310a51-3947-4b89-b5b6-c07f1f208a76\",\r\n\"6c841513-6b62-4251-b3a3-65b1aeb34b74\",\r\n\"892b58f7-35e3-43cc-bca7-2739c3088dbb\",\r\n\"975656bd-42e0-43f0-91f3-1d7bb8f3587b\",\r\n\"ac4c4480-d6cc-4499-a74e-240915ab7d5a\",\r\n\"bd4d984c-8b20-42c9-b14e-4561974d3c44\",\r\n\"c18f21cd-0dbb-48ca-a8a4-e78bf81215e8\",\r\n\"d970a8c0-338d-4246-9e4a-0507d73cdc4f\",\r\n\"e290b751-e00a-4b2c-b025-04a7be04453a\",\r\n\"ebf46482-aebf-4cb3-9c6e-3c0e8fba7094\",\r\n\"fa52560e-b13e-4830-a45d-4efe815b8739\",\r\n\"fbf1f707-ba65-4942-8b3a-3bbe081ecb60\"\r\n  ],\r\n  \"onSale\": false\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "teacher",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateTeacher($dto: PartialTeacherInputDto!, $id: String){\r\n  createOrUpdateTeacher(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      photo\r\n      teachingAge\r\n      education\r\n      seniority\r\n      experience\r\n      award\r\n      tags\r\n      \r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\":{\r\n    \"name\": \"王五\",\r\n    \"photo\": \"http://waterdrop-server-assets.oss-cn-zhangjiakou.aliyuncs.com/undefinedrc-upload-1695910720570-13.jpg\",\r\n    \"teachingAge\": 10,\r\n    \"education\": \"社会大学\",\r\n    \"seniority\": \"十年老中医\",\r\n    \"experience\": \"偷抢拐骗\",\r\n    \"award\": \"诺贝尔法学奖\",\r\n    \"tags\": \"法外狂徒,人间精品\"\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createOrUpdateTeacher($dto: PartialTeacherInputDto!, $id: String){\r\n  createOrUpdateTeacher(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      photo\r\n      teachingAge\r\n      education\r\n      seniority\r\n      experience\r\n      award\r\n      tags\r\n      \r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\":\"a5d70540-686b-4f52-b5e0-d4c4d5905387\",\r\n  \"dto\":{\r\n    \"name\": \"三张\",\r\n    \"photo\": \"http://waterdrop-server-assets.oss-cn-zhangjiakou.aliyuncs.com/undefinedrc-upload-1695910720570-13.jpg\",\r\n    \"teachingAge\": 10,\r\n    \"education\": \"社会大学\",\r\n    \"seniority\": \"十年老中医\",\r\n    \"experience\": \"偷抢拐骗\",\r\n    \"award\": \"诺贝尔法学奖\",\r\n    \"tags\": \"法外狂徒,人间精品\"\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getTeacherInfo($id: String!){\r\n  getTeacherInfo(id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      photo\r\n      teachingAge\r\n      education\r\n      seniority\r\n      experience\r\n      award\r\n      tags\r\n      \r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\":\"a5d70540-686b-4f52-b5e0-d4c4d5905387\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getTeachers($page: PageInput!, $name: String){\r\n  getTeachers(page: $page, name: $name){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      photo\r\n      teachingAge\r\n      education\r\n      seniority\r\n      experience\r\n      award\r\n      tags\r\n      \r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"name\":\"三\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "organization-id",
+								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteTeacher($id: String!){\r\n  deleteTeacher(id: $id){\r\n    code\r\n    message\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\":\"4e96764a-cc0f-469b-8f13-a376e78f7bc1\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "wxpay",
+			"item": [
+				{
+					"name": "wxlogin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/api/v1/wxpay/wxlogin",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"wxpay",
+								"wxlogin"
 							]
 						}
 					},
