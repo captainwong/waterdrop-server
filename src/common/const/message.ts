@@ -47,6 +47,16 @@ export const Message = {
   [Code.CREATE_TEACHER_FAILED]: '创建教师失败',
   [Code.PRODUCT_NOT_ENOUGH]: '库存不足',
   [Code.INVALID_PARAMS]: '参数错误',
+  [Code.ORDER_NOT_EXISTS]: '订单不存在',
+  [Code.ORDER_ALREADY_EXISTS]: '订单已存在',
+  [Code.ORDER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '订单不存在或密码不匹配',
+  [Code.ORDER_PASSWORD_NOT_MATCH]: '订单密码不匹配',
+  [Code.CREATE_ORDER_FAILED]: '创建订单失败',
+  [Code.WXORDER_NOT_EXISTS]: '微信订单不存在',
+  [Code.WXORDER_ALREADY_EXISTS]: '微信订单已存在',
+  [Code.WXORDER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '微信订单不存在或密码不匹配',
+  [Code.WXORDER_PASSWORD_NOT_MATCH]: '微信订单密码不匹配',
+  [Code.CREATE_WXORDER_FAILED]: '创建微信订单失败',
 };
 
 export const CodeMsg = (code: number): string => {
