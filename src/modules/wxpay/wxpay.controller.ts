@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Inject,
   Post,
   Query,
   Req,
@@ -19,10 +20,20 @@ import { CodeMsg } from '@/common/const/message';
 import axios from 'axios';
 import { URL } from 'url';
 import { RemoteIp } from '@/common/decorators/remote-ip.decorator';
+import { ProductService } from '../product/product.service';
+import { OrderService } from '../order/order.service';
+import { WECHAT_PAY_MANAGER } from 'nest-wechatpay-node-v3';
+import WxPay from 'wechatpay-node-v3';
+import { WxpayCbDto } from './dto/wxpay-cb.dto';
 
 @Controller('wechat')
 export class WxpayController {
-  constructor(private readonly studentService: StudentService) {}
+  constructor(
+    private readonly studentService: StudentService,
+    private readonly productService: ProductService,
+    private readonly orderService: OrderService,
+    @Inject(WECHAT_PAY_MANAGER) private wxPay: WxPay,
+  ) {}
 
   @Get('test')
   async test(@Req() req: Request, @RemoteIp('ip') ip: string) {
@@ -110,6 +121,50 @@ export class WxpayController {
     res.redirect(url.toString());
   }
 
-  // @Post('wxpayCb')
-  // async wxpayCb(@Body() data: any): Promise<any> {}
+  @Post('wxpayCb')
+  async wxpayCb(@Body() data: WxpayCbDto): Promise<any> {
+    // console.log('wxpayCb', data);
+    /*
+    {
+      id: 'cada5071-bf43-5d85-a797-f821c9042f9c',
+      create_time: '2023-10-06T03:24:28+08:00',
+      resource_type: 'encrypt-resource',
+      event_type: 'TRANSACTION.SUCCESS',
+      summary: '支付成功',
+      resource: {
+        original_type: 'transaction',
+        algorithm: 'AEAD_AES_256_GCM',
+        ciphertext: 'xxxxxxxxxxxxxxxxxx',
+        associated_data: 'transaction',
+        nonce: '3a8sk93zs3mP'
+      }
+    }
+    */
+    const result = this.wxPay.decipher_gcm(
+      data.resource.ciphertext,
+      data.resource.associated_data,
+      data.resource.nonce,
+    );
+    // console.log('result', result);
+    /*
+    {
+      mchid: 'xxxxxxxxxxxxxxxxxx',
+      appid: 'xxxxxxxxxxxxxxxxxx',
+      out_trade_no: 'f00daf10a6a74d2fa361275d5c8ea179',
+      transaction_id: '4200001972202310068553552073',
+      trade_type: 'JSAPI',
+      trade_state: 'SUCCESS',
+      trade_state_desc: '支付成功',
+      bank_type: 'OTHERS',
+      attach: '',
+      success_time: '2023-10-06T05:50:46+08:00',
+      payer: { openid: 'xxxxxxxxxxxxxxxxxx' },
+      amount: { total: 1, payer_total: 1, currency: 'CNY', payer_currency: 'CNY' }
+    }
+    */
+    return {
+      code: 'SUCCESS',
+      message: '成功',
+    };
+  }
 }

@@ -103,12 +103,15 @@ export class WxpayResolver {
       };
     }
 
-    // 单位：分
-    const amount = new Decimal(product.price)
-      .mul(100)
-      .round()
-      .mul(quantity)
-      .toNumber();
+    const amount = 1;
+
+    // // 单位：分
+    // const amount = new Decimal(product.price)
+    //   .mul(100)
+    //   .round()
+    //   .mul(quantity)
+    //   .toNumber();
+
     const outTraceNo = uuid().replace(/-/g, '');
     const params = {
       description: product.name,

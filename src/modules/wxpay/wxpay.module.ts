@@ -28,6 +28,7 @@ import { Order } from '../order/entities/order.entity';
           privateKey: fs.readFileSync(
             process.env.WX_PAY_KEY_DIR + '/apiclient_key.pem',
           ), // 秘钥
+          key: process.env.WX_PAY_API_KEY, // APIv3 密钥
         };
       },
     }),
