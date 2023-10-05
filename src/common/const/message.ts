@@ -35,11 +35,12 @@ export const Message = {
   [Code.CARD_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '卡不存在或密码不匹配',
   [Code.CARD_PASSWORD_NOT_MATCH]: '卡密码不匹配',
   [Code.CREATE_CARD_FAILED]: '创建卡失败',
-  [Code.PRODUCT_NOT_EXISTS]: '产品不存在',
-  [Code.PRODUCT_ALREADY_EXISTS]: '产品已存在',
-  [Code.PRODUCT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '产品不存在或密码不匹配',
-  [Code.PRODUCT_PASSWORD_NOT_MATCH]: '产品密码不匹配',
-  [Code.CREATE_PRODUCT_FAILED]: '创建产品失败',
+  [Code.PRODUCT_NOT_EXISTS]: '商品不存在',
+  [Code.PRODUCT_ALREADY_EXISTS]: '商品已存在',
+  [Code.PRODUCT_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '商品不存在或密码不匹配',
+  [Code.PRODUCT_PASSWORD_NOT_MATCH]: '商品密码不匹配',
+  [Code.CREATE_PRODUCT_FAILED]: '创建商品失败',
+  [Code.PRODUCT_LIMIT]: '超过商品限购数量',
   [Code.TEACHER_NOT_EXISTS]: '教师不存在',
   [Code.TEACHER_ALREADY_EXISTS]: '教师已存在',
   [Code.TEACHER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '教师不存在或密码不匹配',
@@ -57,6 +58,7 @@ export const Message = {
   [Code.WXORDER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '微信订单不存在或密码不匹配',
   [Code.WXORDER_PASSWORD_NOT_MATCH]: '微信订单密码不匹配',
   [Code.CREATE_WXORDER_FAILED]: '创建微信订单失败',
+  [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 
 export const CodeMsg = (code: number): string => {

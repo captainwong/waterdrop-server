@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Order } from './entities/order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { OrderStatus } from './const';
 
 @Injectable()
 export class OrderService {
@@ -24,6 +25,27 @@ export class OrderService {
       take: pageSize,
       order: {
         createdAt: 'DESC',
+      },
+    });
+  }
+
+  async getCount(
+    studentId: string,
+    productId: string,
+    organizationId: string,
+  ): Promise<number> {
+    return this.orderRepository.count({
+      where: {
+        status: OrderStatus.SUCCESS,
+        student: {
+          id: studentId,
+        },
+        product: {
+          id: productId,
+        },
+        organization: {
+          id: organizationId,
+        },
       },
     });
   }

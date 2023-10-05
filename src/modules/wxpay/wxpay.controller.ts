@@ -5,10 +5,11 @@ import {
   HttpStatus,
   Post,
   Query,
+  Req,
   Res,
 } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import {
   INVALID_PARAMS,
   STUDENT_NOT_EXISTS,
@@ -17,10 +18,18 @@ import {
 import { CodeMsg } from '@/common/const/message';
 import axios from 'axios';
 import { URL } from 'url';
+import { RemoteIp } from '@/common/decorators/remote-ip.decorator';
 
 @Controller('wechat')
 export class WxpayController {
   constructor(private readonly studentService: StudentService) {}
+
+  @Get('test')
+  async test(@Req() req: Request, @RemoteIp('ip') ip: string) {
+    //const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    console.log('req.ip', ip);
+    return ip;
+  }
 
   // called by browser
   @Get('wxlogin')
@@ -62,7 +71,8 @@ export class WxpayController {
       `${studentId}@${encodeURIComponent(redirect)}`,
     ).toString('base64');
 
-    const wxuri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.WX_APP_ID}&redirect_uri=${process.env.SERVER_HOST}/api/v1/wxpay/wxloginCb&response_type=code&scope=snsapi_base&state=${state}#wechat_redirect`;
+    const redirect_uri = `${process.env.SERVER_HOST}${process.env.SERVER_API_GLOBAL_PREFIX}/wechat/wxloginCb`;
+    const wxuri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.WX_APP_ID}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_base&state=${state}#wechat_redirect`;
     console.log('wxuri', wxuri);
     res.redirect(wxuri);
   }
@@ -100,6 +110,6 @@ export class WxpayController {
     res.redirect(url.toString());
   }
 
-  // @Post('wxpayNotify')
-  // async wxpayNotify(@Body() data: any): Promise<any> {}
+  // @Post('wxpayCb')
+  // async wxpayCb(@Body() data: any): Promise<any> {}
 }

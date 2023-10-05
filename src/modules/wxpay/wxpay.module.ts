@@ -9,17 +9,19 @@ import { WxpayController } from './wxpay.controller';
 import { WxpayResolver } from './wxpay.resolver';
 import { WeChatPayModule } from 'nest-wechatpay-node-v3';
 import * as fs from 'fs';
+import { OrderService } from '../order/order.service';
+import { Order } from '../order/entities/order.entity';
 
 @Module({
   controllers: [WxpayController],
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([Student, Product]),
+    TypeOrmModule.forFeature([Student, Product, Order]),
     WeChatPayModule.registerAsync({
       useFactory: async () => {
         return {
-          appid: process.env.WX_PAY_APPID,
-          mchid: process.env.WX_PAY_MCHID,
+          appid: process.env.WX_PAY_APP_ID,
+          mchid: process.env.WX_PAY_MCH_ID,
           publicKey: fs.readFileSync(
             process.env.WX_PAY_KEY_DIR + '/apiclient_cert.pem',
           ), // 公钥
@@ -30,6 +32,6 @@ import * as fs from 'fs';
       },
     }),
   ],
-  providers: [WxpayResolver, StudentService, ProductService],
+  providers: [WxpayResolver, StudentService, ProductService, OrderService],
 })
 export class WxpayModule {}

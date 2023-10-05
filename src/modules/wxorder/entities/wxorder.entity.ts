@@ -1,7 +1,7 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Order } from '@/modules/order/entities/order.entity';
 import { Organization } from '@/modules/organization/entities/organization.entity';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity('wxorders')
 export class Wxorder extends CommonEntity {
@@ -43,12 +43,14 @@ export class Wxorder extends CommonEntity {
     comment: '微信支付订单号',
     nullable: true,
   })
+  @Index()
   transaction_id: string;
 
   @Column({
     comment: '商户订单号',
     nullable: true,
   })
+  @Index()
   out_trade_no: string;
 
   @Column({

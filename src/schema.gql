@@ -843,10 +843,7 @@ type Mutation {
   deleteTeacher(id: String!): Result!
 
   """获取微信支付配置"""
-  wxpayConfig(scene: String!, productId: String!, quantity: Float!, amount: Float!): WxpayConfigResult!
-
-  """Create order"""
-  createOrUpdateOrder(dto: PartialOrderInputDto!, id: String): OrderResult!
+  getWxpayConfig(scene: String!, productId: String!, quantity: Float!): WxpayConfigResult!
 
   """Delete order by id"""
   deleteOrder(id: String!): Result!
@@ -1154,15 +1151,4 @@ input PartialTeacherInputDto {
 
   """风格标签，以，隔开"""
   tags: String
-}
-
-input PartialOrderInputDto {
-  """id"""
-  id: String
-  createdAt: DateTime
-  createdBy: String
-  updatedAt: DateTime
-  updatedBy: String
-  deletedAt: DateTime
-  deletedBy: String
 }

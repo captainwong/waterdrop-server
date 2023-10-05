@@ -3,7 +3,7 @@ import { Organization } from '@/modules/organization/entities/organization.entit
 import { Product } from '@/modules/product/entities/product.entity';
 import { Student } from '@/modules/student/entities/student.entity';
 import { Wxorder } from '@/modules/wxorder/entities/wxorder.entity';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity('orders')
 export class Order extends CommonEntity {
@@ -11,6 +11,7 @@ export class Order extends CommonEntity {
     comment: '订单号',
     default: '',
   })
+  @Index()
   outTradeNo: string;
 
   @Column({
