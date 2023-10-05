@@ -18,7 +18,7 @@ async function bootstrap() {
   //   }),
   // );
   app.enableCors();
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix(process.env.SERVER_API_GLOBAL_PREFIX || 'api/v1');
   await app.listen(parseInt(process.env.SERVER_PORT, 10) || 3000);
 }
 bootstrap();

@@ -50,12 +50,15 @@
     "dotenv": "^16.3.1",
     "graphql": "^16.8.0",
     "mysql2": "^3.6.1",
+    "nest-wechatpay-node-v3": "^1.0.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "uuid": "^9.0.1",
+    "wechatpay-node-v3": "^2.1.6"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",

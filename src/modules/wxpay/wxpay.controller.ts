@@ -1,4 +1,12 @@
-import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { StudentService } from '../student/student.service';
 import { Response } from 'express';
 import {
@@ -10,7 +18,7 @@ import { CodeMsg } from '@/common/const/message';
 import axios from 'axios';
 import { URL } from 'url';
 
-@Controller('wxpay')
+@Controller('wechat')
 export class WxpayController {
   constructor(private readonly studentService: StudentService) {}
 
@@ -36,6 +44,7 @@ export class WxpayController {
           message: CodeMsg(INVALID_PARAMS),
         })
         .end();
+      return;
     }
     const student = await this.studentService.findOne(studentId);
     if (!student) {
@@ -90,4 +99,7 @@ export class WxpayController {
     url.searchParams.append('code', `${SUCCESS}`);
     res.redirect(url.toString());
   }
+
+  // @Post('wxpayNotify')
+  // async wxpayNotify(@Body() data: any): Promise<any> {}
 }
