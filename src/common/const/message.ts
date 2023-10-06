@@ -58,6 +58,12 @@ export const Message = {
   [Code.WXORDER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '微信订单不存在或密码不匹配',
   [Code.WXORDER_PASSWORD_NOT_MATCH]: '微信订单密码不匹配',
   [Code.CREATE_WXORDER_FAILED]: '创建微信订单失败',
+  [Code.STUDENT_RECORD_ALREADY_EXISTS]: '学生记录已存在',
+  [Code.STUDENT_RECORD_NOT_EXISTS]: '学生记录不存在',
+  [Code.STUDENT_RECORD_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]:
+    '学生记录不存在或密码不匹配',
+  [Code.STUDENT_RECORD_PASSWORD_NOT_MATCH]: '学生记录密码不匹配',
+  [Code.CREATE_STUDENT_RECORD_FAILED]: '创建学生记录失败',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 

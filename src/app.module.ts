@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { StudentCardModule } from './modules/student-card/student-card.module';
 import { WxorderModule } from './modules/wxorder/wxorder.module';
 import { OrderModule } from './modules/order/order.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
@@ -53,6 +54,7 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
     WxpayModule,
     OrderModule,
     WxorderModule,
+    StudentCardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
