@@ -14,12 +14,14 @@ import { Order } from '../order/entities/order.entity';
 import { WxpayService } from './wxpay.service';
 import { WxorderService } from '../wxorder/wxorder.service';
 import { Wxorder } from '../wxorder/entities/wxorder.entity';
+import { StudentCardService } from '../student-card/student-card.service';
+import { StudentCard } from '../student-card/entities/student-card.entity';
 
 @Module({
   controllers: [WxpayController],
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([Student, Product, Order, Wxorder]),
+    TypeOrmModule.forFeature([Student, Product, Order, Wxorder, StudentCard]),
     WeChatPayModule.registerAsync({
       useFactory: async () => {
         return {
@@ -42,6 +44,7 @@ import { Wxorder } from '../wxorder/entities/wxorder.entity';
     OrderService,
     WxorderService,
     WxpayService,
+    StudentCardService,
     WxpayResolver,
   ],
 })

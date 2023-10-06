@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { StudentCard } from './entities/student-card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { Card } from '../card/entities/card.entity';
+import * as dayjs from 'dayjs';
+import { CardType } from '@/common/const/enum';
 
 @Injectable()
 export class StudentCardService {
@@ -9,6 +12,37 @@ export class StudentCardService {
     @InjectRepository(StudentCard)
     private readonly studentRecordRepository: Repository<StudentCard>,
   ) {}
+
+  // 为学生生成对应商品的消费卡
+  async createStudentCards(
+    organizationId: string,
+    studentId: string,
+    cards: Card[],
+  ): Promise<boolean> {
+    const studentCards = cards.map((card) => {
+      const now = dayjs();
+      return this.studentRecordRepository.create({
+        student: {
+          id: studentId,
+        },
+        card: {
+          id: card.id,
+        },
+        course: {
+          id: card.course.id,
+        },
+        organization: {
+          id: organizationId,
+        },
+        purchasedAt: now.toDate(),
+        effectiveAt: now.toDate(),
+        expiresAt: now.add(card.duration, 'day').toDate(),
+        remainingTimes: card.type === CardType.COUNT ? card.count : 0,
+      });
+    });
+    const res = await this.studentRecordRepository.save(studentCards);
+    return res.length > 0;
+  }
 
   async findAll(
     page: number,

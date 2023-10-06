@@ -57,7 +57,7 @@ export class OrderService {
   async findOneByOutTradeNo(outTradeNo: string): Promise<Order> {
     return this.orderRepository.findOne({
       where: { outTradeNo },
-      relations: ['product', 'student', 'organization', 'wxorder'],
+      relations: ['product.cards.course', 'student', 'organization', 'wxorder'],
     });
   }
 

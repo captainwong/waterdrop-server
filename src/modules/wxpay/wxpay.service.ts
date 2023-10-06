@@ -5,6 +5,7 @@ import { OrderService } from '../order/order.service';
 import { WxorderCbType } from '../wxorder/dto/wxorder-type.dto';
 import { OrderStatus } from '../order/const';
 import { WxorderService } from '../wxorder/wxorder.service';
+import { StudentCardService } from '../student-card/student-card.service';
 
 @Injectable()
 export class WxpayService {
@@ -13,6 +14,7 @@ export class WxpayService {
     private readonly productService: ProductService,
     private readonly orderService: OrderService,
     private readonly wxorderService: WxorderService,
+    private readonly studentCardService: StudentCardService,
   ) {}
 
   async orderPaid(result: WxorderCbType): Promise<void> {
@@ -32,7 +34,7 @@ export class WxpayService {
       return;
     }
 
-    // 0. find or create wxorder
+    // 1. find or create wxorder
     let wxorder = await this.wxorderService.findOneByTransactionId(
       result.transaction_id,
     );
@@ -47,8 +49,6 @@ export class WxpayService {
       });
     }
 
-    // 1. todo: 为学生添加当前商品的消费卡
-
     // 2. 更新订单状态
     await this.orderService.update(order.id, {
       status: 'SUCCESS',
@@ -62,6 +62,13 @@ export class WxpayService {
     await this.productService.incSalesDecStock(
       order.product.id,
       order.quantity,
+    );
+
+    // 4. 为学生添加当前商品的消费卡
+    await this.studentCardService.createStudentCards(
+      order.organization.id,
+      order.student.id,
+      order.product.cards,
     );
   }
 }
