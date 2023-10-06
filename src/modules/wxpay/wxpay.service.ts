@@ -23,8 +23,12 @@ export class WxpayService {
       console.error('order not exists', result.out_trade_no);
       return;
     }
+    // TODO: 把支付成功的 outtradeno 放 redis 里，省的微信重复回调
     if (order.status !== OrderStatus.USERPAYING) {
-      console.log('order status not USERPAYING', order.status);
+      console.log('order status not USERPAYING', {
+        out_trade_no: result.out_trade_no,
+        status: order.status,
+      });
       return;
     }
 
