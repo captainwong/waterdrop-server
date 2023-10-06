@@ -32,6 +32,12 @@ export class WxorderService {
     return this.wxorderRepository.findOne({ where: { id } });
   }
 
+  async findOneByTransactionId(transactionId: string): Promise<Wxorder> {
+    return this.wxorderRepository.findOne({
+      where: { transaction_id: transactionId },
+    });
+  }
+
   async create(dto: DeepPartial<Wxorder>): Promise<Wxorder> {
     return this.wxorderRepository.save(this.wxorderRepository.create(dto));
   }

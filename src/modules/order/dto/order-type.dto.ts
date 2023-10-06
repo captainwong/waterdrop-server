@@ -16,7 +16,7 @@ export class OrderTypeDto extends CommonTypeDto {
   quantity: number;
 
   @Field({
-    description: 'amount',
+    description: '总金额，单位分',
   })
   amount: number;
 
@@ -26,9 +26,15 @@ export class OrderTypeDto extends CommonTypeDto {
   tel: string;
 
   @Field({
-    description: '状态',
+    description: '支付状态',
   })
   status: string;
+
+  @Field({
+    description: '支付时间',
+    nullable: true,
+  })
+  paidAt: Date;
 
   @Field({
     description: 'createdAt',

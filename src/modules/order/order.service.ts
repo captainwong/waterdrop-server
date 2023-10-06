@@ -54,6 +54,13 @@ export class OrderService {
     return this.orderRepository.findOne({ where: { id } });
   }
 
+  async findOneByOutTradeNo(outTradeNo: string): Promise<Order> {
+    return this.orderRepository.findOne({
+      where: { outTradeNo },
+      relations: ['product', 'student', 'organization', 'wxorder'],
+    });
+  }
+
   async create(dto: DeepPartial<Order>): Promise<Order> {
     return this.orderRepository.save(this.orderRepository.create(dto));
   }

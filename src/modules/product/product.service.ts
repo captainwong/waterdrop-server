@@ -124,6 +124,23 @@ export class ProductService {
     return this.productRepository.save(product);
   }
 
+  async incSalesDecStock(id: string, quantity: number): Promise<boolean> {
+    const res = await this.productRepository.increment(
+      { id },
+      'sales',
+      quantity,
+    );
+    if (res.affected > 0) {
+      const res2 = await this.productRepository.decrement(
+        { id },
+        'stock',
+        quantity,
+      );
+      return res2.affected > 0;
+    }
+    return false;
+  }
+
   async batchUpdate(
     userId: string,
     organizationId: string,

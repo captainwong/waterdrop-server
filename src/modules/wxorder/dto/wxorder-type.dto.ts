@@ -95,3 +95,31 @@ export class WxorderTypeDto extends CommonTypeDto {
   @Field(() => OrganizationTypeDto, { nullable: true, description: '门店' })
   organization?: OrganizationTypeDto;
 }
+
+/*
+{
+  mchid: 'xxxxxxxxxxxxxxxxxx',
+  appid: 'xxxxxxxxxxxxxxxxxx',
+  out_trade_no: 'f00daf10a6a74d2fa361275d5c8ea179',
+  transaction_id: '4200001972202310068553552073',
+  trade_type: 'JSAPI',
+  trade_state: 'SUCCESS',
+  trade_state_desc: '支付成功',
+  bank_type: 'OTHERS',
+  attach: '',
+  success_time: '2023-10-06T05:50:46+08:00',
+  payer: { openid: 'xxxxxxxxxxxxxxxxxx' },
+  amount: { total: 1, payer_total: 1, currency: 'CNY', payer_currency: 'CNY' }
+}
+*/
+export type WxorderCbType = WxorderTypeDto & {
+  payer: {
+    openid: string;
+  };
+  amount: {
+    total: number;
+    payer_total: number;
+    currency: string;
+    payer_currency: string;
+  };
+};

@@ -353,14 +353,17 @@ type OrderTypeDto {
   """数量"""
   quantity: Float!
 
-  """amount"""
+  """总金额，单位分"""
   amount: Float!
 
   """手机号"""
   tel: String!
 
-  """状态"""
+  """支付状态"""
   status: String!
+
+  """支付时间"""
+  paidAt: DateTime
 
   """订单号"""
   outTradeNo: String

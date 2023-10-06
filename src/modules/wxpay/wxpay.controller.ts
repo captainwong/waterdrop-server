@@ -25,6 +25,9 @@ import { OrderService } from '../order/order.service';
 import { WECHAT_PAY_MANAGER } from 'nest-wechatpay-node-v3';
 import WxPay from 'wechatpay-node-v3';
 import { WxpayCbDto } from './dto/wxpay-cb.dto';
+import { WxorderCbType } from '../wxorder/dto/wxorder-type.dto';
+import { WxpayService } from './wxpay.service';
+import { OrderStatus } from '../order/const';
 
 @Controller('wechat')
 export class WxpayController {
@@ -32,6 +35,7 @@ export class WxpayController {
     private readonly studentService: StudentService,
     private readonly productService: ProductService,
     private readonly orderService: OrderService,
+    private readonly wxpayService: WxpayService,
     @Inject(WECHAT_PAY_MANAGER) private wxPay: WxPay,
   ) {}
 
@@ -39,6 +43,15 @@ export class WxpayController {
   async test(@Req() req: Request, @RemoteIp('ip') ip: string) {
     //const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
     console.log('req.ip', ip);
+    // this.orderService
+    //   .findOneByOutTradeNo('f00daf10a6a74d2fa361275d5c8ea179')
+    //   .then((order) => {
+    //     console.log('found order', order.id);
+    //   })
+    //   .catch((reason) => {
+    //     console.log('error', reason);
+    //   });
+    // console.log('finised req');
     return ip;
   }
 
@@ -123,45 +136,14 @@ export class WxpayController {
 
   @Post('wxpayCb')
   async wxpayCb(@Body() data: WxpayCbDto): Promise<any> {
-    // console.log('wxpayCb', data);
-    /*
-    {
-      id: 'cada5071-bf43-5d85-a797-f821c9042f9c',
-      create_time: '2023-10-06T03:24:28+08:00',
-      resource_type: 'encrypt-resource',
-      event_type: 'TRANSACTION.SUCCESS',
-      summary: '支付成功',
-      resource: {
-        original_type: 'transaction',
-        algorithm: 'AEAD_AES_256_GCM',
-        ciphertext: 'xxxxxxxxxxxxxxxxxx',
-        associated_data: 'transaction',
-        nonce: '3a8sk93zs3mP'
-      }
-    }
-    */
-    const result = this.wxPay.decipher_gcm(
+    console.log('wxpayCb.data', data);
+    const result: WxorderCbType = this.wxPay.decipher_gcm(
       data.resource.ciphertext,
       data.resource.associated_data,
       data.resource.nonce,
     );
-    // console.log('result', result);
-    /*
-    {
-      mchid: 'xxxxxxxxxxxxxxxxxx',
-      appid: 'xxxxxxxxxxxxxxxxxx',
-      out_trade_no: 'f00daf10a6a74d2fa361275d5c8ea179',
-      transaction_id: '4200001972202310068553552073',
-      trade_type: 'JSAPI',
-      trade_state: 'SUCCESS',
-      trade_state_desc: '支付成功',
-      bank_type: 'OTHERS',
-      attach: '',
-      success_time: '2023-10-06T05:50:46+08:00',
-      payer: { openid: 'xxxxxxxxxxxxxxxxxx' },
-      amount: { total: 1, payer_total: 1, currency: 'CNY', payer_currency: 'CNY' }
-    }
-    */
+    this.wxpayService.orderPaid(result);
+
     return {
       code: 'SUCCESS',
       message: '成功',

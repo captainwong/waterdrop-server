@@ -3,7 +3,14 @@ import { Organization } from '@/modules/organization/entities/organization.entit
 import { Product } from '@/modules/product/entities/product.entity';
 import { Student } from '@/modules/student/entities/student.entity';
 import { Wxorder } from '@/modules/wxorder/entities/wxorder.entity';
-import { Column, Entity, Index, ManyToOne, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+} from 'typeorm';
 
 @Entity('orders')
 export class Order extends CommonEntity {
@@ -38,6 +45,12 @@ export class Order extends CommonEntity {
   })
   status: string;
 
+  @Column({
+    comment: '支付时间',
+    nullable: true,
+  })
+  paidAt: Date;
+
   @ManyToOne(() => Organization, {
     cascade: true,
   })
@@ -54,5 +67,6 @@ export class Order extends CommonEntity {
   student: Student;
 
   @OneToOne(() => Wxorder, (wxorder) => wxorder.order, { cascade: true })
+  @JoinColumn()
   wxorder?: Wxorder;
 }

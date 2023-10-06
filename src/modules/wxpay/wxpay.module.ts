@@ -11,12 +11,15 @@ import { WeChatPayModule } from 'nest-wechatpay-node-v3';
 import * as fs from 'fs';
 import { OrderService } from '../order/order.service';
 import { Order } from '../order/entities/order.entity';
+import { WxpayService } from './wxpay.service';
+import { WxorderService } from '../wxorder/wxorder.service';
+import { Wxorder } from '../wxorder/entities/wxorder.entity';
 
 @Module({
   controllers: [WxpayController],
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([Student, Product, Order]),
+    TypeOrmModule.forFeature([Student, Product, Order, Wxorder]),
     WeChatPayModule.registerAsync({
       useFactory: async () => {
         return {
@@ -33,6 +36,13 @@ import { Order } from '../order/entities/order.entity';
       },
     }),
   ],
-  providers: [WxpayResolver, StudentService, ProductService, OrderService],
+  providers: [
+    StudentService,
+    ProductService,
+    OrderService,
+    WxorderService,
+    WxpayService,
+    WxpayResolver,
+  ],
 })
 export class WxpayModule {}
