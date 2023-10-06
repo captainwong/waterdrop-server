@@ -5,7 +5,7 @@ import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { Inject, Req, UseGuards } from '@nestjs/common';
-import { WxpayConfigResult } from './dto/wxpay-result.type';
+import { WxpayConfigResult } from './dto/wxpay-config-result.type';
 import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { CodeMsg } from '@/common/const/message';
 import {
@@ -21,7 +21,7 @@ import {
 import WxPay from 'wechatpay-node-v3';
 import { WECHAT_PAY_MANAGER } from 'nest-wechatpay-node-v3';
 import { v4 as uuid } from 'uuid';
-import { SCENES } from './const';
+import { ORDER_TIMEOUT, SCENES } from './const';
 import { createCodeMsgResult } from '@/common/dto/result.dto';
 import { WxorderService } from '../wxorder/wxorder.service';
 import { OrderService } from '../order/order.service';
@@ -31,6 +31,8 @@ import { OrderStatus } from '../order/const';
 import { WxpayConfigType } from './dto/wxpay-config.type';
 import Decimal from 'decimal.js';
 import { RemoteGqlIp } from '@/common/decorators/remote-gql-ip.decorator';
+import { OutTradeNo32 } from '@/utils/outtradeno';
+import * as dayjs from 'dayjs';
 
 @TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -112,10 +114,12 @@ export class WxpayResolver {
     //   .mul(quantity)
     //   .toNumber();
 
-    const outTraceNo = uuid().replace(/-/g, '');
+    const outTraceNo = OutTradeNo32();
     const params = {
       description: product.name,
       out_trade_no: outTraceNo,
+      // TODO: 点击购买则创建订单，并展示过期时间，这就需要购物车功能和订单页面展示功能
+      time_expire: dayjs().add(ORDER_TIMEOUT, 'minutes').toISOString(),
       notify_url: `${process.env.SERVER_HOST}${process.env.SERVER_API_GLOBAL_PREFIX}/wechat/wxpayCb`,
       amount: {
         total: amount,
@@ -142,6 +146,12 @@ export class WxpayResolver {
     }
 
     console.log('wxconfig', wxconfig);
+    if (wxconfig.message) {
+      return {
+        code: wxconfig.status,
+        message: wxconfig.message,
+      };
+    }
 
     await this.orderService.create({
       tel: student.tel,
@@ -163,7 +173,9 @@ export class WxpayResolver {
     return {
       code: SUCCESS,
       message: CodeMsg(SUCCESS),
-      data: wxconfig as WxpayConfigType,
+      // TODO: 点击购买则创建订单，并展示过期时间，这就需要购物车功能和订单页面展示功能
+      // data: { ...wxconfig, expires_in: ORDER_TIMEOUT } as WxpayConfigType,
+      data: { ...wxconfig } as WxpayConfigType,
     };
   }
 }

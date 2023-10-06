@@ -1,53 +1,63 @@
 import { CategoryList } from '@/modules/product/dto/category-type';
 import { hash } from '@/utils/hash';
+import { OutTradeNo32 } from '@/utils/outtradeno';
 import { Faker, zh_CN, en } from '@faker-js/faker';
+import * as dayjs from 'dayjs';
 
-const faker = new Faker({
-  locale: [zh_CN, en],
-});
+const outTradeNo = OutTradeNo32();
+console.log(outTradeNo.length, outTradeNo);
 
-const discount = faker.number.float({ min: 50, max: 90, precision: 2 }) / 100;
-console.log({ discount });
+const date = dayjs();
+console.log('date', date.toISOString());
+const expire = date.add(15, 'minutes');
+console.log('expire', expire.toISOString());
 
-let fprice = faker.number.float({ min: 100, max: 10000, precision: 2 });
-console.log({ fprice });
-const originalPrice = fprice.toFixed(2).toString();
-console.log({ fprice, originalPrice });
-fprice = fprice * discount;
-console.log({ fprice });
+// const faker = new Faker({
+//   locale: [zh_CN, en],
+// });
 
-const price = fprice.toFixed(2).toString();
+// const discount = faker.number.float({ min: 50, max: 90, precision: 2 }) / 100;
+// console.log({ discount });
 
-console.log({ fprice, originalPrice, price });
+// let fprice = faker.number.float({ min: 100, max: 10000, precision: 2 });
+// console.log({ fprice });
+// const originalPrice = fprice.toFixed(2).toString();
+// console.log({ fprice, originalPrice });
+// fprice = fprice * discount;
+// console.log({ fprice });
 
-let name: string[] = [];
+// const price = fprice.toFixed(2).toString();
 
-name.push('abc');
-name.push('abc');
-for (let i = 0; i < 5; i++) {
-  const productName = faker.commerce.productName();
-  name.push(productName);
-  console.log({ name, productName });
-}
-name = name.filter((item, index) => name.indexOf(item) === index);
+// console.log({ fprice, originalPrice, price });
 
-console.log({ name });
+// let name: string[] = [];
 
-async function test() {
-  const pwd = await hash('e10adc3949ba59abbe56e057f20f883e');
-  console.log({ pwd });
+// name.push('abc');
+// name.push('abc');
+// for (let i = 0; i < 5; i++) {
+//   const productName = faker.commerce.productName();
+//   name.push(productName);
+//   console.log({ name, productName });
+// }
+// name = name.filter((item, index) => name.indexOf(item) === index);
 
-  // const enums = CategoryList.reduce((key, name) => ({ key: item.key, text: item.name })),
-  // console.log(enums, enums);
+// console.log({ name });
 
-  // convert CategoryList to object with key and text
-  const enums = CategoryList.reduce((acc, item) => {
-    acc[item.key] = {
-      text: item.name,
-    };
-    return acc;
-  }, {});
-  console.log('enums', enums);
-}
+// async function test() {
+//   const pwd = await hash('e10adc3949ba59abbe56e057f20f883e');
+//   console.log({ pwd });
 
-test();
+//   // const enums = CategoryList.reduce((key, name) => ({ key: item.key, text: item.name })),
+//   // console.log(enums, enums);
+
+//   // convert CategoryList to object with key and text
+//   const enums = CategoryList.reduce((acc, item) => {
+//     acc[item.key] = {
+//       text: item.name,
+//     };
+//     return acc;
+//   }, {});
+//   console.log('enums', enums);
+// }
+
+// test();

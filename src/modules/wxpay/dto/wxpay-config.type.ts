@@ -8,6 +8,10 @@ import { Field, ObjectType } from '@nestjs/graphql';
 // paySign: '70EA570631E4BB79628FBCA90534C63FF7FADD89', // 微信签名
 @ObjectType()
 export class WxpayConfigType {
+  // TODO: 点击购买则创建订单，并展示过期时间，这就需要购物车功能和订单页面展示功能
+  // @Field({ description: '过期时间，单位分钟' })
+  // expires_in?: number;
+
   @Field({
     description: '公众号ID',
   })
