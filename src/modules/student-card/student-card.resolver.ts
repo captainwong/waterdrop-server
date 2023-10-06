@@ -13,6 +13,9 @@ import { Result } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
 import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
+import { CardStatus } from './const';
+import { CardType } from '@/common/const/enum';
+import * as dayjs from 'dayjs';
 
 @TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -31,21 +34,33 @@ export class StudentCardResolver {
         };
   }
 
-  @Query(() => StudentCardResults, { description: 'Find ststudentRecords' })
+  @Query(() => StudentCardResults, { description: 'Find student cards' })
   async getStudentCards(
-    @CurrentGqlTokenId('userId') userId: string,
+    @CurrentGqlTokenId('studentId') studentId: string,
     @Args('page') pageInput: PageInput,
   ): Promise<StudentCardResults> {
     const { page, pageSize } = pageInput;
-    const [ststudentRecords, total] = await this.studentRecordService.findAll(
+    const [studentCards, total] = await this.studentRecordService.findAll(
       page,
       pageSize,
-      userId,
+      studentId,
     );
+    const cards = studentCards.map((studentCard) => {
+      let status = CardStatus.VALID;
+      if (dayjs().isAfter(studentCard.expiresAt)) {
+        status = CardStatus.EXPIRED;
+      } else if (
+        studentCard.type === CardType.COUNT &&
+        studentCard.remainingTimes === 0
+      ) {
+        status = CardStatus.DEPLETED;
+      }
+      return { ...studentCard, status };
+    });
     return {
       code: SUCCESS,
       message: CodeMsg(SUCCESS),
-      data: ststudentRecords,
+      data: cards,
       page: {
         page,
         pageSize,

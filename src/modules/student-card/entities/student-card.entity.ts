@@ -1,3 +1,4 @@
+import { CardType } from '@/common/const/enum';
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Card } from '@/modules/card/entities/card.entity';
 import { Course } from '@/modules/course/entities/course.entity';
@@ -8,6 +9,12 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity('student_cards')
 export class StudentCard extends CommonEntity {
+  @Column({
+    comment: '类型',
+    default: CardType.DURATION,
+  })
+  type: string;
+
   @Column({
     comment: '购买时间',
     type: 'timestamp',

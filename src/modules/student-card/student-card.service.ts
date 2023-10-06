@@ -37,6 +37,7 @@ export class StudentCardService {
         purchasedAt: now.toDate(),
         effectiveAt: now.toDate(),
         expiresAt: now.add(card.duration, 'day').toDate(),
+        type: card.type,
         remainingTimes: card.type === CardType.COUNT ? card.count : 0,
       });
     });
@@ -47,10 +48,10 @@ export class StudentCardService {
   async findAll(
     page: number,
     pageSize: number,
-    createdBy: string,
+    studentId: string,
   ): Promise<[StudentCard[], number]> {
     const where: FindOptionsWhere<StudentCard> = {
-      createdBy: createdBy,
+      student: { id: studentId },
     };
     return this.studentRecordRepository.findAndCount({
       where,
@@ -59,6 +60,7 @@ export class StudentCardService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['card', 'organization'],
     });
   }
 

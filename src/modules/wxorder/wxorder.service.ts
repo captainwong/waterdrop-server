@@ -10,23 +10,23 @@ export class WxorderService {
     private readonly wxorderRepository: Repository<Wxorder>,
   ) {}
 
-  async findAll(
-    page: number,
-    pageSize: number,
-    createdBy: string,
-  ): Promise<[Wxorder[], number]> {
-    const where: FindOptionsWhere<Wxorder> = {
-      createdBy: createdBy,
-    };
-    return this.wxorderRepository.findAndCount({
-      where,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-  }
+  // async findAll(
+  //   page: number,
+  //   pageSize: number,
+  //   studentId: string,
+  // ): Promise<[Wxorder[], number]> {
+  //   const where: FindOptionsWhere<Wxorder> = {
+  //     student: createdBy,
+  //   };
+  //   return this.wxorderRepository.findAndCount({
+  //     where,
+  //     skip: (page - 1) * pageSize,
+  //     take: pageSize,
+  //     order: {
+  //       createdAt: 'DESC',
+  //     },
+  //   });
+  // }
 
   async findOne(id: string): Promise<Wxorder> {
     return this.wxorderRepository.findOne({ where: { id } });

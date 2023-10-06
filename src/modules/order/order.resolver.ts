@@ -11,7 +11,7 @@ import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 
-@TokenEntity('user', 'student')
+@TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class OrderResolver {
@@ -27,14 +27,14 @@ export class OrderResolver {
 
   @Query(() => OrderResults, { description: 'Find orders' })
   async getOrders(
-    @CurrentGqlTokenId('userId') userId: string,
+    @CurrentGqlTokenId('studentId') studentId: string,
     @Args('page') pageInput: PageInput,
   ): Promise<OrderResults> {
     const { page, pageSize } = pageInput;
     const [orders, total] = await this.orderService.findAll(
       page,
       pageSize,
-      userId,
+      studentId,
     );
     return {
       code: SUCCESS,

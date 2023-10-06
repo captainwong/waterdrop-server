@@ -8,6 +8,11 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class StudentCardTypeDto extends CommonTypeDto {
   @Field({
+    description: '类型',
+  })
+  type: string;
+
+  @Field({
     description: '购买时间',
   })
   purchasedAt: Date;
@@ -30,6 +35,9 @@ export class StudentCardTypeDto extends CommonTypeDto {
     nullable: true,
   })
   remainingTimes: number;
+
+  @Field({ description: '状态', nullable: true })
+  status?: string;
 
   @Field(() => CardTypeDto, { nullable: true })
   card: CardTypeDto;

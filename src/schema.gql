@@ -213,6 +213,9 @@ type StudentCardTypeDto {
   deletedAt: DateTime
   deletedBy: String
 
+  """类型"""
+  type: String!
+
   """购买时间"""
   purchasedAt: DateTime!
 
@@ -224,6 +227,9 @@ type StudentCardTypeDto {
 
   """剩余可用次数"""
   remainingTimes: Float
+
+  """状态"""
+  status: String
   card: CardTypeDto
   student: StudentTypeDto
   course: CourseTypeDto
@@ -322,20 +328,6 @@ type WxorderResult {
 
   """数据"""
   data: WxorderTypeDto
-}
-
-type WxorderResults {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: [WxorderTypeDto!]
-
-  """分页信息"""
-  page: PageTypeDto
 }
 
 type ProductTypeDto {
@@ -823,13 +815,10 @@ type Query {
   """Find wxorder by id"""
   getWxorderInfo(id: String!): WxorderResult!
 
-  """Find wxorders"""
-  getWxorders(page: PageInput!): WxorderResults!
-
   """Find studentCard by id"""
   getStudentCardInfo(id: String!): StudentCardResult!
 
-  """Find ststudentRecords"""
+  """Find student cards"""
   getStudentCards(page: PageInput!): StudentCardResults!
 }
 

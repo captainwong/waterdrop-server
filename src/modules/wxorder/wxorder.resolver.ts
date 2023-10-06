@@ -11,7 +11,7 @@ import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 
-@TokenEntity('user', 'student')
+@TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class WxorderResolver {
@@ -25,28 +25,28 @@ export class WxorderResolver {
       : { code: WXORDER_NOT_EXISTS, message: CodeMsg(WXORDER_NOT_EXISTS) };
   }
 
-  @Query(() => WxorderResults, { description: 'Find wxorders' })
-  async getWxorders(
-    @CurrentGqlTokenId('userId') userId: string,
-    @Args('page') pageInput: PageInput,
-  ): Promise<WxorderResults> {
-    const { page, pageSize } = pageInput;
-    const [wxorders, total] = await this.wxorderService.findAll(
-      page,
-      pageSize,
-      userId,
-    );
-    return {
-      code: SUCCESS,
-      message: CodeMsg(SUCCESS),
-      data: wxorders,
-      page: {
-        page,
-        pageSize,
-        total,
-      },
-    };
-  }
+  // @Query(() => WxorderResults, { description: 'Find wxorders' })
+  // async getWxorders(
+  //   @CurrentGqlTokenId('studentId') studentId: string,
+  //   @Args('page') pageInput: PageInput,
+  // ): Promise<WxorderResults> {
+  //   const { page, pageSize } = pageInput;
+  //   const [wxorders, total] = await this.wxorderService.findAll(
+  //     page,
+  //     pageSize,
+  //     studentId,
+  //   );
+  //   return {
+  //     code: SUCCESS,
+  //     message: CodeMsg(SUCCESS),
+  //     data: wxorders,
+  //     page: {
+  //       page,
+  //       pageSize,
+  //       total,
+  //     },
+  //   };
+  // }
 
   @Mutation(() => Result, { description: 'Delete wxorder by id' })
   async deleteWxorder(

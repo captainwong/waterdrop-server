@@ -14,10 +14,10 @@ export class OrderService {
   async findAll(
     page: number,
     pageSize: number,
-    createdBy: string,
+    studentId: string,
   ): Promise<[Order[], number]> {
     const where: FindOptionsWhere<Order> = {
-      createdBy: createdBy,
+      student: { id: studentId },
     };
     return this.orderRepository.findAndCount({
       where,
