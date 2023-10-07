@@ -39,6 +39,7 @@ export class CourseInputDto extends CommonInputDto {
 
   @Field(() => [String], {
     description: '任课老师',
+    nullable: true,
   })
   teachers: string[];
 }

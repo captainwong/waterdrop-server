@@ -971,8 +971,8 @@ type Mutation {
   """Delete studentCard by id"""
   deleteStudentCard(id: String!): Result!
 
-  """Create schedule"""
-  createSchedule(startAt: DateTime!, endAt: DateTime!): ScheduleResults!
+  """Create schedules"""
+  createSchedules(startAt: DateTime!, endAt: DateTime!): ScheduleResults!
 
   """Delete schedule by id"""
   deleteSchedule(id: String!): Result!
@@ -1130,7 +1130,7 @@ input CourseInputDto {
   reservableTimeSlots: [TimeSlotsInput!]
 
   """任课老师"""
-  teachers: [String!]!
+  teachers: [String!]
 }
 
 input TimeSlotsInput {

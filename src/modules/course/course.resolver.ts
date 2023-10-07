@@ -36,7 +36,7 @@ export class CourseResolver {
         ...dto,
         createdBy: userId,
         organization: { id: organizationId },
-        teachers: dto.teachers.map((teacher) => ({ id: teacher })),
+        teachers: dto.teachers?.map((teacher) => ({ id: teacher })),
       });
 
       return course
@@ -49,7 +49,7 @@ export class CourseResolver {
       const course = await this.courseService.update(id, {
         ...dto,
         updatedBy: userId,
-        teachers: dto.teachers.map((teacher) => ({ id: teacher })),
+        teachers: dto.teachers?.map((teacher) => ({ id: teacher })),
       });
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }

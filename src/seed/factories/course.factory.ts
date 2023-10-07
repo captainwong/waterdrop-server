@@ -60,8 +60,8 @@ const randomReservableTimeSlots = (faker: Faker) => {
 
   weekdays.forEach((weekday) => {
     const slots = [];
-    const h = ('0' + faker.number.int({ min: 8, max: 11 })).slice(-2);
-    const start = dayjs(`2020-01-01T00:${h}:00.000Z`);
+    const h = ('0' + faker.number.int({ min: 6, max: 11 })).slice(-2);
+    const start = dayjs(`2020-01-01 ${h}:00:00`);
     const end = start.add(faker.helpers.arrayElement(durations), 'minutes');
     let key = 1;
 

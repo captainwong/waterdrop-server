@@ -35,8 +35,8 @@ export class ScheduleResolver {
     private readonly courseService: CourseService,
   ) {}
 
-  @Mutation(() => ScheduleResults, { description: 'Create schedule' })
-  async createSchedule(
+  @Mutation(() => ScheduleResults, { description: 'Create schedules' })
+  async createSchedules(
     @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId() organizationId: string,
     @Args('startAt') startAt: Date,

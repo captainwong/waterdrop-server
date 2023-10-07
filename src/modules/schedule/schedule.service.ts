@@ -27,8 +27,9 @@ export class ScheduleService {
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {
-        createdAt: 'DESC',
+        start: 'ASC',
       },
+      relations: ['course', 'teacher', 'organization'],
     });
   }
 
