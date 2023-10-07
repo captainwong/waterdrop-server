@@ -48,7 +48,7 @@ export class CourseTypeDto extends CommonTypeDto {
   note: string;
 
   @Field(() => [TimeSlotsType], { description: '可约时间', nullable: true })
-  resavableTimeSlots: TimeSlotsType[];
+  reservableTimeSlots: TimeSlotsType[];
 
   @Field(() => [TeacherTypeDto], { description: '任课老师', nullable: true })
   teachers: TeacherTypeDto[];

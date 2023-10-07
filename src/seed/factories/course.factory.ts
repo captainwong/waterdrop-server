@@ -54,7 +54,7 @@ const WEEKDAYS: IWeekday[] = [
 ];
 
 const randomReservableTimeSlots = (faker: Faker) => {
-  const resavableTimeSlots = [];
+  const reservableTimeSlots = [];
   const weekdays = faker.helpers.arrayElements(WEEKDAYS, 5);
   const durations = [45, 60, 90, 120];
 
@@ -86,13 +86,13 @@ const randomReservableTimeSlots = (faker: Faker) => {
       });
     }
 
-    resavableTimeSlots.push({
+    reservableTimeSlots.push({
       weekday: weekday.key,
       slots,
     });
   });
 
-  return resavableTimeSlots;
+  return reservableTimeSlots;
 };
 
 const randomProgrammingCourseName = (faker: Faker) => {
@@ -153,6 +153,6 @@ export const CourseFactory = setSeederFactory(Course, (faker: Faker) => {
   entity.note = faker.lorem.sentence();
   entity.refund = '概不退款';
   entity.reservation = faker.lorem.sentence();
-  entity.resavableTimeSlots = randomReservableTimeSlots(faker);
+  entity.reservableTimeSlots = randomReservableTimeSlots(faker);
   return entity;
 });

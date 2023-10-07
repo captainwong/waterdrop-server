@@ -467,7 +467,7 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "query getOrganizationInfo($id: String!) {\r\n    getOrganizationInfo(id: $id) {\r\n      code\r\n      message\r\n      data {\r\n        id\r\n        createdAt\r\n        createdBy\r\n        updatedAt\r\n        updatedBy\r\n        deletedAt\r\n        deletedBy\r\n        businessLicense\r\n        identityCardBackImg\r\n        identityCardFrontImg\r\n        tags\r\n        desc\r\n        name\r\n        tel\r\n        address\r\n        longitude\r\n        latitude\r\n        logo\r\n        frontImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        roomImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n        otherImgs {\r\n          id\r\n          url\r\n          remark\r\n        }\r\n      }\r\n    }\r\n  }",
-								"variables": "{\r\n  \"id\": \"3decec06-855c-40a1-8479-bb19344494ba\"\r\n}"
+								"variables": "{\r\n  \"id\": \"e47240d4-dc83-47c8-85a5-cb997aa09b52\"\r\n}"
 							}
 						},
 						"url": {
@@ -749,15 +749,15 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"value": "2d48e467-202c-43c5-886b-15e3617198ee",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n  \"dto\": {\r\n    \"name\":\"歼星舰喷漆教程\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\",\r\n    \"resavableTimeSlots\":[\r\n      {\r\n        \"weekday\": \"monday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"9:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"10:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      },\r\n      {\r\n        \"weekday\": \"sunday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"6:00:00\",\r\n            \"end\": \"7:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}"
+								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      teachers{\r\n        id\r\n        name\r\n      }\r\n      organization {\r\n        id\r\n        name\r\n      }\r\n      reservableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"dto\": {\r\n    \"name\":\"歼星舰喷漆教程\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\",\r\n    \"teachers\": [\r\n      \"01e3c230-5c4f-43ab-8079-05d84221dbd8\"\r\n    ],\r\n    \"reservableTimeSlots\":[\r\n      {\r\n        \"weekday\": \"monday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"9:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"10:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      },\r\n      {\r\n        \"weekday\": \"sunday\",\r\n        \"slots\": [\r\n          {\r\n            \"start\": \"6:00:00\",\r\n            \"end\": \"7:00:00\",\r\n            \"key\": 1\r\n          },\r\n          {\r\n            \"start\": \"8:00:00\",\r\n            \"end\": \"12:00:00\",\r\n            \"key\": 2\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}"
 							}
 						},
 						"url": {
@@ -791,15 +791,15 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "6da9b006-6209-49a2-8adc-1fa6a6e4d68a",
+								"value": "2d48e467-202c-43c5-886b-15e3617198ee",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n    \"id\": \"23840ca6-0cde-418c-b53b-d6789688ca3e\",\r\n  \"dto\": {\r\n    \"name\":\"迫击炮制造教程3\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\"\r\n  }\r\n}"
+								"query": "mutation createOrUpdateCourse($dto: CourseInputDto!, $id: String){\r\n  createOrUpdateCourse(dto: $dto, id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      teachers{\r\n        id\r\n        name\r\n      }\r\n      organization {\r\n        id\r\n        name\r\n      }\r\n      reservableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"00588895-da89-48b0-a474-b82e6a48836c\",\r\n  \"dto\": {\r\n    \"name\":\"迫击炮制造教程3\",\r\n    \"desc\":\"一发入魂\",\r\n    \"group\":\"18-81\",\r\n    \"baseAbility\":\"冶铁\",\r\n    \"limit\":30,\r\n    \"duration\":100,\r\n    \"reservation\":\"带好木炭\",\r\n    \"cover\": null,\r\n    \"refund\": \"概不退款\",\r\n    \"note\": \"爱国\",\r\n    \"teachers\": [\r\n      \"01e3c230-5c4f-43ab-8079-05d84221dbd8\"\r\n    ]\r\n  }\r\n}"
 							}
 						},
 						"url": {
@@ -834,8 +834,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getCourseInfo($id: String!){\r\n  getCourseInfo(id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n  \"id\": \"23840ca6-0cde-418c-b53b-d6789688ca3e\"\r\n}"
+								"query": "query getCourseInfo($id: String!){\r\n  getCourseInfo(id: $id){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      teachers{\r\n        id\r\n        name\r\n      }\r\n      organization {\r\n        id\r\n        name\r\n      }\r\n      reservableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\": \"00588895-da89-48b0-a474-b82e6a48836c\"\r\n}"
 							}
 						},
 						"url": {
@@ -905,14 +905,14 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "6da9b006-6209-49a2-8adc-1fa6a6e4d68a",
+								"value": "2d48e467-202c-43c5-886b-15e3617198ee",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getCourses($page: PageInput!, $name: String){\r\n  getCourses(page: $page, name: $name){\r\n    code\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      resavableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
+								"query": "query getCourses($page: PageInput!, $name: String){\r\n  getCourses(page: $page, name: $name){\r\n    code\r\n    data{\r\n      id\r\n      name\r\n      desc\r\n      group\r\n      baseAbility\r\n      limit\r\n      duration\r\n      reservation\r\n      cover\r\n      refund\r\n      note\r\n      teachers{\r\n        id\r\n        name\r\n      }\r\n      organization {\r\n        id\r\n        name\r\n      }\r\n      reservableTimeSlots{\r\n        weekday\r\n        slots{\r\n          start\r\n          end\r\n          key\r\n        }\r\n      }\r\n    }\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n  }\r\n}",
 								"variables": "{\r\n    \"name\":\"喷漆\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
 							}
 						},
@@ -1551,7 +1551,7 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"value": "e47240d4-dc83-47c8-85a5-cb997aa09b52",
 								"type": "text"
 							}
 						],
@@ -1593,7 +1593,7 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"value": "e47240d4-dc83-47c8-85a5-cb997aa09b52",
 								"type": "text"
 							}
 						],
@@ -1635,7 +1635,7 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"value": "e47240d4-dc83-47c8-85a5-cb997aa09b52",
 								"type": "text"
 							}
 						],
@@ -1677,7 +1677,7 @@
 						"header": [
 							{
 								"key": "organization-id",
-								"value": "e7d91b2e-a786-4289-b3a1-32230d3f475b",
+								"value": "e47240d4-dc83-47c8-85a5-cb997aa09b52",
 								"type": "text"
 							}
 						],
@@ -1685,7 +1685,7 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "query getTeachers($page: PageInput!, $name: String){\r\n  getTeachers(page: $page, name: $name){\r\n    code\r\n    message\r\n    page{\r\n      page\r\n      pageSize\r\n      total\r\n    }\r\n    data{\r\n      id\r\n      name\r\n      photo\r\n      teachingAge\r\n      education\r\n      seniority\r\n      experience\r\n      award\r\n      tags\r\n      \r\n    }\r\n  }\r\n}",
-								"variables": "{\r\n  \"name\":\"三\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
+								"variables": "{\r\n  \"name\": \"天海翼\",\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
 							}
 						},
 						"url": {
@@ -1747,8 +1747,33 @@
 			]
 		},
 		{
-			"name": "wxpay",
+			"name": "wechat",
 			"item": [
+				{
+					"name": "test",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/api/v1/wechat/test",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"wechat",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "wxlogin",
 					"request": {
@@ -1758,7 +1783,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{protocol}}://{{host}}:{{port}}/api/v1/wxpay/wxlogin",
+							"raw": "{{protocol}}://{{host}}:{{port}}/api/v1/wechat/wxlogin",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{host}}"
@@ -1767,8 +1792,160 @@
 							"path": [
 								"api",
 								"v1",
-								"wxpay",
+								"wechat",
 								"wxlogin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "wxpayCb",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"5e240f8b-ad2b-5f4f-8934-f47cc0c41ef9\",\r\n  \"create_time\": \"2023-10-06T08:33:49+08:00\",\r\n  \"resource_type\": \"encrypt-resource\",\r\n  \"event_type\": \"TRANSACTION.SUCCESS\",\r\n  \"summary\": \"支付成功\",\r\n  \"resource\": {\r\n    \"original_type\": \"transaction\",\r\n    \"algorithm\": \"AEAD_AES_256_GCM\",\r\n    \"ciphertext\": \"RF3CdH1wA6gOLpdwP59pq7DlJnr6lJSCC3mZk1Z3yVlQena12s0NL0jLVGz+ZIU3TE5t/wSJm6Oei81VqZdiINjrQA7QsxHejHdPXxxsH/a42Y1JN03tcY+/+mxXpVmINwZjx7zAIaJ6hLHVdYCaPbqt4z3lvmF1I0AhmmbelN2Tl/g3jGxVLItdpgR/Wd8PqGcxSFI7t+O2vI6ehnYiY+gmOP3pSFv+0nPD4T0WGBxuyI8lKuHefrk5kcpQfjvZmL04gYIudh61yNz6mXhHj9/k5nxBu5hvU/SPTHYQKBH/XGHj+tEXDmaKhoGvfd+d9QKyuL0OLv9fy9xel+sF7lzccrSdwZif7lbm14GV/1onuAS0Pyv0H2T2idawonm+m4Yq2AsAB3ZB3tZxZanif45Wdr4BqMdxRSYTHywZ9ZrM/uXhGJRHxJcJ9K1akdqhvhiHkrtYg5pmiPMbtKwi7l4FHSCS6ZafCuhu0w9uz26Cax9sBKFiXrKY253RZxOPYp7MO3m0EPbQEoMKwLLJl4dyWcWgTezNPlyvTcgvxOvaOmAJtfN3WH5ODYNkUxHbyqrxlWAa5xFO8aR+8iI5\",\r\n    \"associated_data\": \"transaction\",\r\n    \"nonce\": \"UrZfs8O4d491\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/api/v1/wechat/wxpayCb",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"wechat",
+								"wxpayCb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getWxpayConfig",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation getWxpayConfig($scene: String!, $productId: String!, $quantity: Float!){\r\n  getWxpayConfig(scene: $scene, productId: $productId, quantity: $quantity){\r\n    code\r\n    message\r\n    data{\r\n      appId\r\n      timeStamp\r\n      nonceStr\r\n      package\r\n      signType\r\n      paySign\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"scene\": \"JSAPI\",\r\n  \"productId\": \"0027e9d0-2148-4bc8-bf8d-558765cc071d\",\r\n  \"quantity\": 1\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "getWxpayConfig Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation getWxpayConfig($scene: String!, $productId: String!, $quantity: Float!){\r\n  getWxpayConfig(scene: $scene, productId: $productId, quantity: $quantity){\r\n    code\r\n    message\r\n    data{\r\n      appId\r\n      timeStamp\r\n      nonceStr\r\n      package\r\n      signType\r\n      paySign\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"scene\": \"JSAPI\",\r\n  \"productId\": \"0027e9d0-2148-4bc8-bf8d-558765cc071d\",\r\n  \"quantity\": 1\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "student-card",
+			"item": [
+				{
+					"name": "getStudentCards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{student_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getStudentCards($page: PageInput!){\r\n  getStudentCards(page: $page){\r\n    code\r\n    message\r\n    data{\r\n      id\r\n      type\r\n      purchasedAt\r\n      effectiveAt\r\n      expiresAt\r\n      remainingTimes\r\n      status\r\n      card{\r\n        id\r\n        name\r\n      }\r\n      student {\r\n        id\r\n        name\r\n      }\r\n      course {\r\n        id name\r\n      }\r\n      organization {\r\n        id \r\n        name\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n  \"page\":{\r\n    \"page\": 1,\r\n    \"pageSize\":50\r\n  }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{host}}:{{port}}/graphql",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"graphql"
 							]
 						}
 					},

@@ -64,6 +64,8 @@ export const Message = {
     '学生记录不存在或密码不匹配',
   [Code.STUDENT_RECORD_PASSWORD_NOT_MATCH]: '学生记录密码不匹配',
   [Code.CREATE_STUDENT_RECORD_FAILED]: '创建学生记录失败',
+  [Code.SCHEDULE_NOT_EXISTS]: '课程表不存在',
+  [Code.CREATE_SCHEDULE_FAILED]: '创建课程表失败',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 

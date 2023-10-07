@@ -185,13 +185,69 @@ type CourseTypeDto {
   note: String
 
   """可约时间"""
-  resavableTimeSlots: [TimeSlotsType!]
+  reservableTimeSlots: [TimeSlotsType!]
 
   """任课老师"""
   teachers: [TeacherTypeDto!]
 
   """所属门店"""
   organization: OrganizationTypeDto
+}
+
+type ScheduleTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """上课日期"""
+  date: DateTime
+
+  """上课时间"""
+  beginTime: String
+
+  """下课时间"""
+  endTime: String
+
+  """人数限制"""
+  limit: Float
+
+  """课程"""
+  course: CourseTypeDto
+
+  """讲师"""
+  teacher: TeacherTypeDto
+
+  """门店"""
+  organization: OrganizationTypeDto
+}
+
+type ScheduleResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: ScheduleTypeDto
+}
+
+type ScheduleResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [ScheduleTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
 }
 
 type CardTypeDto {
@@ -826,6 +882,12 @@ type Query {
 
   """Find student cards"""
   getStudentCards(page: PageInput!): StudentCardResults!
+
+  """Find schedule by id"""
+  getScheduleInfo(id: String!): ScheduleResult!
+
+  """Find schedules"""
+  getSchedules(page: PageInput!): ScheduleResults!
 }
 
 input PageInput {
@@ -908,6 +970,12 @@ type Mutation {
 
   """Delete studentCard by id"""
   deleteStudentCard(id: String!): Result!
+
+  """Create schedule"""
+  createSchedule(startAt: DateTime!, endAt: DateTime!): ScheduleResults!
+
+  """Delete schedule by id"""
+  deleteSchedule(id: String!): Result!
 }
 
 input UserInputDto {
@@ -1059,7 +1127,7 @@ input CourseInputDto {
   note: String
 
   """可约时间"""
-  resavableTimeSlots: [TimeSlotsInput!]
+  reservableTimeSlots: [TimeSlotsInput!]
 
   """任课老师"""
   teachers: [String!]!

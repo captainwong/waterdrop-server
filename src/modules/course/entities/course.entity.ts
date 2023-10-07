@@ -72,7 +72,7 @@ export class Course extends CommonEntity {
   note: string;
 
   @Column('simple-json', { comment: '可约时间', nullable: true })
-  resavableTimeSlots: TimeSlotsType[];
+  reservableTimeSlots: TimeSlotsType[];
 
   @ManyToOne(() => Organization, (organization) => organization.courses, {
     cascade: true,
