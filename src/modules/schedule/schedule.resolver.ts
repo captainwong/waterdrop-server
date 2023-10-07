@@ -5,7 +5,9 @@ import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { CurrentGqlTokenId } from '@/common/decorators/current-gql-token-id.decorator';
 import { ScheduleResult, ScheduleResults } from './dto/schedule-result';
 import {
+  COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL,
   CREATE_SCHEDULE_FAILED,
+  ORGANIZATION_HAS_NO_COURSES,
   SCHEDULE_NOT_EXISTS,
   SUCCESS,
 } from '@/common/const/code';
@@ -18,6 +20,11 @@ import { CurrentOrganizationId } from '@/common/decorators/current-organization.
 import { CourseService } from '../course/course.service';
 import dayjs from 'dayjs';
 import { Schedule } from './entities/schedule.entity';
+import {
+  TWeek,
+  TimeSlotType,
+  TimeSlotsType,
+} from '../course/dto/common-type.dto';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -41,6 +48,12 @@ export class ScheduleResolver {
       userId,
       organizationId,
     );
+    if (!courses || courses.length === 0) {
+      return {
+        code: ORGANIZATION_HAS_NO_COURSES,
+        message: CodeMsg(ORGANIZATION_HAS_NO_COURSES),
+      };
+    }
     const schedules: Promise<Schedule>[] = [];
     for (const course of courses) {
       if (!course.teachers || course.teachers.length === 0) {
@@ -52,11 +65,10 @@ export class ScheduleResolver {
       ) {
         continue;
       }
-      const reservableTimeSlots = course.reservableTimeSlots.map(
-        (timeSlot) => ({
-          [timeSlot.weekday]: timeSlot.slots,
-        }),
-      );
+      const reservableTimeSlots: Record<string, TimeSlotType[]> = {};
+      course.reservableTimeSlots.forEach((timeSlot) => {
+        reservableTimeSlots[timeSlot.weekday] = timeSlot.slots;
+      });
       let day = dayjs(startAt);
       while (day.isBefore(dayjs(endAt).add(1, 'day'))) {
         const weekday = day.format('dddd').toLowerCase();
@@ -66,8 +78,8 @@ export class ScheduleResolver {
             const conflictCount = await this.scheduleService.findConflictCount(
               course.id,
               day.toDate(),
-              slot.beginTime,
-              slot.endTime,
+              slot.start,
+              slot.end,
             );
             if (conflictCount === 0) {
               const schedule = this.scheduleService.createInstance({
@@ -82,8 +94,8 @@ export class ScheduleResolver {
                   id: course.teachers[0].id,
                 },
                 date: day.toDate(),
-                beginTime: slot.beginTime,
-                endTime: slot.endTime,
+                start: slot.start,
+                end: slot.end,
                 limit: course.limit,
               });
               schedules.push(schedule);
@@ -92,6 +104,13 @@ export class ScheduleResolver {
         }
         day = day.add(1, 'day');
       }
+    }
+
+    if (schedules.length === 0) {
+      return {
+        code: COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL,
+        message: CodeMsg(COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL),
+      };
     }
 
     const instances = await Promise.all(schedules);

@@ -17,13 +17,13 @@ export class Schedule extends CommonEntity {
     comment: '上课时间',
     nullable: true,
   })
-  beginTime: string;
+  start: string;
 
   @Column({
     comment: '下课时间',
     nullable: true,
   })
-  endTime: string;
+  end: string;
 
   @Column({
     comment: '人数限制',

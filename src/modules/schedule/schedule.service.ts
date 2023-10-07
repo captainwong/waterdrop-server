@@ -33,16 +33,16 @@ export class ScheduleService {
   async findConflictCount(
     courseId: string,
     date: Date,
-    beginTime: string,
-    endTime: string,
+    start: string,
+    end: string,
   ): Promise<number> {
     const where: FindOptionsWhere<Schedule> = {
       course: {
         id: courseId,
       },
       date: date,
-      beginTime: Between(beginTime, endTime),
-      endTime: Between(beginTime, endTime),
+      start: Between(start, end),
+      end: Between(start, end),
     };
     return this.scheduleRepository.count({
       where,

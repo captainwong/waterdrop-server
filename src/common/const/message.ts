@@ -66,6 +66,9 @@ export const Message = {
   [Code.CREATE_STUDENT_RECORD_FAILED]: '创建学生记录失败',
   [Code.SCHEDULE_NOT_EXISTS]: '课程表不存在',
   [Code.CREATE_SCHEDULE_FAILED]: '创建课程表失败',
+  [Code.ORGANIZATION_HAS_NO_COURSES]: '门店没有课程',
+  [Code.COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL]:
+    '课程没有时间段或教师或课程表已满',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 
