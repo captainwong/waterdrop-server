@@ -207,10 +207,10 @@ type ScheduleTypeDto {
   date: DateTime
 
   """上课时间"""
-  beginTime: String
+  start: String
 
   """下课时间"""
-  endTime: String
+  end: String
 
   """人数限制"""
   limit: Float
@@ -887,7 +887,7 @@ type Query {
   getScheduleInfo(id: String!): ScheduleResult!
 
   """Find schedules"""
-  getSchedules(page: PageInput!): ScheduleResults!
+  getSchedules(day: String!, page: PageInput!): ScheduleResults!
 }
 
 input PageInput {

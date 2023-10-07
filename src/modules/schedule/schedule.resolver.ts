@@ -69,8 +69,8 @@ export class ScheduleResolver {
       course.reservableTimeSlots.forEach((timeSlot) => {
         reservableTimeSlots[timeSlot.weekday] = timeSlot.slots;
       });
-      let day = dayjs(startAt);
-      while (day.isBefore(dayjs(endAt).add(1, 'day'))) {
+      let day = dayjs(startAt).startOf('day');
+      while (day.isBefore(dayjs(endAt).add(1, 'day').startOf('day'))) {
         const weekday = day.format('dddd').toLowerCase();
         const slots = reservableTimeSlots[weekday];
         if (slots && slots.length > 0) {
@@ -131,16 +131,19 @@ export class ScheduleResolver {
       : { code: SCHEDULE_NOT_EXISTS, message: CodeMsg(SCHEDULE_NOT_EXISTS) };
   }
 
+  @TokenEntity('student')
   @Query(() => ScheduleResults, { description: 'Find schedules' })
   async getSchedules(
-    @CurrentGqlTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
+    @Args('day') day: string,
     @Args('page') pageInput: PageInput,
   ): Promise<ScheduleResults> {
     const { page, pageSize } = pageInput;
     const [schedules, total] = await this.scheduleService.findAll(
+      dayjs(day).startOf('day').toDate(),
       page,
       pageSize,
-      userId,
+      organizationId,
     );
     return {
       code: SUCCESS,

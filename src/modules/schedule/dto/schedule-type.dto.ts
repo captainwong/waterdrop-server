@@ -10,10 +10,10 @@ export class ScheduleTypeDto extends CommonTypeDto {
   date?: Date;
 
   @Field({ nullable: true, description: '上课时间' })
-  beginTime?: string;
+  start?: string;
 
   @Field({ nullable: true, description: '下课时间' })
-  endTime?: string;
+  end?: string;
 
   @Field({ nullable: true, description: '人数限制' })
   limit?: number;

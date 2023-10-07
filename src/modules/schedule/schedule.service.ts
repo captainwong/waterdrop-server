@@ -11,12 +11,16 @@ export class ScheduleService {
   ) {}
 
   async findAll(
+    day: Date,
     page: number,
     pageSize: number,
-    createdBy: string,
+    organizationId: string,
   ): Promise<[Schedule[], number]> {
     const where: FindOptionsWhere<Schedule> = {
-      createdBy: createdBy,
+      date: day,
+      organization: {
+        id: organizationId,
+      },
     };
     return this.scheduleRepository.findAndCount({
       where,
