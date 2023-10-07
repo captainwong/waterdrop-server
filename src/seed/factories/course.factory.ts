@@ -55,7 +55,7 @@ const WEEKDAYS: IWeekday[] = [
 
 const randomReservableTimeSlots = (faker: Faker) => {
   const reservableTimeSlots = [];
-  const weekdays = faker.helpers.arrayElements(WEEKDAYS, 5);
+  const weekdays = faker.helpers.arrayElements(WEEKDAYS, { min: 1, max: 7 });
   const durations = [45, 60, 90, 120];
 
   weekdays.forEach((weekday) => {
@@ -71,7 +71,7 @@ const randomReservableTimeSlots = (faker: Faker) => {
       end: end.format('HH:mm:ss'),
     });
 
-    const maxEnd = end;
+    let maxEnd = end;
     for (let i = 0; i < faker.number.int({ min: 1, max: 3 }); i++) {
       const start = maxEnd.add(
         faker.helpers.arrayElement(durations),
@@ -84,6 +84,7 @@ const randomReservableTimeSlots = (faker: Faker) => {
         start: start.format('HH:mm:ss'),
         end: end.format('HH:mm:ss'),
       });
+      maxEnd = end;
     }
 
     reservableTimeSlots.push({
