@@ -32,7 +32,7 @@ import { WxpayConfigType } from './dto/wxpay-config.type';
 import Decimal from 'decimal.js';
 import { RemoteGqlIp } from '@/common/decorators/remote-gql-ip.decorator';
 import { OutTradeNo32 } from '@/utils/outtradeno';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)

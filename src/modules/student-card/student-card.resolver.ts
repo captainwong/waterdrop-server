@@ -15,7 +15,7 @@ import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { CardStatus } from './const';
 import { CardType } from '@/common/const/enum';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)

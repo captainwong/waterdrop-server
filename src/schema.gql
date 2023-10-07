@@ -43,7 +43,7 @@ type TimeSlotsType {
   slots: [TimeSlotType!]!
 }
 
-type CourseTypeDto {
+type TeacherTypeDto {
   id: String!
   createdAt: DateTime!
   createdBy: String
@@ -52,69 +52,35 @@ type CourseTypeDto {
   deletedAt: DateTime
   deletedBy: String
 
-  """课程名称"""
-  name: String!
+  """姓名"""
+  name: String
 
-  """课程描述"""
-  desc: String
+  """照片"""
+  photo: String
 
-  """适龄人群"""
-  group: String!
+  """教龄"""
+  teachingAge: Float
 
-  """适合基础"""
-  baseAbility: String!
+  """学历"""
+  education: String
 
-  """学员人数上限"""
-  limit: Float!
+  """资历"""
+  seniority: String
 
-  """课程时长"""
-  duration: Float!
+  """职业经验"""
+  experience: String
 
-  """预约信息"""
-  reservation: String
+  """获奖经历"""
+  award: String
 
-  """课程封面"""
-  cover: String
-
-  """退款信息"""
-  refund: String
-
-  """其他说明"""
-  note: String
-
-  """可约时间"""
-  resavableTimeSlots: [TimeSlotsType!]
+  """风格标签，以，隔开"""
+  tags: String
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type CardTypeDto {
-  id: String!
-  createdAt: DateTime!
-  createdBy: String
-  updatedAt: DateTime
-  updatedBy: String
-  deletedAt: DateTime
-  deletedBy: String
-
-  """名称"""
-  name: String!
-
-  """类型"""
-  type: String!
-
-  """最大使用次数"""
-  count: Float!
-
-  """有效天数"""
-  duration: Float!
-
-  """课程"""
-  course: CourseTypeDto!
-}
 
 type ImageTypeDto {
   """id"""
@@ -177,6 +143,80 @@ type OrganizationTypeDto {
 
   """环境图片"""
   otherImgs: [ImageTypeDto!]
+}
+
+type CourseTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """课程名称"""
+  name: String!
+
+  """课程描述"""
+  desc: String
+
+  """适龄人群"""
+  group: String!
+
+  """适合基础"""
+  baseAbility: String!
+
+  """学员人数上限"""
+  limit: Float!
+
+  """课程时长"""
+  duration: Float!
+
+  """预约信息"""
+  reservation: String
+
+  """课程封面"""
+  cover: String
+
+  """退款信息"""
+  refund: String
+
+  """其他说明"""
+  note: String
+
+  """可约时间"""
+  resavableTimeSlots: [TimeSlotsType!]
+
+  """任课老师"""
+  teachers: [TeacherTypeDto!]
+
+  """所属门店"""
+  organization: OrganizationTypeDto
+}
+
+type CardTypeDto {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """名称"""
+  name: String!
+
+  """类型"""
+  type: String!
+
+  """最大使用次数"""
+  count: Float!
+
+  """有效天数"""
+  duration: Float!
+
+  """课程"""
+  course: CourseTypeDto!
 }
 
 type StudentTypeDto {
@@ -447,40 +487,6 @@ type OrderResults {
 
   """分页信息"""
   page: PageTypeDto
-}
-
-type TeacherTypeDto {
-  id: String!
-  createdAt: DateTime!
-  createdBy: String
-  updatedAt: DateTime
-  updatedBy: String
-  deletedAt: DateTime
-  deletedBy: String
-
-  """姓名"""
-  name: String
-
-  """照片"""
-  photo: String
-
-  """教龄"""
-  teachingAge: Float
-
-  """学历"""
-  education: String
-
-  """资历"""
-  seniority: String
-
-  """职业经验"""
-  experience: String
-
-  """获奖经历"""
-  award: String
-
-  """风格标签，以，隔开"""
-  tags: String
 }
 
 type TeacherResult {
@@ -864,7 +870,7 @@ type Mutation {
   """Delete organization by id"""
   deleteOrganization(id: String!): Result!
 
-  """Create course"""
+  """Create or update course"""
   createOrUpdateCourse(dto: CourseInputDto!, id: String): CourseResult!
 
   """Delete course by id"""
@@ -1054,6 +1060,9 @@ input CourseInputDto {
 
   """可约时间"""
   resavableTimeSlots: [TimeSlotsInput!]
+
+  """任课老师"""
+  teachers: [String!]!
 }
 
 input TimeSlotsInput {

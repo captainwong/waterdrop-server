@@ -13,12 +13,8 @@ export class TeacherService {
   async findAll(
     page: number,
     pageSize: number,
-    name?: string,
+    where: FindOptionsWhere<Teacher>,
   ): Promise<[Teacher[], number]> {
-    const where: FindOptionsWhere<Teacher> = {};
-    if (name) {
-      where.name = Like(`%${name}%`);
-    }
     return this.teacherRepository.findAndCount({
       where,
       skip: (page - 1) * pageSize,

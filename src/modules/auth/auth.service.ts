@@ -4,7 +4,7 @@ import * as Utils from '@alicloud/tea-util';
 import { getRandomVerificationCode4 } from '@/utils';
 import { UserService } from '../user/user.service';
 import smsClient from '@/utils/sms';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Result, createCodeMsgResult } from '@/common/dto/result.dto';
 import {
   CREATE_USER_FAILED,
@@ -63,7 +63,7 @@ export class AuthService {
         if (result) {
           return {
             code: SUCCESS,
-            message: "code 是 1234",
+            message: 'code 是 1234',
           };
         } else {
           return createCodeMsgResult(UPDATE_USER_SMS_CODE_FAILED);
@@ -76,10 +76,10 @@ export class AuthService {
           smsCodeCreatedAt: new Date(),
         });
         console.log('create user result', result);
-        if (result) {          
+        if (result) {
           return {
             code: SUCCESS,
-            message: "code 是 1234",
+            message: 'code 是 1234',
           };
         } else {
           return createCodeMsgResult(CREATE_USER_FAILED);
@@ -153,17 +153,17 @@ export class AuthService {
     }
 
     if (!(await compare(password, student.password))) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('password not match, updating', password, student.password);
-        await this.studentService.update(student.id, {
-          password: await hash(password),
-        });
-        const token = this.jwtService.sign({
-          id: student.id,
-          entity: 'student',
-        });
-        return createCodeMsgResult(SUCCESS, token);
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      //   console.log('password not match, updating', password, student.password);
+      //   await this.studentService.update(student.id, {
+      //     password: await hash(password),
+      //   });
+      //   const token = this.jwtService.sign({
+      //     id: student.id,
+      //     entity: 'student',
+      //   });
+      //   return createCodeMsgResult(SUCCESS, token);
+      // }
 
       return createCodeMsgResult(USER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH);
     }

@@ -37,8 +37,8 @@ export class CourseInputDto extends CommonInputDto {
   @Field(() => [TimeSlotsInput], { description: '可约时间', nullable: true })
   resavableTimeSlots: TimeSlotsInput[];
 
-  // @Field(() => Organization, {
-  //   description: '所属门店',
-  // })
-  // organization: Organization;
+  @Field(() => [String], {
+    description: '任课老师',
+  })
+  teachers: string[];
 }

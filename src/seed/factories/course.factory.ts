@@ -3,7 +3,7 @@ import { Faker } from '@faker-js/faker';
 import { Course } from '@/modules/course/entities/course.entity';
 import { Avatars } from '../const/avatars';
 import { TWeek } from '@/modules/course/dto/common-type.dto';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { ProgrammingLanguages } from '../const/courses/programming-languages';
 import { CategoryList } from '@/modules/product/dto/category-type';
 import { ChineseCourses } from '../const/courses/chinese';

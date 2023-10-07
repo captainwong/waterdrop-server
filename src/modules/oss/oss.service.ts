@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as OSS from 'ali-oss';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { OssType } from './dto/oss.type';
 
 @Injectable()

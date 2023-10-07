@@ -3,7 +3,7 @@ import { StudentCard } from './entities/student-card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { Card } from '../card/entities/card.entity';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { CardType } from '@/common/const/enum';
 
 @Injectable()

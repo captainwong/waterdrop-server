@@ -28,6 +28,7 @@ export class CourseService {
     }
     return this.courseRepository.findAndCount({
       where,
+      relations: ['teachers', 'organization'],
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {
@@ -43,42 +44,24 @@ export class CourseService {
   ): Promise<Course> {
     return this.courseRepository.findOne({
       where: { id, createdBy, organization: { id: organizationId } },
+      relations: ['teachers', 'organization'],
     });
   }
 
-  async create(
-    createdBy: string,
-    organizationId: string,
-    dto: DeepPartial<Course>,
-  ): Promise<Course> {
-    return this.courseRepository.save(
-      this.courseRepository.create({
-        ...dto,
-        createdBy,
-        organization: { id: organizationId },
-      }),
-    );
+  async create(dto: DeepPartial<Course>): Promise<Course> {
+    return this.courseRepository.save(this.courseRepository.create(dto));
   }
 
-  async update(
-    id: string,
-    createdBy: string,
-    organizationId: string,
-    dto: DeepPartial<Course>,
-  ): Promise<Course> {
+  async update(id: string, dto: DeepPartial<Course>): Promise<Course> {
     const course = await this.courseRepository.findOne({
       where: {
         id,
-        createdBy,
-        organization: {
-          id: organizationId,
-        },
       },
     });
     if (!course) {
       return null;
     }
-    Object.assign(course, { ...dto, updatedBy: createdBy });
+    Object.assign(course, dto);
     return this.courseRepository.save(course);
   }
 

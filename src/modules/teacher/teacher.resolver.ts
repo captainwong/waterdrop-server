@@ -16,6 +16,8 @@ import { CodeMsg } from '@/common/const/message';
 import { TokenEntity } from '@/common/decorators/token-entity.decorator';
 import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { CurrentOrganizationId } from '@/common/decorators/current-organization.decorator';
+import { FindOptionsWhere, Like } from 'typeorm';
+import { Teacher } from './entities/teacher.entity';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -69,14 +71,25 @@ export class TeacherResolver {
 
   @Query(() => TeacherResults, { description: 'Find teachers' })
   async getTeachers(
+    @CurrentGqlTokenId('userId') userId: string,
+    @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('page') pageInput: PageInput,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<TeacherResults> {
+    const where: FindOptionsWhere<Teacher> = {
+      createdBy: userId,
+      organization: {
+        id: organizationId,
+      },
+    };
+    if (name) {
+      where.name = Like(`%${name}%`);
+    }
     const { page, pageSize } = pageInput;
     const [teachers, total] = await this.teacherService.findAll(
       page,
       pageSize,
-      name,
+      where,
     );
     return {
       code: SUCCESS,

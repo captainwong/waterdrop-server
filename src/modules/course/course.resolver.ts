@@ -23,7 +23,7 @@ import { CurrentOrganizationId } from '@/common/decorators/current-organization.
 export class CourseResolver {
   constructor(private readonly courseService: CourseService) {}
 
-  @Mutation(() => CourseResult, { description: 'Create course' })
+  @Mutation(() => CourseResult, { description: 'Create or update course' })
   async createOrUpdateCourse(
     @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
@@ -32,11 +32,13 @@ export class CourseResolver {
   ): Promise<CourseResult> {
     console.log('createOrUpdateCourse', { userId, organizationId, id });
     if (!id) {
-      const course = await this.courseService.create(
-        userId,
-        organizationId,
-        dto,
-      );
+      const course = await this.courseService.create({
+        ...dto,
+        createdBy: userId,
+        organization: { id: organizationId },
+        teachers: dto.teachers.map((teacher) => ({ id: teacher })),
+      });
+
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
         : {
@@ -44,12 +46,11 @@ export class CourseResolver {
             message: CodeMsg(CREATE_COURSE_FAILED),
           };
     } else {
-      const course = await this.courseService.update(
-        id,
-        userId,
-        organizationId,
-        dto,
-      );
+      const course = await this.courseService.update(id, {
+        ...dto,
+        updatedBy: userId,
+        teachers: dto.teachers.map((teacher) => ({ id: teacher })),
+      });
       return course
         ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: course }
         : {

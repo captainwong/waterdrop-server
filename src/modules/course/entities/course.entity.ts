@@ -1,9 +1,17 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { IsInt, IsNotEmpty, Max, Min } from 'class-validator';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { TimeSlotsType } from '../dto/common-type.dto';
 import { Organization } from '@/modules/organization/entities/organization.entity';
 import { Card } from '@/modules/card/entities/card.entity';
+import { Teacher } from '@/modules/teacher/entities/teacher.entity';
 
 @Entity('courses')
 export class Course extends CommonEntity {
@@ -73,4 +81,8 @@ export class Course extends CommonEntity {
 
   @OneToMany(() => Card, (card) => card.course)
   cards: Card[];
+
+  @ManyToMany(() => Teacher)
+  @JoinTable({ name: 'course_teachers' })
+  teachers: Teacher[];
 }

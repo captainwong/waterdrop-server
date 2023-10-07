@@ -2,7 +2,7 @@ import { CategoryList } from '@/modules/product/dto/category-type';
 import { hash } from '@/utils/hash';
 import { OutTradeNo32 } from '@/utils/outtradeno';
 import { Faker, zh_CN, en } from '@faker-js/faker';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 const outTradeNo = OutTradeNo32();
 console.log(outTradeNo.length, outTradeNo);

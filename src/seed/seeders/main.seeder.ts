@@ -10,10 +10,28 @@ import { Teacher } from '@/modules/teacher/entities/teacher.entity';
 import { Course } from '@/modules/course/entities/course.entity';
 import { Card } from '@/modules/card/entities/card.entity';
 import { Product } from '@/modules/product/entities/product.entity';
+import { hash } from '@/utils/hash';
+import md5 from 'md5';
+import teachersJson from '../const/teachers.json';
+
+let tmpTeachersJson = [...teachersJson];
 
 const faker = new Faker({
   locale: [zh_CN, en],
 });
+
+const FAKE_USERS = 3;
+const FAKE_ORGS = FAKE_USERS * 5;
+const FAKE_STUDENTS = 2;
+const FAKE_COURSES = FAKE_ORGS * 20;
+const MY_USER_ID = '3d44569f-a9b9-4266-aafd-7a85f7c03419';
+const MY_USER_TEL = '13385401630';
+const MY_USER_PWD = '123456';
+const MY_ORG_ID = 'e47240d4-dc83-47c8-85a5-cb997aa09b52';
+const MY_ORG_NAME = '总店';
+const MY_STUDENT_ID = '02bed139-a8c8-48c9-a333-8f5f42844902';
+const MY_STUDENT_ACCOUNT = 'captainwong';
+const MY_STUDENT_PWD = '123456';
 
 const createUsers = async (
   count: number,
@@ -24,9 +42,9 @@ const createUsers = async (
   userFactory.setLocale(['zh_CN', 'en']);
   const me = await userFactory.make();
   me.name = 'admin';
-  me.tel = '13385401630';
-  me.password = '123456';
-  me.id = '3d44569f-a9b9-4266-aafd-7a85f7c03419';
+  me.tel = MY_USER_TEL;
+  me.password = await hash(md5(MY_USER_PWD));
+  me.id = MY_USER_ID;
   await userFactory.save(me);
 
   if (count < 2) return [me];
@@ -75,7 +93,8 @@ const createOrgs = async (
       .fill('')
       .map(async () => {
         const org = await organizationFactory.make({
-          name: '总店',
+          id: MY_ORG_ID,
+          name: MY_ORG_NAME,
           createdBy: users[0].id,
           frontImgs: takeImgs(),
           roomImgs: takeImgs(),
@@ -116,9 +135,9 @@ const createStudents = async (
   const factory = factoryManager.get(Student);
   factory.setLocale(['zh_CN', 'en']);
   const me = await factory.make({
-    account: 'captainwong',
-    password: '123456',
-    id: '02bed139-a8c8-48c9-a333-8f5f42844902',
+    account: MY_STUDENT_ACCOUNT,
+    password: await hash(md5(MY_STUDENT_PWD)),
+    id: MY_STUDENT_ID,
   });
   await factory.save(me);
 
@@ -130,8 +149,16 @@ const createStudents = async (
   return students;
 };
 
+const fixAliImg = (img: string) => {
+  const arr = img.split('/');
+  const filename = arr[arr.length - 1];
+  return (
+    'https://waterdrop-server-assets.oss-cn-zhangjiakou.aliyuncs.com/teachers/' +
+    encodeURIComponent(filename)
+  );
+};
+
 const createTeachers = async (
-  count: number,
   dataSource: DataSource,
   factoryManager: SeederFactoryManager,
   orgs: Organization[],
@@ -140,27 +167,47 @@ const createTeachers = async (
   const factory = factoryManager.get(Teacher);
   factory.setLocale(['zh_CN', 'en']);
 
-  const myTeachers = await Promise.all(
-    Array(Math.floor(count / 2))
+  let allTeachers = await Promise.all(
+    Array(10)
       .fill('')
       .map(async () => {
+        if (tmpTeachersJson.length === 0) {
+          tmpTeachersJson = teachersJson;
+        }
+        const star = tmpTeachersJson.shift();
         const teacher = await factory.make({
           organization: orgs[0],
+          createdBy: orgs[0].createdBy,
+          name: star.name,
+          photo: fixAliImg(star.ali),
+          experience: star.desc,
         });
         return teacher;
       }),
   );
-  const teachers = await Promise.all(
-    Array(Math.floor(count / 2 + 1))
-      .fill('')
-      .map(async () => {
-        const teacher = await factory.make({
-          organization: faker.helpers.arrayElement(orgs),
-        });
-        return teacher;
-      }),
-  );
-  let allTeachers = myTeachers.concat(teachers);
+  for (const org of orgs) {
+    const count = faker.number.int({ min: 1, max: 10 });
+    for (let i = 0; i < count; i += 1) {
+      if (tmpTeachersJson.length === 0) {
+        tmpTeachersJson = teachersJson.map((item) => ({
+          name: faker.person.fullName(),
+          photo: item.photo,
+          ali: item.ali,
+          desc: item.desc,
+        }));
+        console.log('reload teachers', tmpTeachersJson);
+      }
+      const star = tmpTeachersJson.shift();
+      const teacher = await factory.make({
+        organization: org,
+        createdBy: org.createdBy,
+        name: star.name,
+        photo: fixAliImg(star.ali),
+        experience: star.desc,
+      });
+      allTeachers.push(teacher);
+    }
+  }
   const repo = dataSource.getRepository(Teacher);
   allTeachers = await repo.save(allTeachers);
   console.timeEnd('creating teachers...');
@@ -244,6 +291,37 @@ const createCourses = async (
   return res;
 };
 
+const linkCoursesAndTeachers = async (
+  dataSource: DataSource,
+  courses: Course[],
+  teachers: Teacher[],
+) => {
+  console.time('linking course and teacher...');
+  const repo = dataSource.getRepository(Course);
+  for (const course of courses) {
+    const sameOgrTeachers = teachers.filter(
+      (teacher) => teacher.organization.id === course.organization.id,
+    );
+    if (sameOgrTeachers.length === 0) {
+      console.error(
+        'sameOgrTeachers.length is 0',
+        course.organization.id,
+        teachers[0].organization.id,
+        course.organization.id === teachers[0].organization.id,
+      );
+      process.exit();
+    } else {
+      console.log('sameOgrTeachers.length', sameOgrTeachers.length);
+    }
+    course.teachers = faker.helpers.arrayElements(sameOgrTeachers, {
+      min: 1,
+      max: 4,
+    });
+    await repo.save(course);
+  }
+  console.timeEnd('linking course and teacher...');
+};
+
 const createProducts = async (
   dataSource: DataSource,
   factoryManager: SeederFactoryManager,
@@ -298,22 +376,17 @@ export default class MainSeeder implements Seeder {
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     console.time('seeding done!');
-    const FAKE_USERS = 3;
-    const FAKE_ORGS = FAKE_USERS * 5;
-    const FAKE_STUDENTS = 2;
-    const FAKE_TEACHERS = FAKE_ORGS * 5;
-    const FAKE_COURSES = FAKE_ORGS * 20;
-
     const users = await createUsers(FAKE_USERS, factoryManager);
     const orgs = await createOrgs(FAKE_ORGS, dataSource, factoryManager, users);
     await createStudents(FAKE_STUDENTS, factoryManager);
-    await createTeachers(FAKE_TEACHERS, dataSource, factoryManager, orgs);
+    const teachers = await createTeachers(dataSource, factoryManager, orgs);
     const courses = await createCourses(
       FAKE_COURSES,
       dataSource,
       factoryManager,
       orgs,
     );
+    await linkCoursesAndTeachers(dataSource, courses, teachers);
     const products = await createProducts(dataSource, factoryManager, orgs);
     await linkProductsAndCards(dataSource, products, courses);
     console.timeEnd('seeding done!');
