@@ -7,7 +7,11 @@ import {
   StudentCardResult,
   StudentCardResults,
 } from './dto/student-card-result';
-import { STUDENT_RECORD_NOT_EXISTS, SUCCESS } from '@/common/const/code';
+import {
+  STUDENT_HAS_NO_VALID_CARDS,
+  STUDENT_RECORD_NOT_EXISTS,
+  SUCCESS,
+} from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
 import { Result } from '@/common/dto/result.dto';
 import { CodeMsg } from '@/common/const/message';
@@ -16,16 +20,20 @@ import { TokenEntityGuard } from '@/common/guards/token-entity.guard';
 import { CardStatus } from './const';
 import { CardType } from '@/common/const/enum';
 import dayjs from 'dayjs';
+import { OrganizationResults } from '../organization/dto/organization/organization-result';
+import { OrganizationTypeDto } from '../organization/dto/organization/organization-type.dto';
+import _ from 'lodash';
+import { ScheduleResults } from '../schedule/dto/schedule-result';
 
 @TokenEntity('student')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
 @Resolver()
 export class StudentCardResolver {
-  constructor(private readonly studentRecordService: StudentCardService) {}
+  constructor(private readonly studentCardService: StudentCardService) {}
 
   @Query(() => StudentCardResult, { description: 'Find studentCard by id' })
   async getStudentCardInfo(@Args('id') id: string): Promise<StudentCardResult> {
-    const studentCard = await this.studentRecordService.findOne(id);
+    const studentCard = await this.studentCardService.findOne(id);
     return studentCard
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: studentCard }
       : {
@@ -40,7 +48,7 @@ export class StudentCardResolver {
     @Args('page') pageInput: PageInput,
   ): Promise<StudentCardResults> {
     const { page, pageSize } = pageInput;
-    const [studentCards, total] = await this.studentRecordService.findAll(
+    const [studentCards, total] = await this.studentCardService.findAll(
       page,
       pageSize,
       studentId,
@@ -69,13 +77,55 @@ export class StudentCardResolver {
     };
   }
 
+  @Query(() => OrganizationResults, {
+    description: 'Find reservable courses',
+  })
+  async getReservableCourses(
+    @CurrentGqlTokenId('studentId') studentId: string,
+  ): Promise<OrganizationResults> {
+    // find valid cards for student
+    const validCards = await this.studentCardService.findValidCardsForStudent(
+      studentId,
+    );
+    if (validCards.length === 0) {
+      return {
+        code: STUDENT_HAS_NO_VALID_CARDS,
+        message: CodeMsg(STUDENT_HAS_NO_VALID_CARDS),
+      };
+    }
+
+    // find available courses and deduplicate
+    const availableCourses = _.uniqBy(
+      validCards.map((card) => card.course),
+      'id',
+    );
+
+    // group available courses by organization
+    const orgsObj: Record<string, OrganizationTypeDto> = {};
+    availableCourses.forEach((course) => {
+      if (!orgsObj[course.organization.id]) {
+        orgsObj[course.organization.id] = {
+          ...course.organization,
+          courses: [],
+        };
+      }
+      orgsObj[course.organization.id].courses.push(course);
+    });
+    const orgs: OrganizationTypeDto[] = Object.values(orgsObj);
+    return {
+      code: SUCCESS,
+      message: CodeMsg(SUCCESS),
+      data: orgs,
+    };
+  }
+
   @Mutation(() => Result, { description: 'Delete studentCard by id' })
   async deleteStudentCard(
     @CurrentGqlTokenId('userId') userId: string,
     @Args('id') id: string,
   ): Promise<Result> {
     console.log('deleteStudentCard', id, userId);
-    const res = await this.studentRecordService.remove(id, userId);
+    const res = await this.studentCardService.remove(id, userId);
     return res
       ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
       : {

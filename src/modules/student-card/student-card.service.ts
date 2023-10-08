@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { StudentCard } from './entities/student-card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindOptionsWhere,
+  LessThan,
+  Not,
+  Repository,
+} from 'typeorm';
 import { Card } from '../card/entities/card.entity';
 import dayjs from 'dayjs';
 import { CardType } from '@/common/const/enum';
@@ -96,5 +102,26 @@ export class StudentCardService {
       return res2.affected > 0;
     }
     return false;
+  }
+
+  async findValidCardsForStudent(studentId: string): Promise<StudentCard[]> {
+    const now = dayjs();
+    const cards = await this.studentRecordRepository.find({
+      where: {
+        student: { id: studentId },
+        effectiveAt: LessThan(now.toDate()),
+        expiresAt: Not(LessThan(now.toDate())),
+      },
+      relations: ['card', 'course.organization'],
+      order: {
+        effectiveAt: 'ASC',
+      },
+    });
+    return cards.filter((card) => {
+      if (card.type === CardType.COUNT) {
+        return card.remainingTimes > 0;
+      }
+      return true;
+    });
   }
 }

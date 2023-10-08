@@ -69,6 +69,7 @@ export const Message = {
   [Code.ORGANIZATION_HAS_NO_COURSES]: '门店没有课程',
   [Code.COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL]:
     '课程没有时间段或教师或课程表已满',
+  [Code.STUDENT_HAS_NO_VALID_CARDS]: '学生没有有效的消费卡',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 

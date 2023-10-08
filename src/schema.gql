@@ -143,6 +143,9 @@ type OrganizationTypeDto {
 
   """环境图片"""
   otherImgs: [ImageTypeDto!]
+
+  """课程列表"""
+  courses: [CourseTypeDto!]
 }
 
 type CourseTypeDto {
@@ -352,6 +355,31 @@ type StudentCardResults {
 
   """数据"""
   data: [StudentCardTypeDto!]
+
+  """分页信息"""
+  page: PageTypeDto
+}
+
+type OrganizationResult {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: OrganizationTypeDto
+}
+
+type OrganizationResults {
+  """状态码"""
+  code: Int!
+
+  """信息"""
+  message: String
+
+  """数据"""
+  data: [OrganizationTypeDto!]
 
   """分页信息"""
   page: PageTypeDto
@@ -667,31 +695,6 @@ type CourseResults {
   page: PageTypeDto
 }
 
-type OrganizationResult {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: OrganizationTypeDto
-}
-
-type OrganizationResults {
-  """状态码"""
-  code: Int!
-
-  """信息"""
-  message: String
-
-  """数据"""
-  data: [OrganizationTypeDto!]
-
-  """分页信息"""
-  page: PageTypeDto
-}
-
 type UserTypeDto {
   """用户id"""
   id: String!
@@ -883,11 +886,17 @@ type Query {
   """Find student cards"""
   getStudentCards(page: PageInput!): StudentCardResults!
 
+  """Find reservable courses"""
+  getReservableCourses: OrganizationResults!
+
   """Find schedule by id"""
   getScheduleInfo(id: String!): ScheduleResult!
 
   """Find schedules"""
   getSchedules(day: String!, page: PageInput!): ScheduleResults!
+
+  """Find reservable schedules by course"""
+  getReservableSchedules(courseId: String!): ScheduleResults!
 }
 
 input PageInput {

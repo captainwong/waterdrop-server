@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Schedule } from './entities/schedule.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  Between,
+  DeepPartial,
+  FindOptionsWhere,
+  LessThan,
+  Repository,
+} from 'typeorm';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class ScheduleService {
@@ -29,7 +36,7 @@ export class ScheduleService {
       order: {
         start: 'ASC',
       },
-      relations: ['course', 'teacher', 'organization'],
+      relations: ['course.teachers', 'teacher', 'organization'],
     });
   }
 
@@ -89,5 +96,24 @@ export class ScheduleService {
       return res2.affected > 0;
     }
     return false;
+  }
+
+  async findReservableSchedulesByCourse(
+    courseId: string,
+  ): Promise<[Schedule[], number]> {
+    const now = dayjs();
+    const where: FindOptionsWhere<Schedule> = {
+      course: {
+        id: courseId,
+      },
+      date: Between(now.endOf('day').toDate(), now.add(7, 'day').toDate()),
+    };
+    return this.scheduleRepository.findAndCount({
+      where,
+      order: {
+        date: 'ASC',
+        start: 'ASC',
+      },
+    });
   }
 }

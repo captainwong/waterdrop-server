@@ -20,11 +20,7 @@ import { CurrentOrganizationId } from '@/common/decorators/current-organization.
 import { CourseService } from '../course/course.service';
 import dayjs from 'dayjs';
 import { Schedule } from './entities/schedule.entity';
-import {
-  TWeek,
-  TimeSlotType,
-  TimeSlotsType,
-} from '../course/dto/common-type.dto';
+import { TimeSlotType } from '../course/dto/common-type.dto';
 
 @TokenEntity('user')
 @UseGuards(GqlAuthGuard, TokenEntityGuard)
@@ -152,6 +148,27 @@ export class ScheduleResolver {
       page: {
         page,
         pageSize,
+        total,
+      },
+    };
+  }
+
+  @TokenEntity('student')
+  @Query(() => ScheduleResults, {
+    description: 'Find reservable schedules by course',
+  })
+  async getReservableSchedules(
+    @Args('courseId') courseId: string,
+  ): Promise<ScheduleResults> {
+    const [schedules, total] =
+      await this.scheduleService.findReservableSchedulesByCourse(courseId);
+    return {
+      code: SUCCESS,
+      message: CodeMsg(SUCCESS),
+      data: schedules,
+      page: {
+        page: 1,
+        pageSize: schedules.length,
         total,
       },
     };

@@ -1,6 +1,7 @@
 import { CommonTypeDto } from '@/common/dto/common-type.dto';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ImageTypeDto } from '../image/image-type.dto';
+import { CourseTypeDto } from '@/modules/course/dto/course-type.dto';
 
 @ObjectType()
 export class OrganizationTypeDto extends CommonTypeDto {
@@ -87,4 +88,10 @@ export class OrganizationTypeDto extends CommonTypeDto {
     description: '环境图片',
   })
   otherImgs?: ImageTypeDto[];
+
+  @Field(() => [CourseTypeDto], {
+    nullable: true,
+    description: '课程列表',
+  })
+  courses?: CourseTypeDto[];
 }
