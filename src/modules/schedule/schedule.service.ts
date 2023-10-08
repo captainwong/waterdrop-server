@@ -64,7 +64,10 @@ export class ScheduleService {
   }
 
   async findOne(id: string): Promise<Schedule> {
-    return this.scheduleRepository.findOne({ where: { id } });
+    return this.scheduleRepository.findOne({
+      where: { id },
+      relations: ['course', 'organization'],
+    });
   }
 
   async createInstance(dto: DeepPartial<Schedule>): Promise<Schedule> {

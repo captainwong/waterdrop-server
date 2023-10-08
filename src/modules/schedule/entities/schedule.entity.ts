@@ -1,8 +1,9 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Course } from '@/modules/course/entities/course.entity';
 import { Organization } from '@/modules/organization/entities/organization.entity';
+import { StudentSchedule } from '@/modules/student-schedule/entities/student-schedule.entity';
 import { Teacher } from '@/modules/teacher/entities/teacher.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('schedules')
 export class Schedule extends CommonEntity {
@@ -39,4 +40,10 @@ export class Schedule extends CommonEntity {
 
   @ManyToOne(() => Teacher)
   teacher: Teacher;
+
+  @OneToMany(
+    () => StudentSchedule,
+    (studentSchedule) => studentSchedule.schedule,
+  )
+  studentSchedules: StudentSchedule[];
 }

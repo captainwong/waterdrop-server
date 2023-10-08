@@ -58,18 +58,19 @@ export const Message = {
   [Code.WXORDER_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]: '微信订单不存在或密码不匹配',
   [Code.WXORDER_PASSWORD_NOT_MATCH]: '微信订单密码不匹配',
   [Code.CREATE_WXORDER_FAILED]: '创建微信订单失败',
-  [Code.STUDENT_RECORD_ALREADY_EXISTS]: '学生记录已存在',
-  [Code.STUDENT_RECORD_NOT_EXISTS]: '学生记录不存在',
-  [Code.STUDENT_RECORD_NOT_EXISTS_OR_PASSWORD_NOT_MATCH]:
-    '学生记录不存在或密码不匹配',
-  [Code.STUDENT_RECORD_PASSWORD_NOT_MATCH]: '学生记录密码不匹配',
-  [Code.CREATE_STUDENT_RECORD_FAILED]: '创建学生记录失败',
+  [Code.STUDENT_CARD_NOT_EXISTS]: '学生记录不存在',
+  [Code.CREATE_STUDENT_CARD_FAILED]: '创建学生记录失败',
+  [Code.STUDENT_CARD_EXPIRED]: '学生记录已过期',
+  [Code.STUDENT_CARD_DEPLETED]: '学生记录已用完',
   [Code.SCHEDULE_NOT_EXISTS]: '课程表不存在',
   [Code.CREATE_SCHEDULE_FAILED]: '创建课程表失败',
   [Code.ORGANIZATION_HAS_NO_COURSES]: '门店没有课程',
   [Code.COURSES_HAS_NO_SLOTS_OR_TECHERS_OR_SCHEDULE_IS_FULL]:
     '课程没有时间段或教师或课程表已满',
   [Code.STUDENT_HAS_NO_VALID_CARDS]: '学生没有有效的消费卡',
+  [Code.STUDENT_SCHEDULE_NOT_EXISTS]: '学生课程表不存在',
+  [Code.CREATE_STUDENT_SCHEDULE_FAILED]: '创建学生课程表失败',
+  [Code.SCHEDULE_ALREADY_RESERVED]: '您已预约了该课程，不可重复预约',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 

@@ -1,6 +1,7 @@
 import { CommonTypeDto } from '@/common/dto/common-type.dto';
 import { CourseTypeDto } from '@/modules/course/dto/course-type.dto';
 import { OrganizationTypeDto } from '@/modules/organization/dto/organization/organization-type.dto';
+import { StudentScheduleTypeDto } from '@/modules/student-schedule/dto/student-schedule-type.dto';
 import { TeacherTypeDto } from '@/modules/teacher/dto/teacher-type.dto';
 import { Field, ObjectType } from '@nestjs/graphql';
 
@@ -26,4 +27,10 @@ export class ScheduleTypeDto extends CommonTypeDto {
 
   @Field(() => OrganizationTypeDto, { nullable: true, description: '门店' })
   organization?: OrganizationTypeDto;
+
+  @Field(() => [StudentScheduleTypeDto], {
+    nullable: true,
+    description: '学员预约记录',
+  })
+  studentSchedules?: StudentScheduleTypeDto[];
 }

@@ -16,7 +16,7 @@ import { CardType } from '@/common/const/enum';
 export class StudentCardService {
   constructor(
     @InjectRepository(StudentCard)
-    private readonly studentRecordRepository: Repository<StudentCard>,
+    private readonly studentCardRepository: Repository<StudentCard>,
   ) {}
 
   // 为学生生成对应商品的消费卡
@@ -27,7 +27,7 @@ export class StudentCardService {
   ): Promise<boolean> {
     const studentCards = cards.map((card) => {
       const now = dayjs();
-      return this.studentRecordRepository.create({
+      return this.studentCardRepository.create({
         student: {
           id: studentId,
         },
@@ -47,7 +47,7 @@ export class StudentCardService {
         remainingTimes: card.type === CardType.COUNT ? card.count : 0,
       });
     });
-    const res = await this.studentRecordRepository.save(studentCards);
+    const res = await this.studentCardRepository.save(studentCards);
     return res.length > 0;
   }
 
@@ -59,7 +59,7 @@ export class StudentCardService {
     const where: FindOptionsWhere<StudentCard> = {
       student: { id: studentId },
     };
-    return this.studentRecordRepository.findAndCount({
+    return this.studentCardRepository.findAndCount({
       where,
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -70,13 +70,19 @@ export class StudentCardService {
     });
   }
 
-  async findOne(id: string): Promise<StudentCard> {
-    return this.studentRecordRepository.findOne({ where: { id } });
+  async findOne(id: string, stduentId?: string): Promise<StudentCard> {
+    const where: FindOptionsWhere<StudentCard> = {
+      id,
+    };
+    if (stduentId) {
+      where.student = { id: stduentId };
+    }
+    return this.studentCardRepository.findOne({ where });
   }
 
   async create(dto: DeepPartial<StudentCard>): Promise<StudentCard> {
-    return this.studentRecordRepository.save(
-      this.studentRecordRepository.create(dto),
+    return this.studentCardRepository.save(
+      this.studentCardRepository.create(dto),
     );
   }
 
@@ -89,16 +95,16 @@ export class StudentCardService {
       return null;
     }
     Object.assign(studentRecord, dto);
-    return this.studentRecordRepository.save(studentRecord);
+    return this.studentCardRepository.save(studentRecord);
   }
 
   async remove(id: string, userId: string): Promise<boolean> {
     console.log('remove', id, userId);
-    const res = await this.studentRecordRepository.update(id, {
+    const res = await this.studentCardRepository.update(id, {
       deletedBy: userId,
     });
     if (res.affected > 0) {
-      const res2 = await this.studentRecordRepository.softDelete(id);
+      const res2 = await this.studentCardRepository.softDelete(id);
       return res2.affected > 0;
     }
     return false;
@@ -117,7 +123,7 @@ export class StudentCardService {
     if (courseId) {
       where.course = { id: courseId };
     }
-    const cards = await this.studentRecordRepository.find({
+    const cards = await this.studentCardRepository.find({
       where,
       relations: ['card', 'course.organization'],
       order: {

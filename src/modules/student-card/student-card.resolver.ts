@@ -9,7 +9,7 @@ import {
 } from './dto/student-card-result';
 import {
   STUDENT_HAS_NO_VALID_CARDS,
-  STUDENT_RECORD_NOT_EXISTS,
+  STUDENT_CARD_NOT_EXISTS,
   SUCCESS,
 } from '@/common/const/code';
 import { PageInput } from '@/common/dto/page-input.dto';
@@ -37,8 +37,8 @@ export class StudentCardResolver {
     return studentCard
       ? { code: SUCCESS, message: CodeMsg(SUCCESS), data: studentCard }
       : {
-          code: STUDENT_RECORD_NOT_EXISTS,
-          message: CodeMsg(STUDENT_RECORD_NOT_EXISTS),
+          code: STUDENT_CARD_NOT_EXISTS,
+          message: CodeMsg(STUDENT_CARD_NOT_EXISTS),
         };
   }
 
@@ -147,8 +147,8 @@ export class StudentCardResolver {
     return res
       ? { code: SUCCESS, message: CodeMsg(SUCCESS) }
       : {
-          code: STUDENT_RECORD_NOT_EXISTS,
-          message: CodeMsg(STUDENT_RECORD_NOT_EXISTS),
+          code: STUDENT_CARD_NOT_EXISTS,
+          message: CodeMsg(STUDENT_CARD_NOT_EXISTS),
         };
   }
 }
