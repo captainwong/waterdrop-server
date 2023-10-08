@@ -21,10 +21,12 @@ export class ScheduleService {
     day: Date,
     page: number,
     pageSize: number,
+    userId: string,
     organizationId: string,
   ): Promise<[Schedule[], number]> {
     const where: FindOptionsWhere<Schedule> = {
       date: day,
+      createdBy: userId,
       organization: {
         id: organizationId,
       },

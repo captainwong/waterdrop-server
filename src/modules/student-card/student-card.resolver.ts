@@ -119,6 +119,24 @@ export class StudentCardResolver {
     };
   }
 
+  @Query(() => StudentCardResults, {
+    description: 'Find valid student cards by course',
+  })
+  async getValidStudentCardsByCourse(
+    @CurrentGqlTokenId('studentId') studentId: string,
+    @Args('courseId') courseId: string,
+  ): Promise<StudentCardResults> {
+    const studentCards = await this.studentCardService.findValidCardsForStudent(
+      studentId,
+      courseId,
+    );
+    return {
+      code: SUCCESS,
+      message: CodeMsg(SUCCESS),
+      data: studentCards,
+    };
+  }
+
   @Mutation(() => Result, { description: 'Delete studentCard by id' })
   async deleteStudentCard(
     @CurrentGqlTokenId('userId') userId: string,

@@ -127,9 +127,9 @@ export class ScheduleResolver {
       : { code: SCHEDULE_NOT_EXISTS, message: CodeMsg(SCHEDULE_NOT_EXISTS) };
   }
 
-  @TokenEntity('student')
   @Query(() => ScheduleResults, { description: 'Find schedules' })
   async getSchedules(
+    @CurrentGqlTokenId('userId') userId: string,
     @CurrentOrganizationId('organizationId') organizationId: string,
     @Args('day') day: string,
     @Args('page') pageInput: PageInput,
@@ -139,6 +139,7 @@ export class ScheduleResolver {
       dayjs(day).startOf('day').toDate(),
       page,
       pageSize,
+      userId,
       organizationId,
     );
     return {

@@ -104,14 +104,21 @@ export class StudentCardService {
     return false;
   }
 
-  async findValidCardsForStudent(studentId: string): Promise<StudentCard[]> {
+  async findValidCardsForStudent(
+    studentId: string,
+    courseId?: string,
+  ): Promise<StudentCard[]> {
     const now = dayjs();
+    const where: FindOptionsWhere<StudentCard> = {
+      student: { id: studentId },
+      effectiveAt: LessThan(now.toDate()),
+      expiresAt: Not(LessThan(now.toDate())),
+    };
+    if (courseId) {
+      where.course = { id: courseId };
+    }
     const cards = await this.studentRecordRepository.find({
-      where: {
-        student: { id: studentId },
-        effectiveAt: LessThan(now.toDate()),
-        expiresAt: Not(LessThan(now.toDate())),
-      },
+      where,
       relations: ['card', 'course.organization'],
       order: {
         effectiveAt: 'ASC',

@@ -889,6 +889,9 @@ type Query {
   """Find reservable courses"""
   getReservableCourses: OrganizationResults!
 
+  """Find valid student cards by course"""
+  getValidStudentCardsByCourse(courseId: String!): StudentCardResults!
+
   """Find schedule by id"""
   getScheduleInfo(id: String!): ScheduleResult!
 
