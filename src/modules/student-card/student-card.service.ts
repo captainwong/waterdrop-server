@@ -66,7 +66,7 @@ export class StudentCardService {
       order: {
         createdAt: 'DESC',
       },
-      relations: ['card', 'organization'],
+      relations: ['card', 'organization', 'course'],
     });
   }
 

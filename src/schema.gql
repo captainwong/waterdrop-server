@@ -1051,6 +1051,9 @@ type Mutation {
   """Reserve schedule"""
   reserveSchedule(scheduleId: String!, studentCardId: String!): Result!
 
+  """Cancel student-schedule by id"""
+  cancelStudentSchedule(id: String!): Result!
+
   """Delete student-schedule by id"""
   deleteStudentSchedule(id: String!): Result!
 }

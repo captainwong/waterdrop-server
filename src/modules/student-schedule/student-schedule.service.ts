@@ -13,10 +13,12 @@ export class StudentScheduleService {
   async findAll(
     page: number,
     pageSize: number,
-    createdBy: string,
+    studentId: string,
   ): Promise<[StudentSchedule[], number]> {
     const where: FindOptionsWhere<StudentSchedule> = {
-      createdBy: createdBy,
+      student: {
+        id: studentId,
+      },
     };
     return this.studentScheduleRepository.findAndCount({
       where,
@@ -25,11 +27,15 @@ export class StudentScheduleService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['schedule.teacher', 'course', 'organization'],
     });
   }
 
   async findOne(id: string): Promise<StudentSchedule> {
-    return this.studentScheduleRepository.findOne({ where: { id } });
+    return this.studentScheduleRepository.findOne({
+      where: { id },
+      relations: ['studentCard', 'schedule'],
+    });
   }
 
   async isScheduleAlreadyReserved(

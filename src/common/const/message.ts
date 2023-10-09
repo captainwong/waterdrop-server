@@ -71,6 +71,8 @@ export const Message = {
   [Code.STUDENT_SCHEDULE_NOT_EXISTS]: '学生课程表不存在',
   [Code.CREATE_STUDENT_SCHEDULE_FAILED]: '创建学生课程表失败',
   [Code.SCHEDULE_ALREADY_RESERVED]: '您已预约了该课程，不可重复预约',
+  [Code.STUDENT_SCHEDULE_ALREADY_IN_PROGRESS]: '学生课程表已在进行中',
+  [Code.CANCEL_STUDENT_SCHEDULE_FAILED]: '取消学生课程表失败',
   [Code.NOT_IMPLEMENTED_YET]: '暂未实现',
 };
 
